@@ -171,7 +171,7 @@ MonoBehaviour:
     m_Bits: 512
   counterMovement: 0.175
   maxSlopeAngle: 35
-  jumpForce: 550
+  jumpForce: 300
 --- !u!54 &167701247
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -444,8 +444,13 @@ PrefabInstance:
     - target: {fileID: 95812470430208240, guid: 3fc233a9407d11f46a1983e4692babf9,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 95812470430208240, guid: 3fc233a9407d11f46a1983e4692babf9,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9ed1a3322e42a5a42b12aaac83b940be, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fc233a9407d11f46a1983e4692babf9, type: 3}
 --- !u!1 &1039262839
@@ -670,33 +675,12 @@ Transform:
   m_Father: {fileID: 1580902774}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1444460874 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1997645269869836, guid: 3fc233a9407d11f46a1983e4692babf9,
-    type: 3}
-  m_PrefabInstance: {fileID: 637519435}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1444460875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4468519549282688, guid: 3fc233a9407d11f46a1983e4692babf9,
     type: 3}
   m_PrefabInstance: {fileID: 637519435}
   m_PrefabAsset: {fileID: 0}
---- !u!111 &1444460877
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1444460874}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 9f0376548525d7f46a10087a2cb9ff17, type: 3}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!1 &1580902773
 GameObject:
   m_ObjectHideFlags: 0
