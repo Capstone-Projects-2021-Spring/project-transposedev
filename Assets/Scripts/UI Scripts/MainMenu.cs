@@ -46,6 +46,7 @@ public class MainMenu : MonoBehaviour
         Debug.Log("You have clicked the Single Player button!");
         MainMenuPanel.SetActive(false);
         //SceneManager.LoadScene("TestingPlayerController");
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         SceneManager.LoadScene("HUD", LoadSceneMode.Additive);
 
         /*future
