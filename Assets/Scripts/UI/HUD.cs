@@ -8,7 +8,7 @@ public class HUD : MonoBehaviour
     public static int health = 100;
     public static int ammo = 30;
     public static int armor = 100;
-    public static int ammo_BackUp = 90;
+    public static int ammo_BackUp = 80;
 
     public Transform CurrentAmmoText;
     public Transform BackUpAmmoText;
@@ -62,8 +62,12 @@ public class HUD : MonoBehaviour
             }
             if (ammo <= 0)
             {
-                if (cr <= time) { }
-                time = cr + time_reload;
+                if (ammo_BackUp > 0) { 
+                    if (cr > time)
+                    {
+                        time = cr + time_reload;
+                    }
+                }
             }
         }
         if (ammo <= 0)
