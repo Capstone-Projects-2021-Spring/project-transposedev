@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 public class PlayerInputName : MonoBehaviour
 {
-
+    public GameObject PlayerInputNamePanel = null;
     public InputField nameInputField = null;
     public Button continueButton = null;
+    public GameObject MultiPlayerMenuPanel = null;
+    public GameObject SinglePlayerMenuPanel = null;
 
     public static string DisplayName { get; private set; }
     private string PlayerPrefsNameKey = null;
@@ -32,23 +34,16 @@ public class PlayerInputName : MonoBehaviour
         PlayerPrefs.SetString(PlayerPrefsNameKey, DisplayName);
         
         
-        //MainMenu.PlayerInputNamePanel.SetActive(false);
+        PlayerInputNamePanel.SetActive(false);
         if (MainMenu.isMultiPlayer())
         {
             Debug.Log("MultiPlayer Name: " + DisplayName);
-            //MainMenu.MultiPlayerMenuPanel.SetActive(true);
-            if (DisplayName == null)
-            {
-                Debug.Log("NULL");
-            }
+            MultiPlayerMenuPanel.SetActive(true);
+
         }
         else
         {
             Debug.Log("SinglePlayer Name: " + DisplayName);
-            if (DisplayName==null)
-            {
-                Debug.Log("NULL");
-            }
             //SinglePlayer Menu
         }
         
