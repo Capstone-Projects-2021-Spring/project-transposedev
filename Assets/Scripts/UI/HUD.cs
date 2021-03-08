@@ -9,14 +9,23 @@ public class HUD : MonoBehaviour
     public static int ammo = 30;
     public static int armor = 100;
     public static int ammo_BackUp = 80;
+    public static string timer = "";
 
     public Transform CurrentAmmoText;
     public Transform BackUpAmmoText;
     public Transform HealthText;
     public Transform ArmorText;
+    public Transform TimerText;
     public static int getHealth()
     {
         return health;
+    }
+    public static String getTime()
+    {
+        string min = "0";
+        string sec = "0";
+        //return min+":"+sec;
+        return DateTime.Now.ToString("h:mm:ss tt");
     }
     public static int getRemainAmmo()
     {
@@ -93,9 +102,11 @@ public class HUD : MonoBehaviour
         armor = getArmor();
         ammo = getRemainAmmo();
         ammo_BackUp = getBackUpAmmo();
+        timer = getTime();
         CurrentAmmoText.GetComponent<Text>().text = "" + ammo;
         BackUpAmmoText.GetComponent<Text>().text = "" + ammo_BackUp;
         HealthText.GetComponent<Text>().text = "" + health;
         ArmorText.GetComponent<Text>().text = "" + armor;
+        TimerText.GetComponent<Text>().text =  timer;
     }
 }
