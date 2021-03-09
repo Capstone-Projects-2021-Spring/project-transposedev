@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 public class HUD : MonoBehaviour
 {
     public static int health = 100;
@@ -62,8 +63,9 @@ public class HUD : MonoBehaviour
     {
         //testing features
         DateTime dt = DateTime.Now;
-        long cr =  DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        Debug.Log(time+" " + cr);
+        long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        Debug.Log(time + " " + cr);
+        if (!EscMenu.isInEscMenu()) { 
         if (Input.GetButtonDown("Fire1"))
         {
             if (ammo > 0) {
@@ -71,13 +73,18 @@ public class HUD : MonoBehaviour
             }
             if (ammo <= 0)
             {
-                if (ammo_BackUp > 0) { 
+                if (ammo_BackUp > 0) {
                     if (cr > time)
                     {
                         time = cr + time_reload;
                     }
                 }
             }
+        }
+        }
+        else
+        {
+            Debug.Log("You are in ESC Menu now!");
         }
         if (ammo <= 0)
         {
@@ -108,5 +115,11 @@ public class HUD : MonoBehaviour
         HealthText.GetComponent<Text>().text = "" + health;
         ArmorText.GetComponent<Text>().text = "" + armor;
         TimerText.GetComponent<Text>().text =  timer;
+        //ESC Menu
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("You have called the Esc Menu!");
+            SceneManager.LoadScene("EscMenu", LoadSceneMode.Additive);
+        }
     }
 }
