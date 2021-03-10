@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
+    [SerializeField]
     private int HEALTH_MAX = 100;
+    [SerializeField]
     private int HEALTH = 100;
 
+    [SerializeField]
     private int ARMOR = 60;
+    [SerializeField]
     private int ARMOR_MAX = 15;
 
 
@@ -53,5 +57,25 @@ public class PlayerStats : MonoBehaviour
             ARMOR = ARMOR_MAX;
         else
             ARMOR += ARMOR_MAX;
+    }
+
+    public int GetHealth()
+    {
+        return HEALTH;
+    }
+
+    public int GetMaxHealth()
+    {
+        return HEALTH_MAX;
+    }
+
+    public int GetArmor()
+    {
+        return ARMOR;
+    }
+
+    public int GetMaxArmor()
+    {
+        return ARMOR_MAX;
     }
 }

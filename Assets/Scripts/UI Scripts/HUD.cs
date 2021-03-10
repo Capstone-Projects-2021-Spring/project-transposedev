@@ -16,7 +16,8 @@ public class HUD : MonoBehaviour
     public Transform ArmorText;
     public static int getHealth()
     {
-        return health;
+        return GameObject.Find("Player").GetComponent<PlayerStats>().GetHealth();
+        //return health;
     }
     public static int getRemainAmmo()
     {
@@ -30,12 +31,13 @@ public class HUD : MonoBehaviour
     }
     public static int getArmor()
     {
-        return armor;
+        return GameObject.Find("Player").GetComponent<PlayerStats>().GetArmor();
+        //return armor;
     }
     // Start is called before the first frame update
     void Start()
     {
-        //read ammo,health,armor from other scrpit or class
+        //read ammo,health,armor from other script or class
         health = getHealth();
         armor = getArmor();
         ammo = getRemainAmmo();
