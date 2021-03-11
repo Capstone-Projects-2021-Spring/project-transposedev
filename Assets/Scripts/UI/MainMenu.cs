@@ -14,8 +14,6 @@ public class MainMenu : MonoBehaviour
     public Button Button_MP = null;
     public Button Button_Quit = null;
     private static bool isMP = false;
-
-    // Start is called before the first frame update
     void Start()
     {
         //networkManager.StartHost();
@@ -36,40 +34,31 @@ public class MainMenu : MonoBehaviour
     {
         return isMP;
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     void OnClickSinglePlayer()
     {
-        Debug.Log("You have clicked the Single Player button!");
         MainMenuPanel.SetActive(false);
         //SceneManager.LoadScene("TestingPlayerController");
         SceneManager.LoadScene("HUD", LoadSceneMode.Additive);
 
-        /*future
-        PlayerInputNamePanel.SetActive(true);
-        MainMenuPanel.SetActive(false);
+        
+        //for future
+        //PlayerInputNamePanel.SetActive(true);
+        
         MainMenu.isMP = false;
-        */
+
     }
     void OnClickMultiPlayer()
     {
-        Debug.Log("You have clicked the MultiPlayer button!");
         PlayerInputNamePanel.SetActive(true);
         MainMenuPanel.SetActive(false);
         MainMenu.isMP = true;
     }
     void OnClickQuit()
     {
-        Debug.Log("You have clicked the Quit button!");
         QuitGame();
     }
     void QuitGame()
     {
         Application.Quit();
-        Debug.Log("Game is exiting");
-        //Just to make sure its working
     }
 }

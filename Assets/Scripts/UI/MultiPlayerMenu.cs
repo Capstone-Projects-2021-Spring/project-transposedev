@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class MultiPlayerMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
     public Button Button_Host = null;
     public Button Button_Join = null;
     public Button Button_PrePage = null;
@@ -37,11 +36,5 @@ public class MultiPlayerMenu : MonoBehaviour
         Button_Join.onClick.AddListener(IPInputMenu);
         Button_Host.onClick.AddListener(HostMenu);
         Button_PrePage.onClick.AddListener(MainMenuPage);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

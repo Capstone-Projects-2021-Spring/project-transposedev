@@ -23,11 +23,14 @@ public class HUD : MonoBehaviour
     }
     public static String getTime()
     {
-        string min = "0";
-        string sec = "0";
-        //return min+":"+sec;
-        return DateTime.Now.ToString("h:mm:ss tt");
+        int min = 0;
+        int sec = 0;
+        //testing, please edit this for hooking timer
+        //return ""+min+":"+sec;
+        return DateTime.Now.ToString("h:mm:ss tt"); 
     }
+
+    //please hook the following to Game Status
     public static int getRemainAmmo()
     {
         return ammo;
@@ -42,49 +45,41 @@ public class HUD : MonoBehaviour
     {
         return armor;
     }
-    // Start is called before the first frame update
     void Start()
     {
-        //read ammo,health,armor from other scrpit or class
         health = getHealth();
         armor = getArmor();
         ammo = getRemainAmmo();
         ammo_BackUp = getBackUpAmmo();
     }
 
-    // Update is called once per frame
 
-    //testing features
+    //testing features(please remove this after hooking to the game status)
     private static long time = 0;
     private static long time_reload = 3000;
     private static int mag = 30;
     //testing features end
     void Update()
     {
-        //testing features
+        //testing features (please remove this after hooking to the game status)
         DateTime dt = DateTime.Now;
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        Debug.Log(time + " " + cr);
-        if (!EscMenu.isInEscMenu()) { 
-        if (Input.GetButtonDown("Fire1"))
-        {
-            if (ammo > 0) {
-                ammo -= 1;
-            }
-            if (ammo <= 0)
+        if (!EscMenu.isInEscMenu()) { //test if Esc menu is up
+            if (Input.GetButtonDown("Fire1"))
             {
-                if (ammo_BackUp > 0) {
-                    if (cr > time)
-                    {
-                        time = cr + time_reload;
+                if (ammo > 0) {
+                    ammo -= 1;
+                }
+                if (ammo <= 0)
+                {
+                    if (ammo_BackUp > 0) {
+                        if (cr > time)
+                        {
+                            time = cr + time_reload;
+                        }
                     }
                 }
             }
-        }
-        }
-        else
-        {
-            Debug.Log("You are in ESC Menu now!");
         }
         if (ammo <= 0)
         {
@@ -115,10 +110,10 @@ public class HUD : MonoBehaviour
         HealthText.GetComponent<Text>().text = "" + health;
         ArmorText.GetComponent<Text>().text = "" + armor;
         TimerText.GetComponent<Text>().text =  timer;
-        //ESC Menu
+
+        //to call Esc Menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("You have called the Esc Menu!");
             SceneManager.LoadScene("EscMenu", LoadSceneMode.Additive);
         }
     }

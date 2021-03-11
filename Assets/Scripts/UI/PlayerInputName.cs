@@ -37,25 +37,20 @@ public class PlayerInputName : MonoBehaviour
         PlayerInputNamePanel.SetActive(false);
         if (MainMenu.isMultiPlayer())
         {
-            Debug.Log("MultiPlayer Name: " + DisplayName);
             MultiPlayerMenuPanel.SetActive(true);
 
         }
         else
         {
-            Debug.Log("SinglePlayer Name: " + DisplayName);
-            //SinglePlayer Menu
+            //SinglePlayer Menu, for setting etc.
         }
         
     }
-    // Start is called before the first frame update
     void Start()
     {
         continueButton.onClick.AddListener(SavePlayerName);
         SetUpInputField();
     }
-
-    // Update is called once per frame
     void Update()
     {
         setPlayerName();

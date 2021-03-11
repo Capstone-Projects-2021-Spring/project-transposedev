@@ -21,10 +21,9 @@ public class IPInput : MonoBehaviour
     public void SaveIP()
     {
         ipAddress = IPInputField.text;
-        Debug.Log("IP: " + ipAddress);
 
         //IPInputPanel.SetActive(false);
-        //loby menu
+        //lobby menu
 
 
     }
@@ -35,14 +34,12 @@ public class IPInput : MonoBehaviour
         MultiPlayerMenuPanel.SetActive(true);
 
     }
-    // Start is called before the first frame update
     void Start()
     {
         continueButton.onClick.AddListener(SaveIP);
         Button_PrePage.onClick.AddListener(BackToMPMenu);
     }
 
-    // Update is called once per frame
     void Update()
     {
         setIP();

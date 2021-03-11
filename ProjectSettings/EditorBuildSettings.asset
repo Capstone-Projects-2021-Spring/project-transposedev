@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/UI/HUD.unity
     guid: a7ce112a58cfede49801693103c9dd25
+  - enabled: 1
+    path: Assets/Scenes/UI/EscMenu.unity
+    guid: 2992765ad1c95fc4fa93f9ec0c904196
   m_configObjects: {}
