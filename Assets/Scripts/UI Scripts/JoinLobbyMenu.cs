@@ -12,17 +12,14 @@ public class JoinLobbyMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        /*
-        NetworkManagerLobby.OnClientConnected += HandleClientConnected;
-        NetworkManagerLobby.OnClientDisConnected += HandleClientDisConnected;
-        */
+        //NetworkManagerLobby.OnClientConnected += HandleClientConnected;
+        //NetworkManagerLobby.OnClientDisConnected += HandleClientDisConnected;
     }
     private void OnDisable()
     {
-        /*
-        NetworkManagerLobby.OnClientConnected -= HandleClientConnected;
-        NetworkManagerLobby.OnClientDisConnected -= HandleClientDisConnected;
-        */
+        //NetworkManagerLobby.OnClientConnected -= HandleClientConnected;
+        //NetworkManagerLobby.OnClientDisConnected -= HandleClientDisConnected;
+        
     }
     public void JoinLobby()
     {
@@ -40,16 +37,5 @@ public class JoinLobbyMenu : MonoBehaviour
     private void HandleClientDisConnected()
     {
         JoinButton.interactable = true;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
