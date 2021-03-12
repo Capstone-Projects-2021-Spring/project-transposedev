@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour {
             Look();
         }
 
-        // weapon swaping
+        // item swaping with number buttons
         for (int i = 0; i < items.Length; i++)
 		{
             if (Input.GetKeyDown((i + 1).ToString()))
@@ -80,6 +80,31 @@ public class PlayerMovement : MonoBehaviour {
                 break;
 			}
 		}
+
+        // item swaping with scroll wheel
+        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
+		{
+            if (itemIndex >= items.Length -1)
+			{
+                EquipItem(0);
+			}
+            else
+			{
+                EquipItem(itemIndex + 1);
+			}
+		}
+        else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
+		{
+            if (itemIndex <= 0)
+            {
+                EquipItem(items.Length - 1);
+            }
+            else
+            {
+                EquipItem(itemIndex - 1);
+            }
+        }
+
     }
 
     /// Finds the player's inputs for player movement
