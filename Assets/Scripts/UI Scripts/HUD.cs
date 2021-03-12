@@ -17,6 +17,9 @@ public class HUD : MonoBehaviour
     public Transform HealthText;
     public Transform ArmorText;
     public Transform TimerText;
+
+    public GameObject ESCMenu = null;
+
     public static int getHealth()
     {
         return health;
@@ -114,7 +117,21 @@ public class HUD : MonoBehaviour
         //to call Esc Menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene("EscMenu", LoadSceneMode.Additive);
+            if (EscMenu.isInEscMenu())
+            {
+                ESCMenu.SetActive(false);
+                EscMenu.SetInEscMenu(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
+            }
+            else
+            {
+                ESCMenu.SetActive(true);
+                EscMenu.SetInEscMenu(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
     }
 }

@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour {
     }
     
     void Start() {
-        playerScale =  transform.localScale;
+        playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -59,8 +59,11 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
-        MyInput();
-        Look();
+        if (!EscMenu.isInEscMenu())
+		{
+            MyInput();
+            Look();
+        }
     }
 
     /// Finds the player's inputs for player movement

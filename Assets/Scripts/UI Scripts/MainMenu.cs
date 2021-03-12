@@ -39,7 +39,6 @@ public class MainMenu : MonoBehaviour
         MainMenuPanel.SetActive(false);
         //SceneManager.LoadScene("TestingPlayerController");
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-        SceneManager.LoadScene("HUD", LoadSceneMode.Additive);
 
         
         //for future

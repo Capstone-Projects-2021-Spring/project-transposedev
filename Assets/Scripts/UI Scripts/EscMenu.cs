@@ -10,9 +10,12 @@ public class EscMenu : MonoBehaviour
 
     public Button Button_Return = null;
     public Button Button_Quit = null;
+
+    public GameObject ESCMenu = null;
+
     void Start()
     {
-        inEsc = true;
+        //inEsc = true;
         Button_Return.onClick.AddListener(OnClickReturn);
         Button_Quit.onClick.AddListener(OnClickQuit);
     }
@@ -20,17 +23,20 @@ public class EscMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            inEsc = false;
-            SceneManager.UnloadScene("EscMenu");
+            //inEsc = false;
+            //SceneManager.UnloadScene("EscMenu");
         }
     }
-    void OnClickReturn()
+    public void OnClickReturn()
     {
         inEsc = false;
-        SceneManager.UnloadScene("EscMenu");
+        ESCMenu.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        //SceneManager.UnloadScene("EscMenu");
         //resume the game
     }
-    void OnClickQuit()
+    public void OnClickQuit()
     {
         QuitGame();
     }
@@ -39,12 +45,17 @@ public class EscMenu : MonoBehaviour
         //back to menu & if multiplayer also disconnected
         inEsc = false;
         //SceneManager.UnloadScene("TestingPlayerController");
-        SceneManager.UnloadScene("HUD");
-        SceneManager.UnloadScene("EscMenu");
+        //SceneManager.UnloadScene("HUD");
+        //SceneManager.UnloadScene("EscMenu");
         SceneManager.LoadScene("Menu");
     }
     public static bool isInEscMenu()//use this to check if client is in Esc menu
     {
         return inEsc;
     }
+
+    public static void SetInEscMenu(bool value)
+	{
+        inEsc = value;
+	}
 }
