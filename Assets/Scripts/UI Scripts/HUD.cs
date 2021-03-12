@@ -22,15 +22,12 @@ public class HUD : MonoBehaviour
 
     public static int getHealth()
     {
-        return health;
+        return GameObject.Find("PlayerObject").GetComponent<PlayerStats>().GetHealth();
+        //return health;
     }
     public static String getTime()
     {
-        int min = 0;
-        int sec = 0;
-        //testing, please edit this for hooking timer
-        //return ""+min+":"+sec;
-        return DateTime.Now.ToString("h:mm:ss tt"); 
+        return GameObject.Find("RuleManager").GetComponent<RuleSet>().GetTime();
     }
 
     //please hook the following to Game Status
@@ -46,7 +43,8 @@ public class HUD : MonoBehaviour
     }
     public static int getArmor()
     {
-        return armor;
+        return GameObject.Find("PlayerObject").GetComponent<PlayerStats>().GetArmor();
+        //return armor;
     }
     void Start()
     {
@@ -108,6 +106,7 @@ public class HUD : MonoBehaviour
         ammo = getRemainAmmo();
         ammo_BackUp = getBackUpAmmo();
         timer = getTime();
+
         CurrentAmmoText.GetComponent<Text>().text = "" + ammo;
         BackUpAmmoText.GetComponent<Text>().text = "" + ammo_BackUp;
         HealthText.GetComponent<Text>().text = "" + health;
