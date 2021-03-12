@@ -9,6 +9,11 @@ public class PlayerMovement : MonoBehaviour {
 
     public Transform playerCam;
     public Transform orientation;
+
+    // items that can be held by the player
+    [SerializeField] Item[] items;
+    int itemIndex;
+    int previousItemIndex = -1;
     
     private Rigidbody rb;
 
@@ -52,6 +57,7 @@ public class PlayerMovement : MonoBehaviour {
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        EquipItem(0);
     }
 
     private void FixedUpdate() {
@@ -64,6 +70,16 @@ public class PlayerMovement : MonoBehaviour {
             MyInput();
             Look();
         }
+
+        // weapon swaping
+        for (int i = 0; i < items.Length; i++)
+		{
+            if (Input.GetKeyDown((i + 1).ToString()))
+			{
+                EquipItem(i);
+                break;
+			}
+		}
     }
 
     /// Finds the player's inputs for player movement
@@ -265,6 +281,24 @@ public class PlayerMovement : MonoBehaviour {
             Invoke(nameof(StopGrounded), Time.deltaTime * delay);
         }
     }
+
+    // handles equiping items
+    void EquipItem(int index)
+	{
+        if (index == previousItemIndex)
+            return;
+
+        itemIndex = index;
+
+        items[itemIndex].itemGameObject.SetActive(true);
+
+        if (previousItemIndex != -1)
+		{
+            items[previousItemIndex].itemGameObject.SetActive(false);
+		}
+
+        previousItemIndex = itemIndex;
+	}
 
     private void StopGrounded()
     {
