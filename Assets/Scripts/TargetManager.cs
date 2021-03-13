@@ -7,7 +7,8 @@ public class TargetManager : MonoBehaviour
 {
     public void DestroyTarget(GameObject target)
 	{
-		Destroy(target);
+        transform.gameObject.GetComponent<AudioSource>().Play();
+        Destroy(target);
 	}
 
     public void RespawnTarget()

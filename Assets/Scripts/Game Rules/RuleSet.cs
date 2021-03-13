@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Timers;
+using static EscMenu;
 
 public class RuleSet : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class RuleSet : MonoBehaviour
     private float current_time;
     [SerializeField]
     private bool timer_running = false;
+
+    [SerializeField]
+    private int targets_destroyed = 0;
+
     [SerializeField]
     private int max_players;
     [SerializeField]
@@ -22,7 +27,7 @@ public class RuleSet : MonoBehaviour
     [SerializeField]
     private List<string> weapons_allowed;
 
-    void Start()
+    void Awake()
     {
         SetMatchTime(3);
         StartMatchTimer();
@@ -31,7 +36,7 @@ public class RuleSet : MonoBehaviour
     
     void Update()
     {
-        if (timer_running)
+        if (timer_running && !isInEscMenu())
             UpdateTimer();
     }
 
@@ -56,9 +61,25 @@ public class RuleSet : MonoBehaviour
 
     public string GetTime()
     {
-        int mins = Mathf.FloorToInt(current_time / 60);
+        string mins = Mathf.FloorToInt(current_time / 60).ToString();
         int seconds = Mathf.FloorToInt(current_time % 60);
-        return mins + ":" + seconds;
+
+        string sec;
+        if (seconds < 10)
+            sec = "0" + seconds.ToString();
+        else
+            sec = seconds.ToString();
+
+
+        
+        
+
+        return mins + ":" + sec;
+    }
+
+    public void TargetDestroyed()
+    {
+        targets_destroyed++;
     }
 
 

@@ -7,8 +7,19 @@ public class SingleShotGun : Gun
 	// reference to player camera
 	[SerializeField] Camera camera;
 
-	public override void Use()
+    [SerializeField] private AudioClip myClip;
+    private AudioSource mySource;
+
+    private void Awake()
+    {
+        mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
+        mySource.playOnAwake = false;
+        mySource.clip = myClip;
+    }
+
+    public override void Use()
 	{
+        mySource.Play();
 		Shoot();
 	}
 

@@ -32,5 +32,6 @@ public class Target : MonoBehaviour, IDamageable
 	void Die()
 	{
 		targetManager.DestroyTarget(target);
+        FindObjectOfType<RuleSet>().TargetDestroyed();
 	}
 }

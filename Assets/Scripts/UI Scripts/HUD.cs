@@ -27,7 +27,10 @@ public class HUD : MonoBehaviour
     }
     public static String getTime()
     {
-        return GameObject.Find("RuleManager").GetComponent<RuleSet>().GetTime();
+        if (GameObject.Find("RuleManager") != null)
+            return GameObject.Find("RuleManager").GetComponent<RuleSet>().GetTime();
+        else
+            return "";
     }
 
     //please hook the following to Game Status
