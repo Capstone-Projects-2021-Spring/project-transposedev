@@ -12,6 +12,7 @@ public class EscMenu : MonoBehaviour
     public Button Button_Quit = null;
 
     public GameObject ESCMenu = null;
+    public GameObject PlayerObject;
 
     void Start()
     {
@@ -48,6 +49,7 @@ public class EscMenu : MonoBehaviour
         //SceneManager.UnloadScene("HUD");
         //SceneManager.UnloadScene("EscMenu");
         SceneManager.LoadScene("Menu");
+        Destroy(PlayerObject);
     }
     public static bool isInEscMenu()//use this to check if client is in Esc menu
     {
