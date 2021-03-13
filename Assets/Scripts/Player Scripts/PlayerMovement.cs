@@ -66,35 +66,40 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Update() {
         if (!EscMenu.isInEscMenu())
-		{
+        {
             MyInput();
             Look();
+            SelectItem();
+            UseItem();
         }
+    }
 
+    private void SelectItem()
+	{
         // item swaping with number buttons
         for (int i = 0; i < items.Length; i++)
-		{
+        {
             if (Input.GetKeyDown((i + 1).ToString()))
-			{
+            {
                 EquipItem(i);
                 break;
-			}
-		}
+            }
+        }
 
         // item swaping with scroll wheel
         if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
-		{
-            if (itemIndex >= items.Length -1)
-			{
+        {
+            if (itemIndex >= items.Length - 1)
+            {
                 EquipItem(0);
-			}
+            }
             else
-			{
+            {
                 EquipItem(itemIndex + 1);
-			}
-		}
+            }
+        }
         else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
-		{
+        {
             if (itemIndex <= 0)
             {
                 EquipItem(items.Length - 1);
@@ -104,12 +109,15 @@ public class PlayerMovement : MonoBehaviour {
                 EquipItem(itemIndex - 1);
             }
         }
+    }
 
+    private void UseItem()
+	{
         // use equipped item
         if (Input.GetMouseButtonDown(0))
-		{
+        {
             items[itemIndex].Use();
-		}
+        }
     }
 
     /// Finds the player's inputs for player movement
