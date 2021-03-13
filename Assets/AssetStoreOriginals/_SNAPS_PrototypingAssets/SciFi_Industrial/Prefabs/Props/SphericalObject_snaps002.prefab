@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 33741070140945870}
   - component: {fileID: 23397664346961876}
   - component: {fileID: 64318303044979784}
+  - component: {fileID: 114398670366939046}
   m_Layer: 0
   m_Name: SphericalObject_snaps002
-  m_TagString: Untagged
+  m_TagString: TargetObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -92,3 +93,15 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 7d1a55564d9e7b14d8a988cddbd96160, type: 2}
+--- !u!114 &114398670366939046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735205382363938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba20db625caca924a890114c193d84ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

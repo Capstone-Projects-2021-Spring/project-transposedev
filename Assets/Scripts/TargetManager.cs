@@ -1,27 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Die()
+    public void DestroyTarget(Target target)
 	{
-
+		Destroy(target);
 	}
 
-    public void Respawn()
+    public void RespawnTarget()
 	{
 
 	}

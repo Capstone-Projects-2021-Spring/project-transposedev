@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Target : MonoBehaviour, IDamageable
 {
+	public TargetManager targetManager;
+
 	const float maxHealth = 100f;
 	float currentHealth = maxHealth;
 
@@ -23,6 +25,6 @@ public class Target : MonoBehaviour, IDamageable
 
 	void Die()
 	{
-		
+		targetManager.DestroyTarget(this);
 	}
 }
