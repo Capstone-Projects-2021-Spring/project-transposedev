@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TargetManager : MonoBehaviour
 {
-    public void DestroyTarget(Target target)
+    public void DestroyTarget(GameObject target)
 	{
 		Destroy(target);
 	}

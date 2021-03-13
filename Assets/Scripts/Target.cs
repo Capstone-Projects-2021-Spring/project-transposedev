@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class Target : MonoBehaviour, IDamageable
 {
-	public TargetManager targetManager;
+	TargetManager targetManager;
+	[SerializeField] GameObject target;
 
 	const float maxHealth = 100f;
 	float currentHealth = maxHealth;
+
+	void Start()
+	{
+		targetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
+	}
 
 	void Update()
 	{
@@ -25,6 +31,6 @@ public class Target : MonoBehaviour, IDamageable
 
 	void Die()
 	{
-		targetManager.DestroyTarget(this);
+		targetManager.DestroyTarget(target);
 	}
 }
