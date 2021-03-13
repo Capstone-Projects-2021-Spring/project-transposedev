@@ -36,7 +36,7 @@ public class RuleSet : MonoBehaviour
     
     void Update()
     {
-        if (timer_running && !isInEscMenu())
+        if (timer_running)
             UpdateTimer();
     }
 
@@ -79,7 +79,13 @@ public class RuleSet : MonoBehaviour
 
     public void TargetDestroyed()
     {
-        targets_destroyed++;
+        if(timer_running)
+            targets_destroyed++;
+    }
+
+    public int TargetCounter()
+    {
+        return targets_destroyed;
     }
 
 

@@ -10,6 +10,7 @@ public class HUD : MonoBehaviour
     public static int ammo = 30;
     public static int armor = 100;
     public static int ammo_BackUp = 80;
+    public static int trgt_cntr;
     public static string timer = "";
 
     public Transform CurrentAmmoText;
@@ -17,6 +18,7 @@ public class HUD : MonoBehaviour
     public Transform HealthText;
     public Transform ArmorText;
     public Transform TimerText;
+    public Transform TargetCounterText;
 
     public GameObject ESCMenu = null;
 
@@ -31,6 +33,14 @@ public class HUD : MonoBehaviour
             return GameObject.Find("RuleManager").GetComponent<RuleSet>().GetTime();
         else
             return "";
+    }
+
+    public static int getTargets()
+    {
+        if (GameObject.Find("RuleManager") != null)
+            return GameObject.Find("RuleManager").GetComponent<RuleSet>().TargetCounter();
+        else
+            return 0;
     }
 
     //please hook the following to Game Status
@@ -109,12 +119,14 @@ public class HUD : MonoBehaviour
         ammo = getRemainAmmo();
         ammo_BackUp = getBackUpAmmo();
         timer = getTime();
+        trgt_cntr = getTargets();
 
         CurrentAmmoText.GetComponent<Text>().text = "" + ammo;
         BackUpAmmoText.GetComponent<Text>().text = "" + ammo_BackUp;
         HealthText.GetComponent<Text>().text = "" + health;
         ArmorText.GetComponent<Text>().text = "" + armor;
         TimerText.GetComponent<Text>().text =  timer;
+        TargetCounterText.GetComponent<Text>().text = "Targets Hit: " + trgt_cntr;
 
         //to call Esc Menu
         if (Input.GetKeyDown(KeyCode.Escape))
