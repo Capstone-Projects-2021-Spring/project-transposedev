@@ -5,10 +5,10 @@ using UnityEngine;
 public class KillZone : MonoBehaviour {
 
     [SerializeField] private Transform player;
-    [SerializeField] private Transform spawnPoint;
 
     private void OnTriggerEnter(Collider other) {
-        //Destroy(other.gameObject);
+
+        GameObject spawnPoint = PlayerSpawnManager.NextSpawn(); // Grabs random spawn from list of spawn points in the scene
         player.transform.position = spawnPoint.transform.position;
     }
 
