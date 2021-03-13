@@ -41,7 +41,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2152302989932945783}
-  - component: {fileID: 3399516939644980797}
   m_Layer: 0
   m_Name: Gun2Item
   m_TagString: Untagged
@@ -64,20 +63,6 @@ Transform:
   m_Father: {fileID: 3234537601136121205}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3399516939644980797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879825942268030997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cef417705eecabc46826db5ecc61bbb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemInfo: {fileID: 11400000, guid: 1ce3e356b409a9a448e3f547d5296fe9, type: 2}
-  itemGameObject: {fileID: 1703450340873054101}
 --- !u!1 &1703450340873054101
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +103,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4887697799905487085}
-  - component: {fileID: 5557882996561505625}
   m_Layer: 0
   m_Name: Gun1Item
   m_TagString: Untagged
@@ -141,20 +125,6 @@ Transform:
   m_Father: {fileID: 3234537601136121205}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5557882996561505625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2335756333061837846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cef417705eecabc46826db5ecc61bbb4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemInfo: {fileID: 11400000, guid: 99e4b00639f4a1c44957ff36c05ab348, type: 2}
-  itemGameObject: {fileID: 3374445418901749997}
 --- !u!1 &3180240894997966599
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,6 +712,7 @@ MonoBehaviour:
   Button_Return: {fileID: 3180240896041256033}
   Button_Quit: {fileID: 3180240895891440264}
   ESCMenu: {fileID: 3180240896172621587}
+  PlayerObject: {fileID: 0}
 --- !u!1 &3180240895886933227
 GameObject:
   m_ObjectHideFlags: 0
@@ -1762,8 +1733,8 @@ MonoBehaviour:
   playerCam: {fileID: 3180240896196944838}
   orientation: {fileID: 3180240896231858981}
   items:
-  - {fileID: 5557882996561505625}
-  - {fileID: 3399516939644980797}
+  - {fileID: 0}
+  - {fileID: 0}
   moveSpeed: 4500
   maxSpeed: 20
   grounded: 0

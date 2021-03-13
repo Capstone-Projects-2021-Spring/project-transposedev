@@ -105,6 +105,11 @@ public class PlayerMovement : MonoBehaviour {
             }
         }
 
+        // use equipped item
+        if (Input.GetMouseButtonDown(0))
+		{
+            items[itemIndex].Use();
+		}
     }
 
     /// Finds the player's inputs for player movement
