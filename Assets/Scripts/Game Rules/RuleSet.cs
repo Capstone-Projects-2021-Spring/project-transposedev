@@ -56,7 +56,12 @@ public class RuleSet : MonoBehaviour
         current_time -= Time.deltaTime;
 
         if (current_time <= 0)
+        {
             timer_running = false;
+            FindObjectOfType<EscMenu>().OnClickQuit();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     public string GetTime()
@@ -75,6 +80,11 @@ public class RuleSet : MonoBehaviour
         
 
         return mins + ":" + sec;
+    }
+
+    public float GetTimeFloat()
+    {
+        return current_time;
     }
 
     public void TargetDestroyed()
