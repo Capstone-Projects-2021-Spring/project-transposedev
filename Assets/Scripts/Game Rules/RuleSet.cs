@@ -59,6 +59,8 @@ public class RuleSet : MonoBehaviour
         {
             timer_running = false;
             FindObjectOfType<EscMenu>().OnClickQuit();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 

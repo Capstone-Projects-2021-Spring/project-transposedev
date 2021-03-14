@@ -13,7 +13,7 @@ public class TargetManager : MonoBehaviour
         transform.gameObject.GetComponent<AudioSource>().Play();
         Destroy(target);
 	}
-
+    
     public void RespawnTargets()
 	{
         FindObjectOfType<GenerateTargets>().spawnTargets();
