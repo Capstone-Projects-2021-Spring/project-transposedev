@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f61f3ae1bc96d804d98c627036725505
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - itemInfo: {instanceID: 0}
+  - itemGameObject: {instanceID: 0}
+  - camera: {instanceID: 0}
+  - myClip: {fileID: 8300000, guid: 63e0cc565dd9e554b8a6e4a9cb81b976, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

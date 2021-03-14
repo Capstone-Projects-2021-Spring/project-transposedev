@@ -75,6 +75,7 @@ public class HUD : MonoBehaviour
     //testing features end
     void Update()
     {
+        /*
         //testing features (please remove this after hooking to the game status)
         DateTime dt = DateTime.Now;
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -113,7 +114,7 @@ public class HUD : MonoBehaviour
    
         }
         //testing features end
-
+        */
         health = getHealth();
         armor = getArmor();
         ammo = getRemainAmmo();
