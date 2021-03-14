@@ -126,7 +126,7 @@ public class HUD : MonoBehaviour
         HealthText.GetComponent<Text>().text = "" + health;
         ArmorText.GetComponent<Text>().text = "" + armor;
         TimerText.GetComponent<Text>().text =  timer;
-        TargetCounterText.GetComponent<Text>().text = "Targets Hit: " + trgt_cntr;
+        TargetCounterText.GetComponent<Text>().text = "Targets Destroyed: " + trgt_cntr;
 
         //to call Esc Menu
         if (Input.GetKeyDown(KeyCode.Escape))
