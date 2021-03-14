@@ -156,7 +156,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 1ce3e356b409a9a448e3f547d5296fe9, type: 2}
   itemGameObject: {fileID: 1703450340873054101}
   camera: {fileID: 3180240895148183499}
-  myClip: {fileID: 0}
+  myClip: {fileID: 8300000, guid: 63e0cc565dd9e554b8a6e4a9cb81b976, type: 3}
 --- !u!1 &1703450340873054101
 GameObject:
   m_ObjectHideFlags: 0
