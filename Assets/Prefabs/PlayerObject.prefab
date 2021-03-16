@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -108.45999, y: 52.020004}
-  m_SizeDelta: {x: 87.92468, y: 14.823669}
+  m_AnchoredPosition: {x: -180.2, y: 24.5}
+  m_SizeDelta: {x: 243.6195, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1298934784347249056
 CanvasRenderer:
@@ -58,14 +58,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.8773585, g: 0.115877554, b: 0.7730301, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 12
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Targets Hit:'
+  m_Text: 'Targets Destroyed:'
 --- !u!1 &768016356178347071
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,7 +689,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3180240895746397115
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1543,7 +1543,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 27.299988, y: 24.050003}
+  m_AnchoredPosition: {x: 27.299988, y: 24.5}
   m_SizeDelta: {x: 33.636017, y: 35.141388}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3180240896184170973
@@ -2200,7 +2200,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 117.20001, y: 24.199997}
+  m_AnchoredPosition: {x: 117.20001, y: 24.5}
   m_SizeDelta: {x: 31.082855, y: 31.08284}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3180240896661796420

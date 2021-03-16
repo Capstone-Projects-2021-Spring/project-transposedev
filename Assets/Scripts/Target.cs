@@ -26,7 +26,6 @@ public class Target : MonoBehaviour, IDamageable
 	public void TakeDamage(float damage)
 	{
 		currentHealth -= damage;
-		Debug.Log("Damaged! Health at: " + currentHealth);
 	}
 
 	void Die()

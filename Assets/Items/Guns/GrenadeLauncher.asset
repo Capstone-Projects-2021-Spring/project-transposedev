@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GrenadeLauncher
   m_EditorClassIdentifier: 
   itemInfo: GrenadeLauncher
-  damage: 30
+  damage: 50
