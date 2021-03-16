@@ -114,9 +114,13 @@ public class PlayerMovement : MonoBehaviour {
     private void UseItem()
 	{
         // use equipped item
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKey(KeyCode.Mouse0))
         {
             items[itemIndex].Use();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            items[itemIndex].Release();
         }
     }
 
