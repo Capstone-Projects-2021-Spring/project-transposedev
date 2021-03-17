@@ -18,9 +18,15 @@ public class Launcher : MonoBehaviourPunCallbacks
 	[SerializeField] GameObject playerListItemPrefab;
 	[SerializeField] GameObject startGameButton;
 
+	private Dictionary<string, RoomInfo> cachedRoomList;
+	private Dictionary<string, GameObject> roomListEntries;
+	private Dictionary<int, GameObject> playerListEntries;
+
 	void Awake()
 	{
 		Instance = this;
+		cachedRoomList = new Dictionary<string, RoomInfo>();
+		roomListEntries = new Dictionary<string, GameObject>();
 	}
 
 	// Start is called before the first frame update
@@ -43,11 +49,21 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("Main");
         Debug.Log("Joined Lobby");
 
+		// whenever this joins a new lobby, clear any previous room lists
+		cachedRoomList.Clear();
+		ClearRoomListView();
+
 		// TODO place holder for nickname/username system
 		PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
 	}
 
-    public void CreateRoom()
+	public override void OnLeftLobby()
+	{
+		cachedRoomList.Clear();
+		ClearRoomListView();
+	}
+
+	public void CreateRoom()
 	{
         if (string.IsNullOrEmpty(roomNameInputField.text))
 		{
@@ -65,6 +81,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	public override void OnJoinedRoom()
 	{
+		// joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
+		cachedRoomList.Clear();
+
 		roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 		MenuManager.Instance.OpenMenu("Room");
 
@@ -93,6 +112,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 		MenuManager.Instance.OpenMenu("Error");
 	}
 
+	public override void OnJoinRoomFailed(short returnCode, string message)
+	{
+		errorText.text = "Room join failed: " + message;
+		MenuManager.Instance.OpenMenu("Error");
+	}
+
 	public void LeaveRoom()
 	{
 		PhotonNetwork.LeaveRoom();
@@ -106,16 +131,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	public override void OnRoomListUpdate(List<RoomInfo> roomList)
 	{
-		foreach (Transform trans in roomListContent)
-		{
-			Destroy(trans.gameObject);
-		}
-		for (int i = 0; i < roomList.Count; i++)
-		{
-			//if (roomList[i].RemovedFromList)
-				//continue;
-			Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
-		}
+		ClearRoomListView();
+
+		UpdateCachedRoomList(roomList);
+		UpdateRoomListView();
 	}
 
 	public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -127,4 +146,61 @@ public class Launcher : MonoBehaviourPunCallbacks
 	{
 		PhotonNetwork.LoadLevel(1);
 	}
+
+	// Bug fixing
+
+	private void ClearRoomListView()
+	{
+		foreach (GameObject entry in roomListEntries.Values)
+		{
+			Destroy(entry.gameObject);
+		}
+
+		roomListEntries.Clear();
+	}
+
+	private void UpdateCachedRoomList(List<RoomInfo> roomList)
+	{
+		foreach (RoomInfo info in roomList)
+		{
+			// Remove room from cached room list if it got closed, became invisible or was marked as removed
+			if (!info.IsOpen || !info.IsVisible || info.RemovedFromList)
+			{
+				if (cachedRoomList.ContainsKey(info.Name))
+				{
+					cachedRoomList.Remove(info.Name);
+				}
+
+				continue;
+			}
+
+			// Update cached room info
+			if (cachedRoomList.ContainsKey(info.Name))
+			{
+				cachedRoomList[info.Name] = info;
+			}
+			// Add new room info to cache
+			else
+			{
+				cachedRoomList.Add(info.Name, info);
+			}
+		}
+	}
+
+	private void UpdateRoomListView()
+	{
+		foreach (RoomInfo info in cachedRoomList.Values)
+		{
+			GameObject entry = Instantiate(roomListItemPrefab, roomListContent);
+			entry.GetComponent<RoomListItem>().SetUp(info);
+
+			roomListEntries.Add(info.Name, entry);
+		}
+	}
+
+
+
+
+
+
 }
