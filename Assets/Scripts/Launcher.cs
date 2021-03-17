@@ -89,13 +89,17 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 		Player[] players = PhotonNetwork.PlayerList;
 
-		foreach (Transform child in playerListContent)
+		if (playerListEntries == null)
 		{
-			Destroy(child.gameObject);
+			playerListEntries = new Dictionary<int, GameObject>();
 		}
-		for (int i = 0; i < players.Length; i++)
+
+		foreach (Player p in PhotonNetwork.PlayerList)
 		{
-			Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
+			GameObject entry = Instantiate(playerListItemPrefab, playerListContent);
+			entry.GetComponent<PlayerListItem>().SetUp(p);
+
+			playerListEntries.Add(p.ActorNumber, entry);
 		}
 
 		startGameButton.SetActive(PhotonNetwork.IsMasterClient);
@@ -127,6 +131,14 @@ public class Launcher : MonoBehaviourPunCallbacks
 	public override void OnLeftRoom()
 	{
 		MenuManager.Instance.OpenMenu("Main");
+
+		foreach (GameObject entry in playerListEntries.Values)
+		{
+			Destroy(entry.gameObject);
+		}
+
+		playerListEntries.Clear();
+		playerListEntries = null;
 	}
 
 	public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -139,15 +151,22 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerEnteredRoom(Player newPlayer)
 	{
-		Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
+		GameObject entry = Instantiate(playerListItemPrefab, playerListContent);
+		entry.GetComponent<PlayerListItem>().SetUp(newPlayer);
+
+		playerListEntries.Add(newPlayer.ActorNumber, entry);
+	}
+
+	public override void OnPlayerLeftRoom(Player otherPlayer)
+	{
+		Destroy(playerListEntries[otherPlayer.ActorNumber].gameObject);
+		playerListEntries.Remove(otherPlayer.ActorNumber);
 	}
 
 	public void StartGame()
 	{
 		PhotonNetwork.LoadLevel(1);
 	}
-
-	// Bug fixing
 
 	private void ClearRoomListView()
 	{
