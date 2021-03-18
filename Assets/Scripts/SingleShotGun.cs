@@ -9,7 +9,6 @@ public class SingleShotGun : Gun
 
     [SerializeField] private AudioClip myClip;
     private AudioSource mySource;
-	private bool Fired;
     private void Awake()
     {
         mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
@@ -25,11 +24,6 @@ public class SingleShotGun : Gun
 
 	void Shoot()
 	{
-		if (Fired)
-        {
-			return;
-        }
-		Fired = true;
 		Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 		ray.origin = camera.transform.position;
 		if (Physics.Raycast(ray, out RaycastHit hit))
@@ -39,6 +33,10 @@ public class SingleShotGun : Gun
 	}
 	public override void Release()
 	{
-		Fired = false;
+
 	}
+    public override void HoldDown()
+    {
+        
+    }
 }

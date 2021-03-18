@@ -22,7 +22,12 @@ public class AutomaticGun : Gun
 	private long reload=5000;
 	private bool isReloading;
 
-    public override void Use()
+	public override void Use()
+    {
+
+    }
+
+	public override void HoldDown()
 	{
         mySource.Play();
 		Shoot();
@@ -50,43 +55,48 @@ public class AutomaticGun : Gun
 			time_reload = cr + reload;
 		}
 	}
+	void ReloadCompleted()
+	{
+		//play reloaded sound
+		ammo_current = ammo_max;
+		isReloading = false;
+	}
 	void Shoot()
 	{
-			DateTime dt = DateTime.Now;
-			long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-			//check if reloading
-			if (isReloading)
+		DateTime dt = DateTime.Now;
+		long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+		//check if reloading
+		if (isReloading)
+		{
+			if (cr < time_reload)
 			{
-				if (cr < time_reload)
-				{
-					return;
-				}
-				ammo_current = ammo_max;
-				isReloading = false;
-			}
-			//check if reloading end
-			//cooldown of automatic
-			if (cr < time_fire)
-            {
 				return;
-            }
-			time_fire = cr + cooldown;
+			}
+			ReloadCompleted()
+		}
+		//check if reloading end
+		//cooldown of automatic
+		if (cr < time_fire)
+		{
+			return;
+		}
+		time_fire = cr + cooldown;
 		//cooldown of automatic end
 		//check if there is ammo
 		Reload();
-			//check ammo end
+		//check ammo end
 		Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-			ray.origin = camera.transform.position;
-			if (Physics.Raycast(ray, out RaycastHit hit))
-			{
-				hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
-			}
-			ammo_current--;
-            if (ammo_current <= 0)
-            {
-				isReloading = true;
-				time_reload = cr + reload;
-			}
+		ray.origin = camera.transform.position;
+		if (Physics.Raycast(ray, out RaycastHit hit))
+		{
+			hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
 		}
+		ammo_current--;
+		if (ammo_current <= 0)
+		{
+			isReloading = true;
+			time_reload = cr + reload;
+		}
+	}
 	
 }
