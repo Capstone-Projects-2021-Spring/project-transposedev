@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -43,6 +44,8 @@ public class PlayerMovement : MonoBehaviour {
     float x, y;
     bool jumping, sprinting;
 
+    PhotonView PV;
+
 /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -51,9 +54,15 @@ public class PlayerMovement : MonoBehaviour {
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
     }
     
     void Start() {
+		if (!PV.IsMine)
+		{
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+		}
+
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -65,6 +74,9 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
+        if (!PV.IsMine)
+            return;
+
         if (!EscMenu.isInEscMenu())
         {
             MyInput();
