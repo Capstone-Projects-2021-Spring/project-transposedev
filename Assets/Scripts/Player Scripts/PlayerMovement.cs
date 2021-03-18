@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
 using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviourPunCallbacks {
 
     /*****************/
     /*   VARIABLES   */
@@ -58,18 +60,24 @@ public class PlayerMovement : MonoBehaviour {
     }
     
     void Start() {
-		if (!PV.IsMine)
+		if (PV.IsMine)
+		{
+            EquipItem(0);
+		} else
 		{
             Destroy(GetComponentInChildren<Camera>().gameObject);
-		}
+            Destroy(rb);
+        }
 
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        EquipItem(0);
     }
 
     private void FixedUpdate() {
+        if (!PV.IsMine)
+            return;
+
         Movement();
     }
 
@@ -348,9 +356,24 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
         previousItemIndex = itemIndex;
+
+        if (PV.IsMine)
+		{
+            Hashtable hash = new Hashtable();
+            hash.Add("itemIndex", itemIndex);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+		}
 	}
 
-    private void StopGrounded()
+	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+	{
+		if (!PV.IsMine && targetPlayer == PV.Owner)
+		{
+            EquipItem((int)changedProps["itemIndex"]);
+		}
+	}
+
+	private void StopGrounded()
     {
         grounded = false;
     }
