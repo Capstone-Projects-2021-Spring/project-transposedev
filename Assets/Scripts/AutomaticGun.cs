@@ -72,7 +72,7 @@ public class AutomaticGun : Gun
 			{
 				return;
 			}
-			ReloadCompleted()
+			ReloadCompleted();
 		}
 		//check if reloading end
 		//cooldown of automatic
