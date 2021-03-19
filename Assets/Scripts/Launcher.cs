@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
+using System.IO;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -32,7 +33,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	// Start is called before the first frame update
 	void Start()
     {
-        Debug.Log("Connecting to Master");
+		Debug.Log("Connecting to Master");
         PhotonNetwork.ConnectUsingSettings();
     }
 
@@ -83,6 +84,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 	{
 		// joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
 		cachedRoomList.Clear();
+
+		PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "RoomManager"), Vector3.zero, Quaternion.identity);
 
 		roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 		MenuManager.Instance.OpenMenu("Room");

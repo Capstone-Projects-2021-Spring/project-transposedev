@@ -4,7 +4,7 @@ using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 
-public class PlayerMovement : MonoBehaviourPunCallbacks {
+public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     /*****************/
     /*   VARIABLES   */
@@ -380,6 +380,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks {
     {
         grounded = false;
     }
+
+    public void TakeDamage(float damage)
+    {
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+	{
+        if (!PV.IsMine)
+            return;
+        Debug.Log("Took Damage: " + damage);
+	}
 
     /***************/
     /*   Esc Menu  */
