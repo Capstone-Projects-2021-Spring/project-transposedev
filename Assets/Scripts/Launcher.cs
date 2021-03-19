@@ -168,6 +168,12 @@ public class Launcher : MonoBehaviourPunCallbacks
 		PhotonNetwork.LoadLevel(1);
 	}
 
+	public void LeaveGame()
+	{
+		PhotonNetwork.LeaveRoom();
+		PhotonNetwork.LoadLevel(0);
+	}
+
 	private void ClearRoomListView()
 	{
 		foreach (GameObject entry in roomListEntries.Values)

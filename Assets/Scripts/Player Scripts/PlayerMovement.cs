@@ -406,11 +406,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks {
 
     public void OnClickReturn()
     {
+        if (!PV.IsMine)
+            return;
         Debug.Log("Return Button Pressed");
     }
     public void OnClickQuit()
     {
-        PhotonNetwork.LeaveRoom();
-        PhotonNetwork.LoadLevel(0);
+        if (!PV.IsMine)
+            return;
+        GameManager.Instance.LeaveRoom();
     }
 }
