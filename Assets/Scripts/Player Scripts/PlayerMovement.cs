@@ -50,6 +50,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     PhotonView PV;
 
+    PlayerManager playerManager;
+
+    // example player stats
+    const float maxHealth = 100f;
+    float currentHealth = maxHealth;
+
 /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -59,6 +65,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     void Awake() {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
+        playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
     
     void Start() {
@@ -391,8 +398,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 	{
         if (!PV.IsMine)
             return;
-        Debug.Log("Took Damage: " + damage);
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+		{
+            Die();
+		}
 	}
+
+    void Die()
+	{
+        playerManager.Die();
+	}
+
+
 
     /***************/
     /*   Esc Menu  */
