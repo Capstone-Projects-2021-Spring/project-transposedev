@@ -46,6 +46,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks {
     float x, y;
     bool jumping, sprinting;
 
+    [SerializeField] Menu escMenu;
+
     PhotonView PV;
 
 /* ----------------------------------------------------------------------------------------------------------------- */
@@ -85,13 +87,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks {
         if (!PV.IsMine)
             return;
 
-        if (!EscMenu.isInEscMenu())
-        {
+        if (!escMenu.open)
+		{
             MyInput();
             Look();
             SelectItem();
             UseItem();
         }
+        EscMenu();
     }
 
     private void SelectItem()
@@ -377,5 +380,37 @@ public class PlayerMovement : MonoBehaviourPunCallbacks {
     {
         grounded = false;
     }
-    
+
+    /***************/
+    /*   Esc Menu  */
+    /***************/
+
+    void EscMenu()
+	{
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (escMenu.open)
+			{
+                escMenu.Close();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+			else
+			{
+                escMenu.Open();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+    }
+
+    public void OnClickReturn()
+    {
+        Debug.Log("Return Button Pressed");
+    }
+    public void OnClickQuit()
+    {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel(0);
+    }
 }
