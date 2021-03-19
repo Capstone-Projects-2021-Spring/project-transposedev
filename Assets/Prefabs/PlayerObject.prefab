@@ -291,6 +291,8 @@ MonoBehaviour:
   camera: {fileID: 3180240895148183497}
   player: {fileID: 3180240896242787037}
   maxDistance: 50
+  grappleShootClip: {fileID: 8300000, guid: bc0fe15ed53a7f64a87adc9ba34d2292, type: 3}
+  grappleHookedClip: {fileID: 8300000, guid: 7045ce8e9304c6d43a1a5c39814ecf6b, type: 3}
 --- !u!120 &4815988191097718791
 LineRenderer:
   m_ObjectHideFlags: 0
