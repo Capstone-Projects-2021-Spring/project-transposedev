@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Realtime;
+using Photon.Pun;
 
 public class SingleShotGun : Gun
 {
@@ -19,6 +21,7 @@ public class SingleShotGun : Gun
 
     public override void Use()
 	{
+        Debug.Log(transform.parent.parent.parent.GetComponent<PhotonView>().ViewID + " just shot a gun");
         mySource.Play();
 		Shoot();
 	}
@@ -30,6 +33,7 @@ public class SingleShotGun : Gun
 		if (Physics.Raycast(ray, out RaycastHit hit))
 		{
 			hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
+            
 		}
 	}
 }
