@@ -399,9 +399,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (!PV.IsMine)
             return;
 
-        currentHealth -= damage;
+        //currentHealth -= damage;
 
-        if (currentHealth <= 0)
+        GetComponent<PlayerStats>().LoseHealth((int)damage);
+
+        if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
             Die();
 		}

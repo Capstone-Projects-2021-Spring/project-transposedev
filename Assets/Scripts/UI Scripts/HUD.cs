@@ -20,9 +20,9 @@ public class HUD : MonoBehaviour
     public Transform TimerText;
     public Transform TargetCounterText;
 
-    public static int getHealth()
+    public int getHealth()
     {
-        return GameObject.Find("PlayerObject").GetComponent<PlayerStats>().GetHealth();
+        return GetComponent<PlayerStats>().GetHealth();
     }
     public static String getTime()
     {
@@ -51,9 +51,9 @@ public class HUD : MonoBehaviour
         return ammo_BackUp;
 
     }
-    public static int getArmor()
+    public int getArmor()
     {
-        return GameObject.Find("PlayerObject").GetComponent<PlayerStats>().GetArmor();
+        return GetComponent<PlayerStats>().GetArmor();
         //return armor;
     }
     void Start()
@@ -74,20 +74,20 @@ public class HUD : MonoBehaviour
     //testing features end
     void Update()
     {
-        /*
+        
         health = getHealth();
         armor = getArmor();
-        ammo = getRemainAmmo();
-        ammo_BackUp = getBackUpAmmo();
+        //ammo = getRemainAmmo();
+        //ammo_BackUp = getBackUpAmmo();
         timer = getTime();
         trgt_cntr = getTargets();
 
-        CurrentAmmoText.GetComponent<Text>().text = "" + ammo;
-        BackUpAmmoText.GetComponent<Text>().text = "" + ammo_BackUp;
+        //CurrentAmmoText.GetComponent<Text>().text = "" + ammo;
+        //BackUpAmmoText.GetComponent<Text>().text = "" + ammo_BackUp;
         HealthText.GetComponent<Text>().text = "" + health;
         ArmorText.GetComponent<Text>().text = "" + armor;
         TimerText.GetComponent<Text>().text =  timer;
         TargetCounterText.GetComponent<Text>().text = "Targets Destroyed: " + trgt_cntr;
-        */
+        
     }
 }
