@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour {
             Look();
             SelectItem();
             UseItem();
+            UseAbility();
         }
     }
 
@@ -118,6 +119,12 @@ public class PlayerMovement : MonoBehaviour {
         {
             items[itemIndex].Use();
         }
+    }
+
+    private void UseAbility()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+            gameObject.GetComponent<PlayerClass>().UseAbility();
     }
 
     /// Finds the player's inputs for player movement
