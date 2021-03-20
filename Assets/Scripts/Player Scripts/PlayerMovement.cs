@@ -388,19 +388,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         grounded = false;
     }
 
+    // ran by the shooter
     public void TakeDamage(float damage)
     {
-        Debug.Log(PhotonNetwork.NickName + " I am the shooter my ID is: " + PV.OwnerActorNr);
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PV.OwnerActorNr);
+        Debug.Log(PhotonNetwork.LocalPlayer + " I am the shooter!");
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
     }
 
+    // ran by the target
     [PunRPC]
-    void RPC_TakeDamage(float damage, int shooterID)
+    void RPC_TakeDamage(float damage, Player shooter)
 	{
         if (!PV.IsMine)
             return;
 
-        Debug.Log(PhotonNetwork.NickName + " I am the target and my shooter's ID is: " + shooterID);
+        Debug.Log(PhotonNetwork.LocalPlayer + " I am the target and my shooter is: " + shooter);
         //currentHealth -= damage;
         GetComponent<PlayerStats>().LoseHealth((int)damage);
 
