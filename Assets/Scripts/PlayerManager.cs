@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
 	GameObject controller;
+	public int killCount;
 
 	void Awake()
 	{
