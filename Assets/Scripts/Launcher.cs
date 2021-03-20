@@ -168,6 +168,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	public void StartGame()
 	{
+		PhotonNetwork.CurrentRoom.IsOpen = false;
 		PhotonNetwork.LoadLevel(1);
 	}
 
