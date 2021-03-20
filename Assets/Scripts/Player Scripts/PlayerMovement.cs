@@ -1,7 +1,10 @@
 using System;
 using UnityEngine;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     /*****************/
     /*   VARIABLES   */
@@ -43,6 +46,16 @@ public class PlayerMovement : MonoBehaviour {
     float x, y;
     bool jumping, sprinting;
 
+    [SerializeField] Menu escMenu;
+
+    PhotonView PV;
+
+    PlayerManager playerManager;
+
+    // example player stats
+    const float maxHealth = 100f;
+    float currentHealth = maxHealth;
+
 /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -51,28 +64,45 @@ public class PlayerMovement : MonoBehaviour {
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
+        playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
     
     void Start() {
+		if (PV.IsMine)
+		{
+            EquipItem(0);
+		} else
+		{
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
+
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        EquipItem(0);
     }
 
     private void FixedUpdate() {
+        if (!PV.IsMine)
+            return;
+
         Movement();
     }
 
     private void Update() {
-        if (!EscMenu.isInEscMenu())
-        {
+        if (!PV.IsMine)
+            return;
+
+        if (!escMenu.open)
+		{
             MyInput();
             Look();
             SelectItem();
             UseItem();
             UseAbility();
         }
+        EscMenu();
     }
 
     private void SelectItem()
@@ -343,11 +373,89 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
         previousItemIndex = itemIndex;
+
+        if (PV.IsMine)
+		{
+            Hashtable hash = new Hashtable();
+            hash.Add("itemIndex", itemIndex);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+		}
 	}
 
-    private void StopGrounded()
+	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+	{
+		if (!PV.IsMine && targetPlayer == PV.Owner)
+		{
+            EquipItem((int)changedProps["itemIndex"]);
+		}
+	}
+
+	private void StopGrounded()
     {
         grounded = false;
     }
-    
+
+    public void TakeDamage(float damage)
+    {
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+	{
+        if (!PV.IsMine)
+            return;
+
+        //currentHealth -= damage;
+
+        GetComponent<PlayerStats>().LoseHealth((int)damage);
+
+        if (GetComponent<PlayerStats>().GetHealth() <= 0)
+		{
+            Die();
+		}
+	}
+
+    void Die()
+	{
+        playerManager.Die();
+	}
+
+
+
+    /***************/
+    /*   Esc Menu  */
+    /***************/
+
+    void EscMenu()
+	{
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (escMenu.open)
+			{
+                escMenu.Close();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+			else
+			{
+                escMenu.Open();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+    }
+
+    public void OnClickReturn()
+    {
+        if (!PV.IsMine)
+            return;
+        Debug.Log("Return Button Pressed");
+    }
+    public void OnClickQuit()
+    {
+        if (!PV.IsMine)
+            return;
+        GameManager.Instance.LeaveRoom();
+    }
 }

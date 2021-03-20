@@ -1,9 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class PlayerStats : MonoBehaviour
 {
+    PhotonView PV;
+
+
     [SerializeField]
     private int HEALTH_MAX = 100;
     [SerializeField]
@@ -13,6 +18,12 @@ public class PlayerStats : MonoBehaviour
     private int ARMOR = 60;
     [SerializeField]
     private int ARMOR_MAX = 15;
+
+
+    private void Awake()
+    {
+        PV = GetComponent<PhotonView>();
+    }
 
 
     // Start is called before the first frame update
