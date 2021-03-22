@@ -55,8 +55,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     // example player stats
     const float maxHealth = 100f;
     float currentHealth = maxHealth;
+    Hashtable hash;
 
-/* ----------------------------------------------------------------------------------------------------------------- */
+    /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
     /*   METHODS   */
@@ -369,7 +370,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (PV.IsMine)
 		{
-            Hashtable hash = new Hashtable();
+            hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            hash.Remove("itemIndex");
             hash.Add("itemIndex", itemIndex);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 		}
@@ -412,23 +414,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		}
 	}
 
-    [PunRPC]
-    public void RPC_GetKill()
-    {
-        if (!PV.IsMine)
-            return;
-
-        playerManager.AddKill();
-    }
-
     void Die(Player shooter)
 	{
-        if(shooter != null)
-            PV.RPC("RPC_GetKill", shooter);
-
-        playerManager.Die();
+        playerManager.Die(shooter);
 	}
-
 
 
     /***************/
