@@ -408,7 +408,18 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
-            PV.RPC("RPC_GetKill", RpcTarget.All, PhotonNetwork.LocalPlayer, shooter);
+            //PV.RPC("RPC_GetKill", RpcTarget.All, PhotonNetwork.LocalPlayer, shooter);
+
+            foreach(PlayerManager p in FindObjectsOfType<PlayerManager>())
+            {
+                if(p.GetComponent<PhotonView>().Owner.Equals(shooter))
+                {
+                    Debug.Log(shooter + "just killed me");
+                    p.AddKill();
+                }
+            }
+
+
             Die();
 		}
 	}
