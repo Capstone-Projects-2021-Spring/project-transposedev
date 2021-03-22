@@ -8,8 +8,8 @@ public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
 	GameObject controller;
-	[SerializeField]private int kills;
-    [SerializeField]private int deaths;
+	[SerializeField]private int kills = 0;
+    [SerializeField]private int deaths = 0;
     
 
 	void Awake()
