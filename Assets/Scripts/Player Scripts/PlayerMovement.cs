@@ -408,37 +408,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
-            //PV.RPC("RPC_GetKill", RpcTarget.All, PhotonNetwork.LocalPlayer, shooter);
-
-            foreach(PlayerManager p in FindObjectsOfType<PlayerManager>())
-            {
-                if(p.GetComponent<PhotonView>().Owner.Equals(shooter))
-                {
-                    Debug.Log(shooter + "just killed me");
-                    p.AddKill();
-                }
-            }
-
-
-            Die();
+            Die(shooter);
 		}
 	}
 
     [PunRPC]
-    public void RPC_GetKill(Player target, Player shooter)
+    public void RPC_GetKill()
     {
         if (!PV.IsMine)
             return;
 
-        if(shooter.Equals(PhotonNetwork.LocalPlayer)) //I am the shooter, I should increment my kill count
-        {
-            Debug.Log(shooter + " just got a kill");
-            playerManager.AddKill();
-        }
+        playerManager.AddKill();
     }
 
-    void Die()
+    void Die(Player shooter)
 	{
+        if(shooter != null)
+            PV.RPC("RPC_GetKill", shooter);
+
         playerManager.Die();
 	}
 
