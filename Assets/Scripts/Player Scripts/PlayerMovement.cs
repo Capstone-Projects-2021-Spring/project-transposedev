@@ -391,7 +391,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     // ran by the shooter
     public void TakeDamage(float damage)
     {
-        Debug.Log(PhotonNetwork.LocalPlayer + " I am the shooter!");
+        Debug.Log(PhotonNetwork.LocalPlayer.UserId + " is the shooter");
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
     }
 
@@ -408,9 +408,20 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
+            PV.RPC("RPC_GetKill", RpcTarget.All, PhotonNetwork.LocalPlayer, shooter);
             Die();
 		}
 	}
+
+    [PunRPC]
+    public void RPC_GetKill(Player target, Player shooter)
+    {
+        if(shooter.UserId == PhotonNetwork.LocalPlayer.UserId)
+        {
+            Debug.Log("I just got a kill:" + shooter.UserId);
+            playerManager.AddKill();
+        }
+    }
 
     void Die()
 	{

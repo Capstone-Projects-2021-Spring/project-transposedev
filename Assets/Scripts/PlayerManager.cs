@@ -8,7 +8,9 @@ public class PlayerManager : MonoBehaviour
 {
     PhotonView PV;
 	GameObject controller;
-	public int killCount;
+	[SerializeField]private int kills;
+    [SerializeField]private int deaths;
+    
 
 	void Awake()
 	{
@@ -35,5 +37,22 @@ public class PlayerManager : MonoBehaviour
 	{
 		PhotonNetwork.Destroy(controller);
 		CreateController();
+        deaths++;
+        Debug.Log("I just died, current deaths: " + DeathCount());
 	}
+
+    public void AddKill()
+    {
+        kills++;
+    }
+
+    public int KillCount()
+    {
+        return kills;
+    }
+
+    public int DeathCount()
+    {
+        return deaths;
+    }
 }
