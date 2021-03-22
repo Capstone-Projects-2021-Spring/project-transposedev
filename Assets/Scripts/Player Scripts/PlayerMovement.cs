@@ -416,6 +416,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     [PunRPC]
     public void RPC_GetKill(Player target, Player shooter)
     {
+        if (!PV.IsMine)
+            return;
+
         if(shooter.Equals(PhotonNetwork.LocalPlayer)) //I am the shooter, I should increment my kill count
         {
             Debug.Log(shooter + " just got a kill");
