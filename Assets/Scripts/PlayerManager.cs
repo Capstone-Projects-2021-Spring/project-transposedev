@@ -86,7 +86,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
 	{
-        if (changedProps.Count<3)
+        if (changedProps.Count < 3)
             return;
 
 		if (!PV.IsMine && targetPlayer == PV.Owner)

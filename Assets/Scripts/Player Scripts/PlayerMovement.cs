@@ -52,9 +52,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     PlayerManager playerManager;
 
-    // example player stats
-    const float maxHealth = 100f;
-    float currentHealth = maxHealth;
+    // countainer for accessing custom properties
     Hashtable hash;
 
     /* ----------------------------------------------------------------------------------------------------------------- */
