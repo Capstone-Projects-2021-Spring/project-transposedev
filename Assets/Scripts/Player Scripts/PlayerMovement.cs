@@ -52,11 +52,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     PlayerManager playerManager;
 
-    // example player stats
-    const float maxHealth = 100f;
-    float currentHealth = maxHealth;
+    // countainer for accessing custom properties
+    Hashtable hash;
 
-/* ----------------------------------------------------------------------------------------------------------------- */
+    /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
     /*   METHODS   */
@@ -376,7 +375,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (PV.IsMine)
 		{
-            Hashtable hash = new Hashtable();
+            hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            hash.Remove("itemIndex");
             hash.Add("itemIndex", itemIndex);
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 		}
@@ -395,32 +395,34 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         grounded = false;
     }
 
+    // ran by the shooter
     public void TakeDamage(float damage)
     {
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        Debug.Log(PhotonNetwork.LocalPlayer + " is the shooter");
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
     }
 
+    // ran by the target
     [PunRPC]
-    void RPC_TakeDamage(float damage)
+    void RPC_TakeDamage(float damage, Player shooter)
 	{
         if (!PV.IsMine)
             return;
 
-        //currentHealth -= damage;
+        Debug.Log(PhotonNetwork.LocalPlayer + " I am the target and my shooter is: " + shooter);
 
         GetComponent<PlayerStats>().LoseHealth((int)damage);
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
-            Die();
+            Die(shooter);
 		}
 	}
 
-    void Die()
+    void Die(Player shooter)
 	{
-        playerManager.Die();
+        playerManager.Die(shooter);
 	}
-
 
 
     /***************/
