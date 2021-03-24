@@ -13,6 +13,7 @@ public class RocketBehaviour : MonoBehaviour
     long initTime;
     void Start()
     {
+
     }
 
     private void OnCollisionEnter(Collision collision)

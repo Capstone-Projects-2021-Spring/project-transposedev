@@ -29,7 +29,6 @@ public class AutomaticGun : Gun
 
 	public override void HoldDown()
 	{
-        mySource.Play();
 		Shoot();
 	}
 
@@ -45,7 +44,7 @@ public class AutomaticGun : Gun
 	{
 
 	}
-	void Reload()
+	bool Reload()
     {
 		DateTime dt = DateTime.Now;
 		long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -53,7 +52,9 @@ public class AutomaticGun : Gun
 		{
 			isReloading = true;
 			time_reload = cr + reload;
+			return false;
 		}
+		return true;
 	}
 	void ReloadCompleted()
 	{
@@ -81,10 +82,14 @@ public class AutomaticGun : Gun
 			return;
 		}
 		time_fire = cr + cooldown;
-		//cooldown of automatic end
-		//check if there is ammo
-		Reload();
+        //cooldown of automatic end
+        //check if there is ammo
+        if (!Reload())
+        {
+			return;
+        }
 		//check ammo end
+		mySource.Play();
 		Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 		ray.origin = camera.transform.position;
 		if (Physics.Raycast(ray, out RaycastHit hit))
