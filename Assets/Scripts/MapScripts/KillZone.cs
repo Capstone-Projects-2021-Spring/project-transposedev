@@ -8,8 +8,15 @@ public class KillZone : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
 
-        GameObject spawnPoint = PlayerSpawnManager.NextSpawn(); // Grabs random spawn from list of spawn points in the scene
-        player.transform.position = spawnPoint.transform.position;
+        if(other.gameObject.GetComponent<PlayerMovement>() != null)
+        {
+            player = other.transform;
+            other.gameObject.GetComponent<PlayerMovement>().Die();
+
+            GameObject spawnPoint = PlayerSpawnManager.NextSpawn(); // Grabs random spawn from list of spawn points in the scene
+            player.transform.position = spawnPoint.transform.position;
+        }
+
     }
 
 }

@@ -419,10 +419,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		}
 	}
 
-    void Die(Player shooter)
+    public void Die(Player shooter)
 	{
         playerManager.Die(shooter);
 	}
+
+    public void Die()
+    {
+        playerManager.Die(null);
+    }
 
 
     /***************/

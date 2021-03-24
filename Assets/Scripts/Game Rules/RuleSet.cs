@@ -29,8 +29,8 @@ public class RuleSet : MonoBehaviour
 
     void Awake()
     {
-        SetMatchTime(3);
-        StartMatchTimer();
+        //SetMatchTime(3);
+        //StartMatchTimer();
     }
 
     
