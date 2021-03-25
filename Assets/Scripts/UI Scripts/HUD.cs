@@ -22,7 +22,7 @@ public class HUD : MonoBehaviour
 
     public int getHealth()
     {
-        return GetComponent<PlayerStats>().GetHealth();
+        return transform.gameObject.GetComponent<PlayerStats>().GetHealth();
     }
     public static String getTime()
     {
@@ -53,7 +53,7 @@ public class HUD : MonoBehaviour
     }
     public int getArmor()
     {
-        return GetComponent<PlayerStats>().GetArmor();
+        return transform.gameObject.GetComponent<PlayerStats>().GetArmor();
         //return armor;
     }
     void Start()

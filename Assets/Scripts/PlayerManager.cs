@@ -54,7 +54,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.Destroy(controller);
 		CreateController();
-        Debug.Log("I just died, current deaths: " + DeathCount());
+        //Debug.Log("I just died, current deaths: " + DeathCount());
 	}
 
 

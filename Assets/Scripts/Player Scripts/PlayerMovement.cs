@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     bool jumping, sprinting;
 
     [SerializeField] Menu escMenu;
+    [SerializeField] Menu leaderboard;
 
     PhotonView PV;
 
@@ -102,6 +103,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             UseAbility();
         }
         EscMenu();
+        LeaderboardMenu();
     }
 
     private void SelectItem()
@@ -450,6 +452,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
+        }
+    }
+
+    void LeaderboardMenu()
+    {
+        if(Input.GetKey(KeyCode.Tab))
+        {
+            if(!leaderboard.open)
+            {
+                leaderboard.Open();
+            }
+        }
+        else
+        {
+            leaderboard.Close();
         }
     }
 
