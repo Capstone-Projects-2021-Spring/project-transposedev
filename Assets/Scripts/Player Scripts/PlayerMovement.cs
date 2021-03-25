@@ -147,6 +147,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         {
             items[itemIndex].Use();
         }
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            items[itemIndex].HoldDown();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            items[itemIndex].Release();
+        }
     }
 
     /// Finds the player's inputs for player movement
