@@ -6,9 +6,10 @@ using System;
 public class RocketBehaviour : MonoBehaviour
 {
     public GunInfo itemInfo;
-    float radius = 10;
-    float power = 170;
-    float explosiveLift = 4;
+    float radius = 5;
+    float power = 150;
+    float explosiveLift = 3;
+    public GameObject FireworksAll;
     // Start is called before the first frame update
     long initTime;
     void Start()
@@ -18,7 +19,6 @@ public class RocketBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        DateTime dt = DateTime.Now;
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         if (initTime + 1000 > cr)
         {
@@ -26,6 +26,7 @@ public class RocketBehaviour : MonoBehaviour
         }
         Vector3 rocketOrigin = transform.position;
         Collider[] colliders = Physics.OverlapSphere(rocketOrigin, radius);
+        Explode();
         foreach (Collider hit in colliders)
         {
             hit.GetComponent<Collider>().gameObject.GetComponent<IDamageable>()?.TakeDamage(itemInfo.damage);
@@ -36,5 +37,9 @@ public class RocketBehaviour : MonoBehaviour
         }
         Destroy(gameObject);
     }
-
+    void Explode()
+    {
+        GameObject firework = Instantiate(FireworksAll, transform.position, Quaternion.identity);
+        firework.GetComponent<ParticleSystem>().Play();
+    }
 }
