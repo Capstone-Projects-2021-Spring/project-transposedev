@@ -1,7 +1,10 @@
 using System;
 using UnityEngine;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     /*****************/
     /*   VARIABLES   */
@@ -43,7 +46,16 @@ public class PlayerMovement : MonoBehaviour {
     float x, y;
     bool jumping, sprinting;
 
-/* ----------------------------------------------------------------------------------------------------------------- */
+    [SerializeField] Menu escMenu;
+
+    PhotonView PV;
+
+    PlayerManager playerManager;
+
+    // countainer for accessing custom properties
+    Hashtable hash;
+
+    /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
     /*   METHODS   */
@@ -51,27 +63,44 @@ public class PlayerMovement : MonoBehaviour {
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
+        playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
     
     void Start() {
+		if (PV.IsMine)
+		{
+            EquipItem(0);
+		} else
+		{
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
+
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        EquipItem(0);
     }
 
     private void FixedUpdate() {
+        if (!PV.IsMine)
+            return;
+
         Movement();
     }
 
     private void Update() {
-        if (!EscMenu.isInEscMenu())
-        {
+        if (!PV.IsMine)
+            return;
+
+        if (!escMenu.open)
+		{
             MyInput();
             Look();
             SelectItem();
             UseItem();
         }
+        EscMenu();
     }
 
     private void SelectItem()
@@ -336,11 +365,92 @@ public class PlayerMovement : MonoBehaviour {
 		}
 
         previousItemIndex = itemIndex;
+
+        if (PV.IsMine)
+		{
+            hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            hash.Remove("itemIndex");
+            hash.Add("itemIndex", itemIndex);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+		}
 	}
 
-    private void StopGrounded()
+	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+	{
+		if (!PV.IsMine && targetPlayer == PV.Owner)
+		{
+            EquipItem((int)changedProps["itemIndex"]);
+		}
+	}
+
+	private void StopGrounded()
     {
         grounded = false;
     }
-    
+
+    // ran by the shooter
+    public void TakeDamage(float damage)
+    {
+        Debug.Log(PhotonNetwork.LocalPlayer + " is the shooter");
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+    }
+
+    // ran by the target
+    [PunRPC]
+    void RPC_TakeDamage(float damage, Player shooter)
+	{
+        if (!PV.IsMine)
+            return;
+
+        Debug.Log(PhotonNetwork.LocalPlayer + " I am the target and my shooter is: " + shooter);
+
+        GetComponent<PlayerStats>().LoseHealth((int)damage);
+
+        if (GetComponent<PlayerStats>().GetHealth() <= 0)
+		{
+            Die(shooter);
+		}
+	}
+
+    void Die(Player shooter)
+	{
+        playerManager.Die(shooter);
+	}
+
+
+    /***************/
+    /*   Esc Menu  */
+    /***************/
+
+    void EscMenu()
+	{
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (escMenu.open)
+			{
+                escMenu.Close();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+			else
+			{
+                escMenu.Open();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+    }
+
+    public void OnClickReturn()
+    {
+        if (!PV.IsMine)
+            return;
+        Debug.Log("Return Button Pressed");
+    }
+    public void OnClickQuit()
+    {
+        if (!PV.IsMine)
+            return;
+        GameManager.Instance.LeaveRoom();
+    }
 }
