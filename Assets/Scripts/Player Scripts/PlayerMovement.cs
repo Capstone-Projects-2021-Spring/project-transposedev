@@ -55,6 +55,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     // countainer for accessing custom properties
     Hashtable hash;
 
+    public GameObject projectile;
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -471,9 +473,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     /*   Projectile weapon  */
     /***************/
     [PunRPC]
-    void RPC_LaunchProjectile(GameObject projectile, float speed)
+    void RPC_LaunchProjectile(float speed)
 	{
-        if (!PV.IsMine)
+        if (PV.IsMine)
             return;
 
         GameObject instantiatedProjectile = (GameObject)Instantiate(projectile, transform.position, transform.rotation);

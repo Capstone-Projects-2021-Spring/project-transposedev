@@ -1631,6 +1631,8 @@ MonoBehaviour:
   maxSlopeAngle: 35
   jumpForce: 350
   escMenu: {fileID: 3171332616261470469}
+  projectile: {fileID: 1489931404435634938, guid: f7fbdaddf4b92824aac1f9f88c0cda5f,
+    type: 3}
 --- !u!114 &7007282031397312272
 MonoBehaviour:
   m_ObjectHideFlags: 0
