@@ -78,8 +78,8 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 37f6305c710788641b5db7601ef5d212, type: 2}
   itemGameObject: {fileID: 969007012428590384}
   camera: {fileID: 0}
-  myClip: {fileID: 0}
-  rocket: {fileID: 0}
+  myClip: {fileID: 8300000, guid: 871a5082968edb041a6f64da7359d328, type: 3}
+  rocket: {fileID: 1489931404435634938, guid: f7fbdaddf4b92824aac1f9f88c0cda5f, type: 3}
   speed: 50
 --- !u!1 &8034095849301608894
 GameObject:

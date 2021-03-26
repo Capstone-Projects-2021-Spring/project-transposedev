@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class RocketLauncher : Gun
 {
@@ -11,6 +13,7 @@ public class RocketLauncher : Gun
     private AudioSource mySource;
     public GameObject rocket;
     public float speed = 5;
+
     private void Awake()
     {
         mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
@@ -30,7 +33,8 @@ public class RocketLauncher : Gun
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, speed));
         Destroy(instantiatedProjectile,3);
     }
-	public override void Release()
+
+    public override void Release()
 	{
 
 	}

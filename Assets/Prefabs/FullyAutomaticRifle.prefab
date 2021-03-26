@@ -79,7 +79,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 5b0b691ea954b23419bf450218055938, type: 2}
   itemGameObject: {fileID: 419261588132141064}
   camera: {fileID: 0}
-  myClip: {fileID: 0}
+  myClip: {fileID: 8300000, guid: 63e0cc565dd9e554b8a6e4a9cb81b976, type: 3}
 --- !u!1 &5084822531753875640
 GameObject:
   m_ObjectHideFlags: 0

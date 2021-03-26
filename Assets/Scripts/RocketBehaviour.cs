@@ -37,6 +37,7 @@ public class RocketBehaviour : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
     void Explode()
     {
         GameObject firework = Instantiate(FireworksAll, transform.position, Quaternion.identity);

@@ -146,6 +146,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (Input.GetMouseButtonDown(0))
         {
             items[itemIndex].Use();
+            if (itemIndex == 3)
+            {
+                PV.RPC("RPC_LaunchProjectile", RpcTarget.All, 5f);
+            }
         }
         if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -460,5 +464,20 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (!PV.IsMine)
             return;
         GameManager.Instance.LeaveRoom();
+    }
+
+
+    /***************/
+    /*   Projectile weapon  */
+    /***************/
+    [PunRPC]
+    void RPC_LaunchProjectile(GameObject projectile, float speed)
+	{
+        if (!PV.IsMine)
+            return;
+
+        GameObject instantiatedProjectile = (GameObject)Instantiate(projectile, transform.position, transform.rotation);
+        instantiatedProjectile.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, speed));
+        Destroy(instantiatedProjectile, 3);
     }
 }
