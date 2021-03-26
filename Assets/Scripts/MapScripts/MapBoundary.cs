@@ -4,24 +4,25 @@ using UnityEngine;
 
 public class MapBoundary : MonoBehaviour
 {
+    [SerializeField]
+    private float setTime = 5f;
     private Collider player;
     private bool outOfBounds = false;
-    private float setTime = 5f;
-    private float timer;
+    private float currentTime;
 
     private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player") { // Check if it's tagged target
+        if (other.gameObject.GetComponent<PlayerMovement>() != null) { // Check if it's tagged target
             outOfBounds = true;
             player = other;
-            timer = setTime;
+            currentTime = setTime;
         }
     }
     
     public void OnTriggerExit(Collider other) {
-        if (other.tag == "Player") { // Check if it's tagged target
+        if (other.gameObject.GetComponent<PlayerMovement>() != null) { // Check if it's tagged target
             outOfBounds = false;
             
-            timer = setTime; // reset timer
+            currentTime = setTime; // reset timer
 
             Debug.Log("Player exits battery range");
         }
@@ -29,16 +30,16 @@ public class MapBoundary : MonoBehaviour
     
     private void Update() {
         if (outOfBounds) { // Boundary timer countdown
-            timer -= 1 * Time.deltaTime;
-            Debug.Log("Current Time: " + timer);
+            currentTime -= 1 * Time.deltaTime;
+            Debug.Log("Out of Bounds Current Time: " + currentTime);
         }
 
-        if (timer <= 0) {
+        if (currentTime <= 0) {
             // Teleport
             if (player != null) {
                 GameObject spawnPoint = PlayerSpawnManager.NextSpawn();
                 player.transform.position = spawnPoint.transform.position;
-                timer = setTime; // Reset boundary
+                currentTime = setTime; // Reset boundary
             }
         }
     }
