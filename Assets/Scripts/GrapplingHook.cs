@@ -91,4 +91,14 @@ public class GrapplingHook : Utility
     {
         return grapplePoint;
     }
+
+	public override void HoldDown()
+	{
+
+	}
+
+	public override void Release()
+	{
+
+	}
 }
