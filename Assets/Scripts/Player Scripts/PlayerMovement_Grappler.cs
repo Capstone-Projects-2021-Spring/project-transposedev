@@ -60,6 +60,8 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
     public float projectileSpeed = 5;
 
+    private LineRenderer lr;
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -71,6 +73,7 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+        lr = GetComponent<LineRenderer>();
     }
 
     void Start()
@@ -113,7 +116,12 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         EscMenu();
     }
 
-    private void SelectItem()
+	private void LateUpdate()
+	{
+		
+	}
+
+	private void SelectItem()
     {
         // item swaping with number buttons
         for (int i = 0; i < items.Length; i++)
@@ -156,23 +164,26 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         if (Input.GetMouseButtonDown(0))
         {
             items[itemIndex].Use();
-            
-            /*
             if (itemIndex == 2)
             {
-                PV.RPC("RPC_LaunchProjectile", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
-                    items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, projectileSpeed)));
+                PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
             }
-            */
-            
         }
         if (Input.GetKey(KeyCode.Mouse0))
         {
             items[itemIndex].HoldDown();
+            if (itemIndex == 2)
+            {
+                PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+            }
         }
         if (Input.GetMouseButtonUp(0))
         {
             items[itemIndex].Release();
+            if (itemIndex == 2)
+            {
+                PV.RPC("RPC_Grapple", RpcTarget.All, 0, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+            }
         }
     }
 
@@ -498,4 +509,21 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         Destroy(instantiatedProjectile, 3);
     }
 
+    /***************/
+    /*   Grapple  */
+    /***************/
+
+    [PunRPC]
+    void RPC_Grapple(int positionCount, Vector3 startPosition, Vector3 endPosition)
+    {
+        if (PV.IsMine)
+            return;
+
+        lr.positionCount = positionCount;
+        if (positionCount == 2)
+		{
+            lr.SetPosition(0, startPosition);
+            lr.SetPosition(1, endPosition);
+        }
+    }
 }

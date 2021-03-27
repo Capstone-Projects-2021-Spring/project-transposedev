@@ -20,10 +20,12 @@ public class GrapplingHook : Utility
 
     void Update()
     {
+        /*
         if (Input.GetMouseButtonUp(0))
         {
             StopGrapple();
         }
+        */
     }
 
     void LateUpdate() 
@@ -33,10 +35,7 @@ public class GrapplingHook : Utility
 
     public override void Use()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartGrapple();
-        }
+        StartGrapple();
     }
 
     void StartGrapple() 
@@ -90,7 +89,7 @@ public class GrapplingHook : Utility
 
     public Vector3 GetGrapplePoint() 
     {
-        return grapplePoint;
+        return currentGrapplePosition;
     }
 
 	public override void HoldDown()
@@ -100,6 +99,6 @@ public class GrapplingHook : Utility
 
 	public override void Release()
 	{
-
-	}
+        StopGrapple();
+    }
 }
