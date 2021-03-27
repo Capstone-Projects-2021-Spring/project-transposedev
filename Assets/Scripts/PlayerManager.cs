@@ -42,7 +42,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 	{
 		// Instantiate player controller
 		Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
-		controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation, 0, new object[] { PV.ViewID });
+		controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerControllerGrappler"), spawnPoint.position, spawnPoint.rotation, 0, new object[] { PV.ViewID });
 	}
 
 	public void Die(Player shooter)

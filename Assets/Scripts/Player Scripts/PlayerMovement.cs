@@ -366,6 +366,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         }
     }
 
+    private void StopGrounded()
+    {
+        grounded = false;
+    }
+
+
     // handles equiping items
     void EquipItem(int index)
 	{
@@ -399,11 +405,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             EquipItem((int)changedProps["itemIndex"]);
 		}
 	}
-
-	private void StopGrounded()
-    {
-        grounded = false;
-    }
 
     // ran by the shooter
     public void TakeDamage(float damage)

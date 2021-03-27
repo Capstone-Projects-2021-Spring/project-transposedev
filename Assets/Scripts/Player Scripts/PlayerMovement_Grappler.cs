@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
+using Photon.Pun;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
-public class PlayerMovement_Grappler : MonoBehaviour
+public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 {
 
     /*****************/
@@ -44,6 +47,19 @@ public class PlayerMovement_Grappler : MonoBehaviour
     float x, y;
     bool jumping, sprinting;
 
+    [SerializeField] Menu escMenu;
+
+    PhotonView PV;
+
+    PlayerManager playerManager;
+
+    // countainer for accessing custom properties
+    Hashtable hash;
+
+    public GameObject projectile;
+
+    public float projectileSpeed = 5;
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -53,30 +69,48 @@ public class PlayerMovement_Grappler : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
+        playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
 
     void Start()
     {
+        if (PV.IsMine)
+        {
+            EquipItem(0);
+        }
+        else
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb);
+        }
+
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        EquipItem(0);
     }
 
     private void FixedUpdate()
     {
+        if (!PV.IsMine)
+            return;
+
         Movement();
     }
 
     private void Update()
     {
-        if (!EscMenu.isInEscMenu())
+        if (!PV.IsMine)
+            return;
+
+        if (!escMenu.open)
         {
             MyInput();
             Look();
             SelectItem();
             UseItem();
         }
+        EscMenu();
     }
 
     private void SelectItem()
@@ -122,6 +156,23 @@ public class PlayerMovement_Grappler : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             items[itemIndex].Use();
+            
+            /*
+            if (itemIndex == 2)
+            {
+                PV.RPC("RPC_LaunchProjectile", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                    items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, projectileSpeed)));
+            }
+            */
+            
+        }
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            items[itemIndex].HoldDown();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            items[itemIndex].Release();
         }
     }
 
@@ -325,6 +376,11 @@ public class PlayerMovement_Grappler : MonoBehaviour
         }
     }
 
+    private void StopGrounded()
+    {
+        grounded = false;
+    }
+
     // handles equiping items
     void EquipItem(int index)
     {
@@ -341,11 +397,105 @@ public class PlayerMovement_Grappler : MonoBehaviour
         }
 
         previousItemIndex = itemIndex;
+
+        if (PV.IsMine)
+        {
+            hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            hash.Remove("itemIndex");
+            hash.Add("itemIndex", itemIndex);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
     }
 
-    private void StopGrounded()
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        grounded = false;
+        if (!PV.IsMine && targetPlayer == PV.Owner)
+        {
+            EquipItem((int)changedProps["itemIndex"]);
+        }
+    }
+
+    // ran by the shooter
+    public void TakeDamage(float damage)
+    {
+        Debug.Log(PhotonNetwork.LocalPlayer + " is the shooter");
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+    }
+
+    // ran by the target
+    [PunRPC]
+    void RPC_TakeDamage(float damage, Player shooter)
+    {
+        if (!PV.IsMine)
+            return;
+
+        Debug.Log(PhotonNetwork.LocalPlayer + " I am the target and my shooter is: " + shooter);
+
+        GetComponent<PlayerStats>().LoseHealth((int)damage);
+
+        if (GetComponent<PlayerStats>().GetHealth() <= 0)
+        {
+            Die(shooter);
+        }
+    }
+
+    void Die(Player shooter)
+    {
+        playerManager.Die(shooter);
+    }
+
+
+    /***************/
+    /*   Esc Menu  */
+    /***************/
+
+    void EscMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (escMenu.open)
+            {
+                escMenu.Close();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                escMenu.Open();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+    }
+
+    public void OnClickReturn()
+    {
+        if (!PV.IsMine)
+            return;
+        Debug.Log("Return Button Pressed");
+    }
+    public void OnClickQuit()
+    {
+        if (!PV.IsMine)
+            return;
+        GameManager.Instance.LeaveRoom();
+    }
+
+
+    /***************/
+    /*   Projectile weapon  */
+    /***************/
+
+
+    [PunRPC]
+    void RPC_LaunchProjectile(Vector3 position, Quaternion rotation, Vector3 velocity)
+    {
+        if (PV.IsMine)
+            return;
+
+        GameObject instantiatedProjectile = (GameObject)Instantiate(projectile, position, rotation);
+        instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
+        Destroy(instantiatedProjectile, 3);
     }
 
 }

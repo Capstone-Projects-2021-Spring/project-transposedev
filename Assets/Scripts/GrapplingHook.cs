@@ -15,6 +15,7 @@ public class GrapplingHook : Utility
     void Awake() 
     {
         lr = GetComponent<LineRenderer>();
+        DrawRope();
     }
 
     void Update()
