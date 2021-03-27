@@ -489,7 +489,9 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     {
         if (!PV.IsMine)
             return;
-        Debug.Log("Return Button Pressed");
+        escMenu.Close();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     public void OnClickQuit()
     {

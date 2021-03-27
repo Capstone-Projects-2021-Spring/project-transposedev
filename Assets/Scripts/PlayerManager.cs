@@ -48,10 +48,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 	public void Die(Player shooter)
 	{
         UpdateDeaths(deaths + 1);
-        UpdateKills(shooter);
+        if (!PhotonNetwork.LocalPlayer.Equals(shooter))
+            UpdateKills(shooter);
         PhotonNetwork.Destroy(controller);
 		CreateController();
-        Debug.Log("I just died, current deaths: " + DeathCount());
 	}
 
     public void UpdateKills(Player shooter)
