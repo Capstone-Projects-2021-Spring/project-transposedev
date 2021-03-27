@@ -59,6 +59,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     public float projectileSpeed = 5;
 
+    private LineRenderer lr;
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -488,5 +490,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
         Destroy(instantiatedProjectile, 3);
     }
-    
+
+
+    /***************/
+    /*   Grapple  */
+    /***************/
+
+
+    [PunRPC]
+    void RPC_Grapple(int positionCount, Vector3 startPosition, Vector3 endPosition)
+    {
+        if (PV.IsMine)
+            return;
+
+        lr.positionCount = positionCount;
+        if (positionCount == 2)
+        {
+            lr.SetPosition(0, startPosition);
+            lr.SetPosition(1, endPosition);
+        }
+    }
+
 }

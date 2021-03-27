@@ -118,7 +118,17 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
 	private void LateUpdate()
 	{
-		
+        // draw grapple rope
+		if (itemIndex == 2)
+		{
+            if (((GrapplingHook)items[itemIndex]).IsGrappling())
+			{
+                if (itemIndex == 2)
+                {
+                    PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+                }
+            }
+		}
 	}
 
 	private void SelectItem()
@@ -172,10 +182,6 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         if (Input.GetKey(KeyCode.Mouse0))
         {
             items[itemIndex].HoldDown();
-            if (itemIndex == 2)
-            {
-                PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
-            }
         }
         if (Input.GetMouseButtonUp(0))
         {
