@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     public LayerMask whatIsGround;
     public float counterMovement = 0.175f;
     private float threshold = 0.01f;
-    public float maxSlopeAngle = 35f;
+    public float maxSlopeAngle = 90f;
     private Vector3 playerScale;
     private Vector3 normalVector = Vector3.up;
     private Vector3 wallNormalVector;
