@@ -9,6 +9,11 @@ public class KillZone : MonoBehaviour {
         {
             other.gameObject.GetComponent<PlayerMovement>().Die();
         }
+
+        if (other.gameObject.GetComponent<PlayerMovement_Grappler>() != null)
+        {
+            other.gameObject.GetComponent<PlayerMovement_Grappler>().Die();
+        }
     }
 
 }
