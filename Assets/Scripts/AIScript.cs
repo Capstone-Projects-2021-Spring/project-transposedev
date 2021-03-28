@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIScript : MonoBehavior{
+public class AIScript : MonoBehaviour{
   public NavMeshAgent agent; //reference to agent
   public Transform player;
   public LayerMask GroundSensor;
@@ -48,7 +48,8 @@ public class AIScript : MonoBehavior{
          R.addForce(transform.forward*32f, ForceMode.Impulse);
          R.addForce(transform.up*8f, ForceMode.Impulse);
          alreadyAttacked = true;
-         Invoke(nameOf(ResetAttack), attackCooldown);
+        // Wait(attackCooldown);
+         ResetAttack();
       }
     }
  
@@ -85,7 +86,8 @@ public class AIScript : MonoBehavior{
   public void TakeDamage(int damage){
       health = health - damage;
       if (health <= 0){
-        Invoke(nameOf(killEnemy), 0.5f);
+       // Wait(0.5f);
+        killEnemy();
       }
    }
   
