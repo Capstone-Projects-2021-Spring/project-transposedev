@@ -49,6 +49,9 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     bool jumping, sprinting;
 
     [SerializeField] Menu escMenu;
+
+    [SerializeField] Menu leaderboard;
+
     [SerializeField] Menu hudMenu;
     [SerializeField] TMP_Text classText;
 
@@ -439,7 +442,6 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     // ran by the shooter
     public void TakeDamage(float damage)
     {
-        Debug.Log(PhotonNetwork.LocalPlayer + " is the shooter");
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
     }
 
@@ -450,8 +452,6 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         if (!PV.IsMine)
             return;
 
-        Debug.Log(PhotonNetwork.LocalPlayer + " I am the target and my shooter is: " + shooter);
-
         GetComponent<PlayerStats>().LoseHealth((int)damage);
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
@@ -460,9 +460,14 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         }
     }
 
-    void Die(Player shooter)
+    public void Die(Player shooter)
     {
         playerManager.Die(shooter);
+    }
+
+    public void Die()
+    {
+        playerManager.Die(null);
     }
 
 
@@ -486,6 +491,21 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
+        }
+    }
+
+    void LeaderboardMenu()
+    {
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            if (!leaderboard.open)
+            {
+                leaderboard.Open();
+            }
+        }
+        else
+        {
+            leaderboard.Close();
         }
     }
 

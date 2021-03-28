@@ -2053,8 +2053,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04fe5a9cdebfe64ea9dcaa6b25014d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAmmoText: {fileID: 3077566864168632245}
-  BackUpAmmoText: {fileID: 395442956224700796}
   HealthText: {fileID: 5856508192756094922}
   ArmorText: {fileID: 6253174721933025552}
   TimerText: {fileID: 8494094214964532039}

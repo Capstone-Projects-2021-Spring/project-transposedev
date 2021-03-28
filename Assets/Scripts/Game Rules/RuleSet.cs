@@ -56,9 +56,6 @@ public class RuleSet : MonoBehaviour
         if (current_time < 0)
         {
             timer_running = false;
-            //FindObjectOfType<EscMenu>().OnClickQuit();
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
         }
         else
         {
@@ -76,10 +73,6 @@ public class RuleSet : MonoBehaviour
             sec = "0" + seconds.ToString();
         else
             sec = seconds.ToString();
-
-
-        
-        
 
         return mins + ":" + sec;
     }

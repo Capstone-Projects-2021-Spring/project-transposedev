@@ -4,14 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 
 public class LeaderBoard : MonoBehaviour
 {
     [SerializeField] private Text lb_text;
 
-    void Start()
+	private void Awake()
+	{
+
+    }
+
+	void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -20,28 +26,34 @@ public class LeaderBoard : MonoBehaviour
         string kd;
         lb_text.text = "";
 
-        if (FindObjectOfType<RuleSet>() != null && !FindObjectOfType<RuleSet>().GameOver())
-        {
-            
-            foreach (Player p in PhotonNetwork.PlayerList)
+        try
+		{
+            if (FindObjectOfType<RuleSet>() != null && !FindObjectOfType<RuleSet>().GameOver())
             {
-                kd = p.ToString() + ": " + p.CustomProperties["kills"].ToString() + " / " + p.CustomProperties["deaths"];
 
-                if (p.Equals(PhotonNetwork.LocalPlayer))
+                foreach (Player p in PhotonNetwork.PlayerList)
                 {
-                    kd += " (Me)";
+                    kd = p.ToString() + ": " + p.CustomProperties["kills"].ToString() + " / " + p.CustomProperties["deaths"];
+
+                    if (p.Equals(PhotonNetwork.LocalPlayer))
+                    {
+                        kd += " (Me)";
+                    }
+                    kd += "\n";
+
+                    lb_text.text += kd;
                 }
-                kd += "\n";
-
-                lb_text.text += kd;
             }
-        }
-        else if(FindObjectOfType<RuleSet>().GameOver())
-        {
-            kd = "The Winner is: " + DeclareWinner().ToString() + "!!!";
-            lb_text.text = kd;
-        }
+            else if (FindObjectOfType<RuleSet>().GameOver())
+            {
+                kd = "The Winner is: " + DeclareWinner().ToString() + "!!!";
+                lb_text.text = kd;
+            }
+        } 
+        catch(Exception e)
+		{
 
+		}
     }
 
 

@@ -55,19 +55,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
         UpdateDeaths(deaths + 1);
 
-
         if(shooter != null && !shooter.Equals(PhotonNetwork.LocalPlayer))
             UpdateKills(shooter);
 
         PhotonNetwork.Destroy(controller);
-		CreateController("PlayerController");
-        //Debug.Log("I just died, current deaths: " + DeathCount());
-
-        if (!PhotonNetwork.LocalPlayer.Equals(shooter))
-            UpdateKills(shooter);
-        PhotonNetwork.Destroy(controller);
 		CreateController((string)hash["class"]);
-
 	}
 
 
@@ -103,7 +95,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
 	{
-        if (changedProps.Count < 3)
+        if (changedProps.Count < 4)
             return;
 
 		if (!PV.IsMine && targetPlayer == PV.Owner)
