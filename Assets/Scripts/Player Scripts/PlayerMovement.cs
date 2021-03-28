@@ -3,6 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
@@ -47,6 +48,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     bool jumping, sprinting;
 
     [SerializeField] Menu escMenu;
+    [SerializeField] TMP_Text classText;
 
     PhotonView PV;
 
@@ -422,8 +424,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (!PV.IsMine)
             return;
 
-        Debug.Log(PhotonNetwork.LocalPlayer + " I am the target and my shooter is: " + shooter);
-
         GetComponent<PlayerStats>().LoseHealth((int)damage);
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
@@ -459,6 +459,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
                 Cursor.visible = true;
             }
         }
+    }
+
+    public void OnClickChangeClass()
+    {
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        if ((int)hash["class"] == 0)
+        {
+            hash.Remove("class");
+            hash.Add("class", 1);
+            classText.text = "Class: Grappler";
+        }
+        else
+        {
+            hash.Remove("class");
+            hash.Add("class", 0);
+            classText.text = "Class: Gunner";
+        }
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
 
     public void OnClickReturn()

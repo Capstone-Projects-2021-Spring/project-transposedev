@@ -3,6 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using TMPro;
 
 public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 {
@@ -48,6 +49,7 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     bool jumping, sprinting;
 
     [SerializeField] Menu escMenu;
+    [SerializeField] TMP_Text classText;
 
     PhotonView PV;
 
@@ -483,6 +485,24 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
                 Cursor.visible = true;
             }
         }
+    }
+
+    public void OnClickChangeClass()
+    {
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        if ((int)hash["class"] == 0)
+        {
+            hash.Remove("class");
+            hash.Add("class", 1);
+            classText.text = "Class: Grappler";
+        }
+        else
+        {
+            hash.Remove("class");
+            hash.Add("class", 0);
+            classText.text = "Class: Gunner";
+        }
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
 
     public void OnClickReturn()
