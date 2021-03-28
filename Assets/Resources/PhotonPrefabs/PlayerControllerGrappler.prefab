@@ -1875,10 +1875,10 @@ MonoBehaviour:
   grounded: 0
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   counterMovement: 0.175
-  maxSlopeAngle: 35
-  jumpForce: 500
+  maxSlopeAngle: 45
+  jumpForce: 350
   escMenu: {fileID: 6539221427917772709}
   leaderboard: {fileID: 9037951558815166389}
   hudMenu: {fileID: 872185712913285495}
