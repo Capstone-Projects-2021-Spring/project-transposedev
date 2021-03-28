@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 	GameObject controller;
 	[SerializeField]private int kills = 0;
     [SerializeField]private int deaths = 0;
+    private string myClassName;
 
     // player properties
     Hashtable hash = new Hashtable();
@@ -47,17 +48,19 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", className), spawnPoint.position, spawnPoint.rotation, 0, new object[] { PV.ViewID });
     }
 
+
+
 	public void Die(Player shooter)
 	{
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
         UpdateDeaths(deaths + 1);
 
 
-        if(shooter != null)
+        if(shooter != null && !shooter.Equals(PhotonNetwork.LocalPlayer))
             UpdateKills(shooter);
 
         PhotonNetwork.Destroy(controller);
-		CreateController();
+		CreateController("PlayerController");
         //Debug.Log("I just died, current deaths: " + DeathCount());
 
         if (!PhotonNetwork.LocalPlayer.Equals(shooter))

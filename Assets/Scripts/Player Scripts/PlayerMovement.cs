@@ -483,9 +483,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     void LeaderboardMenu()
     {
-        if(Input.GetKey(KeyCode.Tab))
+        if (Input.GetKey(KeyCode.Tab))
         {
-            if(!leaderboard.open)
+            if (!leaderboard.open)
             {
                 leaderboard.Open();
             }
@@ -494,6 +494,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         {
             leaderboard.Close();
         }
+    }
 
     public void OnClickChangeClass()
     {
