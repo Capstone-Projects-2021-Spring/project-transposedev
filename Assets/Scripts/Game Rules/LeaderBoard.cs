@@ -46,6 +46,7 @@ public class LeaderBoard : MonoBehaviour
             }
             else if (FindObjectOfType<RuleSet>().GameOver())
             {
+                Debug.Log("we made it here");
                 kd = "The Winner is: " + DeclareWinner().ToString() + "!!!";
                 lb_text.text = kd;
             }

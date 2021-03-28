@@ -426,7 +426,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     // ran by the shooter
     public void TakeDamage(float damage)
     {
-        Debug.Log(PhotonNetwork.LocalPlayer + " is the shooter");
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
     }
 
