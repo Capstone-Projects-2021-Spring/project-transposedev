@@ -11,7 +11,6 @@ public class SingleShotGun : Gun
 
     [SerializeField] private AudioClip myClip;
     private AudioSource mySource;
-
     private void Awake()
     {
         mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
@@ -36,4 +35,12 @@ public class SingleShotGun : Gun
             
 		}
 	}
+	public override void Release()
+	{
+
+	}
+    public override void HoldDown()
+    {
+        
+    }
 }

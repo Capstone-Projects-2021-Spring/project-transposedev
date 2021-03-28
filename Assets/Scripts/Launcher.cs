@@ -17,11 +17,15 @@ public class Launcher : MonoBehaviourPunCallbacks
 	[SerializeField] GameObject roomListItemPrefab;
 	[SerializeField] Transform playerListContent;
 	[SerializeField] GameObject playerListItemPrefab;
+	[SerializeField] GameObject mapListContent;
+	[SerializeField] TMP_Text mapSelectedText;
 	[SerializeField] GameObject startGameButton;
 
 	private Dictionary<string, RoomInfo> cachedRoomList;
 	private Dictionary<string, GameObject> roomListEntries;
 	private Dictionary<int, GameObject> playerListEntries;
+
+	private int level = 1;
 
 	void Awake()
 	{
@@ -106,11 +110,13 @@ public class Launcher : MonoBehaviourPunCallbacks
 		}
 
 		startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+		mapListContent.SetActive(PhotonNetwork.IsMasterClient);
 	}
 
 	public override void OnMasterClientSwitched(Player newMasterClient)
 	{
 		startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+		mapListContent.SetActive(PhotonNetwork.IsMasterClient);
 	}
 
 	public override void OnCreateRoomFailed(short returnCode, string message)
@@ -169,7 +175,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 	public void StartGame()
 	{
 		PhotonNetwork.CurrentRoom.IsOpen = false;
-		PhotonNetwork.LoadLevel(1);
+		PhotonNetwork.LoadLevel(level);
 	}
 
 	public void LeaveGame()
@@ -225,6 +231,17 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 			roomListEntries.Add(info.Name, entry);
 		}
+	}
+
+	public void SelectMap(int level)
+	{
+		this.level = level;
+		mapSelectedText.text = "Map " + level + " Selected!";
+	}
+
+	public void OnClickQuit()
+	{
+		Application.Quit();
 	}
 
 

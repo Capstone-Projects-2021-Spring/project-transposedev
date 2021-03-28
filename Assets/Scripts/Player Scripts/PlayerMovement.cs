@@ -3,6 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
@@ -32,7 +33,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     public LayerMask whatIsGround;
     public float counterMovement = 0.175f;
     private float threshold = 0.01f;
-    public float maxSlopeAngle = 35f;
+    public float maxSlopeAngle = 90f;
     private Vector3 playerScale;
     private Vector3 normalVector = Vector3.up;
     private Vector3 wallNormalVector;
@@ -47,7 +48,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     bool jumping, sprinting;
 
     [SerializeField] Menu escMenu;
+
     [SerializeField] Menu leaderboard;
+
+    [SerializeField] Menu hudMenu;
+    [SerializeField] TMP_Text classText;
+
 
     PhotonView PV;
 
@@ -55,6 +61,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     // countainer for accessing custom properties
     Hashtable hash;
+
+    public GameObject projectile;
+
+    public float projectileSpeed = 5;
+
+    private LineRenderer lr;
 
     /* ----------------------------------------------------------------------------------------------------------------- */
 
@@ -72,6 +84,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		if (PV.IsMine)
 		{
             EquipItem(0);
+            hudMenu.Open();
 		} else
 		{
             Destroy(GetComponentInChildren<Camera>().gameObject);
@@ -149,6 +162,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (Input.GetMouseButtonDown(0))
         {
             items[itemIndex].Use();
+            if (itemIndex == 3)
+            {
+                PV.RPC("RPC_LaunchProjectile", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                    items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, projectileSpeed)));
+            }
+        }
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            items[itemIndex].HoldDown();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            items[itemIndex].Release();
         }
     }
 
@@ -358,6 +384,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         }
     }
 
+    private void StopGrounded()
+    {
+        grounded = false;
+    }
+
+
     // handles equiping items
     void EquipItem(int index)
 	{
@@ -392,11 +424,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		}
 	}
 
-	private void StopGrounded()
-    {
-        grounded = false;
-    }
-
     // ran by the shooter
     public void TakeDamage(float damage)
     {
@@ -410,8 +437,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 	{
         if (!PV.IsMine)
             return;
-
-        Debug.Log(PhotonNetwork.LocalPlayer + " I am the target and my shooter is: " + shooter);
 
         GetComponent<PlayerStats>().LoseHealth((int)damage);
 
@@ -455,6 +480,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         }
     }
 
+
     void LeaderboardMenu()
     {
         if(Input.GetKey(KeyCode.Tab))
@@ -468,13 +494,35 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         {
             leaderboard.Close();
         }
+
+    public void OnClickChangeClass()
+    {
+        if (!PV.IsMine)
+            return;
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        if ((string)hash["class"] == "PlayerController")
+        {
+            hash.Remove("class");
+            hash.Add("class", "PlayerControllerGrappler");
+            classText.text = "Class: Grappler";
+        }
+        else
+        {
+            hash.Remove("class");
+            hash.Add("class", "PlayerController");
+            classText.text = "Class: Gunner";
+        }
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
     }
 
     public void OnClickReturn()
     {
         if (!PV.IsMine)
             return;
-        Debug.Log("Return Button Pressed");
+        escMenu.Close();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     public void OnClickQuit()
     {
@@ -482,4 +530,42 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             return;
         GameManager.Instance.LeaveRoom();
     }
+
+
+    /***************/
+    /*   Projectile weapon  */
+    /***************/
+
+    
+    [PunRPC]
+    void RPC_LaunchProjectile(Vector3 position, Quaternion rotation, Vector3 velocity)
+	{
+        if (PV.IsMine)
+            return;
+
+        GameObject instantiatedProjectile = (GameObject)Instantiate(projectile, position, rotation);
+        instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
+        Destroy(instantiatedProjectile, 3);
+    }
+
+
+    /***************/
+    /*   Grapple  */
+    /***************/
+
+
+    [PunRPC]
+    void RPC_Grapple(int positionCount, Vector3 startPosition, Vector3 endPosition)
+    {
+        if (PV.IsMine)
+            return;
+
+        lr.positionCount = positionCount;
+        if (positionCount == 2)
+        {
+            lr.SetPosition(0, startPosition);
+            lr.SetPosition(1, endPosition);
+        }
+    }
+
 }
