@@ -489,17 +489,19 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
     public void OnClickChangeClass()
     {
+        if (!PV.IsMine)
+            return;
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        if ((int)hash["class"] == 0)
+        if ((string)hash["class"] == "PlayerController")
         {
             hash.Remove("class");
-            hash.Add("class", 1);
+            hash.Add("class", "PlayerControllerGrappler");
             classText.text = "Class: Grappler";
         }
         else
         {
             hash.Remove("class");
-            hash.Add("class", 0);
+            hash.Add("class", "PlayerController");
             classText.text = "Class: Gunner";
         }
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);

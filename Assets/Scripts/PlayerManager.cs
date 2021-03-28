@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             hash.Add("itemIndex", 0);
             hash.Add("deaths", 0);
             hash.Add("kills", 0);
-            hash.Add("class", 0); // default player controller class
+            hash.Add("class", "PlayerController"); // default player controller class
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
     }
@@ -35,24 +35,26 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         if (PV.IsMine)
 		{
-            CreateController();
+            // Instantiate player controller
+            CreateController("PlayerController");
         }
     }
 
-	void CreateController()
+	void CreateController(string className)
 	{
         // Instantiate player controller
         Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation, 0, new object[] { PV.ViewID });
-	}
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", className), spawnPoint.position, spawnPoint.rotation, 0, new object[] { PV.ViewID });
+    }
 
 	public void Die(Player shooter)
 	{
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
         UpdateDeaths(deaths + 1);
         if (!PhotonNetwork.LocalPlayer.Equals(shooter))
             UpdateKills(shooter);
         PhotonNetwork.Destroy(controller);
-		CreateController();
+		CreateController((string)hash["class"]);
 	}
 
     public void UpdateKills(Player shooter)

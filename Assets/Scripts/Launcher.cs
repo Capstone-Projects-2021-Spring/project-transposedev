@@ -239,6 +239,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 		mapSelectedText.text = "Map " + level + " Selected!";
 	}
 
+	public void OnClickQuit()
+	{
+		Application.Quit();
+	}
+
 
 
 
