@@ -29,7 +29,7 @@ public class RuleSet : MonoBehaviour
 
     void Awake()
     {
-        SetMatchTime(3);
+        SetMatchTime(1);
         StartMatchTimer();
     }
 
@@ -53,14 +53,13 @@ public class RuleSet : MonoBehaviour
 
     private void UpdateTimer()
     {
-        current_time -= Time.deltaTime;
-
-        if (current_time <= 0)
+        if (current_time < 0)
         {
             timer_running = false;
-            FindObjectOfType<EscMenu>().OnClickQuit();
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+        }
+        else
+        {
+            current_time -= Time.deltaTime;
         }
     }
 
@@ -74,10 +73,6 @@ public class RuleSet : MonoBehaviour
             sec = "0" + seconds.ToString();
         else
             sec = seconds.ToString();
-
-
-        
-        
 
         return mins + ":" + sec;
     }
@@ -96,6 +91,11 @@ public class RuleSet : MonoBehaviour
     public int TargetCounter()
     {
         return targets_destroyed;
+    }
+
+    public bool GameOver()
+    {
+        return !timer_running;
     }
 
 

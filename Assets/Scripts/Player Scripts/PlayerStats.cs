@@ -6,8 +6,7 @@ using Photon.Realtime;
 
 public class PlayerStats : MonoBehaviour
 {
-    PhotonView PV;
-
+    private PhotonView PV;
 
     [SerializeField]
     private int HEALTH_MAX = 100;
@@ -89,4 +88,6 @@ public class PlayerStats : MonoBehaviour
     {
         return ARMOR_MAX;
     }
+
+
 }
