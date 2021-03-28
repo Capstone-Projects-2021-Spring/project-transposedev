@@ -12,13 +12,14 @@ GameObject:
   - component: {fileID: 1968302212243134549}
   - component: {fileID: 3612754598990002276}
   - component: {fileID: 8178285257449567415}
+  - component: {fileID: 872185712913285495}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1405817302700304300
 RectTransform:
   m_ObjectHideFlags: 0
@@ -104,6 +105,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &872185712913285495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257960334078232632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7da7142213d83be49bead20ffdd057a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuName: HUD
+  open: 0
 --- !u!1 &423639096815668722
 GameObject:
   m_ObjectHideFlags: 0
@@ -1618,6 +1633,7 @@ GameObject:
   - component: {fileID: 856925769930287685}
   - component: {fileID: 454300609176248502}
   - component: {fileID: 1001051369046202523}
+  - component: {fileID: 114740976227863902}
   m_Layer: 0
   m_Name: PlayerControllerGrappler
   m_TagString: Untagged
@@ -1748,6 +1764,7 @@ MonoBehaviour:
   maxSlopeAngle: 35
   jumpForce: 500
   escMenu: {fileID: 6539221427917772709}
+  hudMenu: {fileID: 872185712913285495}
   classText: {fileID: 1759100768170048764}
   projectile: {fileID: 444522161687498213, guid: f67cea237b6862e458cb9da1b90fce54,
     type: 3}
@@ -1920,6 +1937,30 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &114740976227863902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4312743997651058320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d06466c03d263624786afa88b52928b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsWindowOn: 1
+  statsOn: 1
+  healthStatsVisible: 1
+  trafficStatsOn: 1
+  buttonsOn: 0
+  statsRect:
+    serializedVersion: 2
+    x: 0
+    y: 100
+    width: 200
+    height: 50
+  WindowId: 100
 --- !u!1 &4594313128591741728
 GameObject:
   m_ObjectHideFlags: 0
@@ -3435,6 +3476,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cefa90e0ad3ccf64f874dbb12517ee80, type: 3}
+--- !u!4 &4679152145805582009 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 684568533564892733, guid: cefa90e0ad3ccf64f874dbb12517ee80,
+    type: 3}
+  m_PrefabInstance: {fileID: 5291627726727559300}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7376202007841682187 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3400828792180640655, guid: cefa90e0ad3ccf64f874dbb12517ee80,
@@ -3447,9 +3494,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a224a3556c5a68642bc7cbf61bd89097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4679152145805582009 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 684568533564892733, guid: cefa90e0ad3ccf64f874dbb12517ee80,
-    type: 3}
-  m_PrefabInstance: {fileID: 5291627726727559300}
-  m_PrefabAsset: {fileID: 0}

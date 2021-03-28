@@ -1735,6 +1735,7 @@ GameObject:
   - component: {fileID: 8437731143245113783}
   - component: {fileID: 4930457120071184490}
   - component: {fileID: 8043636809373142408}
+  - component: {fileID: 114589401224559246}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: Untagged
@@ -1866,6 +1867,7 @@ MonoBehaviour:
   maxSlopeAngle: 35
   jumpForce: 350
   escMenu: {fileID: 3171332616261470469}
+  hudMenu: {fileID: 646852617385971302}
   classText: {fileID: 1032812968276129792}
   projectile: {fileID: 444522161687498213, guid: f67cea237b6862e458cb9da1b90fce54,
     type: 3}
@@ -2038,6 +2040,30 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &114589401224559246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4732556370355924582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d06466c03d263624786afa88b52928b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statsWindowOn: 1
+  statsOn: 1
+  healthStatsVisible: 1
+  trafficStatsOn: 1
+  buttonsOn: 0
+  statsRect:
+    serializedVersion: 2
+    x: 0
+    y: 100
+    width: 200
+    height: 50
+  WindowId: 100
 --- !u!1 &4732556370444169027
 GameObject:
   m_ObjectHideFlags: 0
@@ -2614,13 +2640,14 @@ GameObject:
   - component: {fileID: 1062704134267981908}
   - component: {fileID: 6331768055752509991}
   - component: {fileID: 1648164401731790133}
+  - component: {fileID: 646852617385971302}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6125826099713682487
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2706,6 +2733,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &646852617385971302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5489585981526758054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7da7142213d83be49bead20ffdd057a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuName: HUD
+  open: 0
 --- !u!1 &5612981354069104786
 GameObject:
   m_ObjectHideFlags: 0
@@ -3346,6 +3387,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 698f6a015033f6841a25e64eaab5035a, type: 3}
+--- !u!4 &8565075941092568012 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3122157488546303971, guid: 698f6a015033f6841a25e64eaab5035a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6740026627464487983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6615173760035537744 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 451683764080650111, guid: 698f6a015033f6841a25e64eaab5035a,
@@ -3358,12 +3405,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d820fb62cdc4c445aec0ed0c8c2688d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &8565075941092568012 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3122157488546303971, guid: 698f6a015033f6841a25e64eaab5035a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6740026627464487983}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6987997961144240682
 PrefabInstance:
   m_ObjectHideFlags: 0

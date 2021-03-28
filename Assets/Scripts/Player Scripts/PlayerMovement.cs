@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     bool jumping, sprinting;
 
     [SerializeField] Menu escMenu;
+    [SerializeField] Menu hudMenu;
     [SerializeField] TMP_Text classText;
 
     PhotonView PV;
@@ -79,6 +80,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		if (PV.IsMine)
 		{
             EquipItem(0);
+            hudMenu.Open();
 		} else
 		{
             Destroy(GetComponentInChildren<Camera>().gameObject);
