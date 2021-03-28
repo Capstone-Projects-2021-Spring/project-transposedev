@@ -20,7 +20,6 @@ public class SingleShotGun : Gun
 
     public override void Use()
 	{
-        Debug.Log(transform.parent.parent.parent.GetComponent<PhotonView>().ViewID + " just shot a gun");
         mySource.Play();
 		Shoot();
 	}

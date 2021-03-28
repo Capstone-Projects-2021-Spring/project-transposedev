@@ -113,7 +113,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             Look();
             SelectItem();
             UseItem();
-            UseAbility();
         }
         EscMenu();
         LeaderboardMenu();
