@@ -29,7 +29,7 @@ public class RuleSet : MonoBehaviour
 
     void Awake()
     {
-        SetMatchTime(1);
+        SetMatchTime(3);
         StartMatchTimer();
     }
 
