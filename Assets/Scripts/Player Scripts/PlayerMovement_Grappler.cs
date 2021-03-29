@@ -120,6 +120,7 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             SelectItem();
             UseItem();
         }
+        LeaderboardMenu();
         EscMenu();
     }
 
