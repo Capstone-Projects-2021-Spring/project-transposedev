@@ -45,8 +45,8 @@ public class AIScript : MonoBehaviour{
       transform.LookAt(player);
       if(alreadyAttacked != true){
          Rigidbody R = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-         R.addForce(transform.forward*32f, ForceMode.Impulse);
-         R.addForce(transform.up*8f, ForceMode.Impulse);
+         R.AddForce(transform.forward*32f, ForceMode.Impulse);
+         R.AddForce(transform.up*8f, ForceMode.Impulse);
          alreadyAttacked = true;
         // Wait(attackCooldown);
          ResetAttack();
