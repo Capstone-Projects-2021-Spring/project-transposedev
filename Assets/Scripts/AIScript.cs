@@ -6,8 +6,8 @@ public class AIScript : MonoBehaviour{
   public Transform player;
   public LayerMask GroundSensor;
   public LayerMask PlayerSensor;
-  public GameObject projectile;
-  public float health;
+    public LayerMask WallSensor;
+    public float health;
   
   public Vector3 walkpoint;
   bool walkpointSet;
@@ -20,40 +20,82 @@ public class AIScript : MonoBehaviour{
   public float attackRange;
   public bool playerInSightRange;
   public bool playerInAttackRange;
-  
-  private void Awake(){
-      player = GameObject.Find("PlayerObj").transform;
-      agent = GetComponent<NavMeshAgent>();
+
+    // items that can be held by the bot
+    [SerializeField] Item[] items;
+    int itemIndex;
+    int previousItemIndex = -1;
+    private void Awake(){
+      player = GameObject.Find("PlayerController").transform;
+      //agent = GetComponent<NavMeshAgent>();
     }
-    
- private void Update(){
-      playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
-      playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
-      if (playerInSightRange && playerInAttackRange){
-        AttackMode();
+    void Start()
+    {
+      EquipItem(0);
+    }
+    private void Update(){
+        //playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
+        //playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
+
+        playerInSightRange = !Physics.Linecast(transform.position, player.position,WallSensor)&&Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
+
+        playerInAttackRange = !Physics.Linecast(transform.position, player.position, WallSensor) &&Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
+
+        if (playerInSightRange && playerInAttackRange){
+            AttackMode();
       }
+      /*
       if (!playerInSightRange && !playerInAttackRange){
         PatrolMode();
       }
       if (playerInSightRange && !playerInAttackRange){
         ChaseMode();
       }
+      */
     }   
  
- private void AttackMode(){
-      agent.SetDestination(transform.position);
-      transform.LookAt(player);
-      if(alreadyAttacked != true){
-         Rigidbody R = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-         R.AddForce(transform.forward*32f, ForceMode.Impulse);
-         R.AddForce(transform.up*8f, ForceMode.Impulse);
-         alreadyAttacked = true;
-        // Wait(attackCooldown);
-         ResetAttack();
-      }
+    private void AttackMode(){
+        //agent.SetDestination(transform.position);
+        transform.LookAt(player);
+
+        //for fully auto guns
+        //items[itemIndex].HoldDown();//add it back after merge...
+
+        //for single shot
+        if (!alreadyAttacked)
+        {
+            items[itemIndex].Use();
+            alreadyAttacked = true;
+            Invoke(nameof(ResetAttack), attackCooldown);
+        }
     }
- 
- private void PatrolMode(){
+    void EquipItem(int index)
+    {
+        if (index == previousItemIndex)
+            return;
+
+        itemIndex = index;
+
+        items[itemIndex].itemGameObject.SetActive(true);
+
+        if (previousItemIndex != -1)
+        {
+            items[previousItemIndex].itemGameObject.SetActive(false);
+        }
+
+        previousItemIndex = itemIndex;
+        /*
+        // I leave it here in case you will need it
+        if (PV.IsMine)
+        {
+            hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            hash.Remove("itemIndex");
+            hash.Add("itemIndex", itemIndex);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+        */
+    }
+    private void PatrolMode(){
       if (walkpointSet != true){
          SearchWalkpoint();
       }
@@ -96,11 +138,11 @@ public class AIScript : MonoBehaviour{
     }
   
   //uncomment to make sightRange & attackRange visible in-game
-  //private void makeSightRangesVisible() {
-  //Gizmos.color = Color.red;
-  //Gizmos.DrawWireSphere(transform.position, attackRange);
-  //Gizmos.color = Color.yellow;
-  //Gizmos.DrawWireSphere(transform.position, sightRange);
-  //}
+  private void makeSightRangesVisible() {
+  Gizmos.color = Color.red;
+  Gizmos.DrawWireSphere(transform.position, attackRange);
+  Gizmos.color = Color.yellow;
+  Gizmos.DrawWireSphere(transform.position, sightRange);
+  }
   
 }
