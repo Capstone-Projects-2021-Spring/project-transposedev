@@ -20,6 +20,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 	[SerializeField] GameObject mapListContent;
 	[SerializeField] TMP_Text mapSelectedText;
 	[SerializeField] GameObject startGameButton;
+	[SerializeField] TMP_Text nicknameText;
+	[SerializeField] TMP_InputField nicknameInputField;
 
 	private Dictionary<string, RoomInfo> cachedRoomList;
 	private Dictionary<string, GameObject> roomListEntries;
@@ -244,6 +246,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Application.Quit();
 	}
 
+	public void SetNickname(string nickname)
+	{
+
+	}
 
 
 
