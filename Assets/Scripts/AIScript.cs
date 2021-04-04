@@ -26,7 +26,6 @@ public class AIScript : MonoBehaviour{
     int itemIndex;
     int previousItemIndex = -1;
     private void Awake(){
-      //player = GameObject.Find("PlayerController").transform;
         //agent = GetComponent<NavMeshAgent>();
     }
     void Start()
@@ -63,7 +62,7 @@ public class AIScript : MonoBehaviour{
         transform.LookAt(player);
 
         //for fully auto guns
-        //items[itemIndex].HoldDown();//add it back after merge...
+        items[itemIndex].HoldDown();
 
         //for single shot
         if (!alreadyAttacked)

@@ -1749,9 +1749,9 @@ GameObject:
   - component: {fileID: 454300609176248502}
   - component: {fileID: 1001051369046202523}
   - component: {fileID: 114740976227863902}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerControllerGrappler
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
