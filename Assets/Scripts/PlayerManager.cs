@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 	GameObject controller;
 	[SerializeField]private int kills = 0;
     [SerializeField]private int deaths = 0;
+    private string myClassName;
 
     // player properties
     Hashtable hash = new Hashtable();
@@ -25,6 +26,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             hash.Add("itemIndex", 0);
             hash.Add("deaths", 0);
             hash.Add("kills", 0);
+            hash.Add("class", "PlayerController"); // default player controller class
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
     }
@@ -34,25 +36,32 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         if (PV.IsMine)
 		{
-			CreateController();
-		}
+            // Instantiate player controller
+            CreateController("PlayerController");
+        }
     }
 
-	void CreateController()
+	void CreateController(string className)
 	{
-		// Instantiate player controller
-		Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
-		controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnPoint.position, spawnPoint.rotation, 0, new object[] { PV.ViewID });
-	}
+        // Instantiate player controller
+        Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", className), spawnPoint.position, spawnPoint.rotation, 0, new object[] { PV.ViewID });
+    }
+
+
 
 	public void Die(Player shooter)
 	{
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
         UpdateDeaths(deaths + 1);
-        UpdateKills(shooter);
+
+        if(shooter != null && !shooter.Equals(PhotonNetwork.LocalPlayer))
+            UpdateKills(shooter);
+
         PhotonNetwork.Destroy(controller);
-		CreateController();
-        Debug.Log("I just died, current deaths: " + DeathCount());
+		CreateController((string)hash["class"]);
 	}
+
 
     public void UpdateKills(Player shooter)
 	{
@@ -86,7 +95,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
 	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
 	{
-        if (changedProps.Count < 3)
+        if (changedProps.Count < 4)
             return;
 
 		if (!PV.IsMine && targetPlayer == PV.Owner)

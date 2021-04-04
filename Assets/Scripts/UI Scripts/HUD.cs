@@ -13,8 +13,8 @@ public class HUD : MonoBehaviour
     public static int trgt_cntr;
     public static string timer = "";
 
-    public Transform CurrentAmmoText;
-    public Transform BackUpAmmoText;
+    //public Transform CurrentAmmoText;
+    //public Transform BackUpAmmoText;
     public Transform HealthText;
     public Transform ArmorText;
     public Transform TimerText;
@@ -22,7 +22,7 @@ public class HUD : MonoBehaviour
 
     public int getHealth()
     {
-        return GetComponent<PlayerStats>().GetHealth();
+        return transform.gameObject.GetComponent<PlayerStats>().GetHealth();
     }
     public static String getTime()
     {
@@ -40,6 +40,7 @@ public class HUD : MonoBehaviour
             return 0;
     }
 
+    /*
     //please hook the following to Game Status
     public static int getRemainAmmo()
     {
@@ -51,9 +52,10 @@ public class HUD : MonoBehaviour
         return ammo_BackUp;
 
     }
+    */
     public int getArmor()
     {
-        return GetComponent<PlayerStats>().GetArmor();
+        return transform.gameObject.GetComponent<PlayerStats>().GetArmor();
         //return armor;
     }
     void Start()
@@ -68,9 +70,9 @@ public class HUD : MonoBehaviour
 
 
     //testing features(please remove this after hooking to the game status)
-    private static long time = 0;
-    private static long time_reload = 3000;
-    private static int mag = 30;
+    //private static long time = 0;
+    //private static long time_reload = 3000;
+    //private static int mag = 30;
     //testing features end
     void Update()
     {
