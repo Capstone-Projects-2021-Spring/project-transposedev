@@ -626,8 +626,8 @@ MonoBehaviour:
   attackCooldown: 10
   sightRange: 500
   attackRange: 500
-  playerInSightRange: 1
-  playerInAttackRange: 1
+  playerInSightRange: 0
+  playerInAttackRange: 0
   items:
   - {fileID: 0}
   - {fileID: 0}

@@ -1500,9 +1500,9 @@ GameObject:
   - component: {fileID: 114484287199985068}
   - component: {fileID: 8437731143245113783}
   - component: {fileID: 4930457120071184490}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

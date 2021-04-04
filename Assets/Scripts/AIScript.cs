@@ -26,17 +26,21 @@ public class AIScript : MonoBehaviour{
     int itemIndex;
     int previousItemIndex = -1;
     private void Awake(){
-      player = GameObject.Find("PlayerController").transform;
-      //agent = GetComponent<NavMeshAgent>();
+      //player = GameObject.Find("PlayerController").transform;
+        //agent = GetComponent<NavMeshAgent>();
     }
     void Start()
     {
       EquipItem(0);
+        Invoke(nameof(SetPlayer), 3);
     }
     private void Update(){
         //playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
         //playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
-
+        if (player == null)
+        {
+            return;
+        }
         playerInSightRange = !Physics.Linecast(transform.position, player.position,WallSensor)&&Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
 
         playerInAttackRange = !Physics.Linecast(transform.position, player.position, WallSensor) &&Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
@@ -110,9 +114,13 @@ public class AIScript : MonoBehaviour{
    
  private void ChaseMode(){
       agent.SetDestination(player.position);
-    }  
- 
- private void ResetAttack(){
+    }
+    private void SetPlayer()
+    {
+        player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+    }
+
+    private void ResetAttack(){
       alreadyAttacked = false;
     } 
   
