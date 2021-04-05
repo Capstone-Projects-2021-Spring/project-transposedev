@@ -20,6 +20,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 	[SerializeField] GameObject mapListContent;
 	[SerializeField] TMP_Text mapSelectedText;
 	[SerializeField] GameObject startGameButton;
+	[SerializeField] TMP_Text nicknameText;
+	[SerializeField] TMP_InputField nicknameInputField;
+	[SerializeField] GameObject nicknameGUIContainer;
+	[SerializeField] GameObject nicknameContainer;
 
 	private Dictionary<string, RoomInfo> cachedRoomList;
 	private Dictionary<string, GameObject> roomListEntries;
@@ -58,8 +62,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 		cachedRoomList.Clear();
 		ClearRoomListView();
 
-		// TODO place holder for nickname/username system
-		PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+		SetNickname("Player " + Random.Range(0, 1000).ToString("0000"));
 	}
 
 	public override void OnLeftLobby()
@@ -244,6 +247,33 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Application.Quit();
 	}
 
+
+	public void OpenChangeNicknameContainer()
+	{
+		nicknameGUIContainer.SetActive(true);
+		nicknameContainer.SetActive(false);
+	}
+
+	public void CloseChangeNicknameContainer()
+	{
+		nicknameGUIContainer.SetActive(false);
+		nicknameContainer.SetActive(true);
+		nicknameInputField.text = "";
+	}
+
+	public void OnChangeNicknameSubmit()
+	{
+		if (nicknameInputField.text == "" || nicknameInputField.text.Length > 11)
+			return;
+		SetNickname(nicknameInputField.text);
+		CloseChangeNicknameContainer();
+	}
+
+	private void SetNickname(string nickname)
+	{
+		PhotonNetwork.NickName = nickname;
+		nicknameText.text = "Nickname: " + PhotonNetwork.NickName;
+	}
 
 
 
