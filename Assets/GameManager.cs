@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public void DestroyHazard(GameObject hazard)
 	{
 		PhotonNetwork.Destroy(hazard);
+		StartCoroutine(CoolDown());
+		SpawnHazards();
 	}
 
 	public override void OnLeftRoom()
@@ -37,5 +39,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public void LeaveRoom()
 	{
 		PhotonNetwork.LeaveRoom();
+	}
+
+	IEnumerator CoolDown()
+	{
+		Debug.Log("should be waiting");
+		yield return new WaitForSecondsRealtime(500);
 	}
 }

@@ -32,14 +32,9 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
         Collider[] targets = Physics.OverlapSphere(transform.position, explosionRange);
         foreach (Collider target in targets) {
             if (target.gameObject.GetComponent<PlayerMovement>() != null) { // Check it's a player
-                //target.GetComponent<Target>().TakeDamage(targetDamage); // Damage the player
-                //Debug.Log("Damaged Player!");
+                target.gameObject.GetComponent<PlayerMovement>().TakeDamage(100);
             }
         }
-
-        //if (PV.IsMine)
-            //Debug.Log("IsMine");
-        GameManager.Instance.DestroyHazard(gameObject);
     }
 
     private void OnDrawGizmos() {
@@ -54,7 +49,10 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
         if (barrelHealth <= 0)
 		{
             if (PV.IsMine)
+            {
                 Explode();
+                GameManager.Instance.DestroyHazard(gameObject);
+            }
 		}
     }
 }
