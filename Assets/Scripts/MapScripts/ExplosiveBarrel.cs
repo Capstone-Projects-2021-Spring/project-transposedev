@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosiveBarrel : MonoBehaviour, IDamageable {
-    public GameObject Barrel;
+    //public GameObject Barrel;
     public GameObject explosionEffect;
     public AudioSource explosionSound;
 
@@ -14,12 +14,11 @@ public class ExplosiveBarrel : MonoBehaviour, IDamageable {
     private bool played = false;
 
     private void Awake() {
-        Barrel.SetActive(true);
     }
 
     public void TakeDamage(float damage) {
         barrelHealth -= damage;
-        Debug.Log("Ouch. Barrel is hurt. Health:" +  barrelHealth);
+        //Debug.Log("Ouch. Barrel is hurt. Health:" +  barrelHealth);
     }
 
     public void Explode() {
@@ -34,10 +33,10 @@ public class ExplosiveBarrel : MonoBehaviour, IDamageable {
         foreach (Collider target in targets) {
             if (target.gameObject.GetComponent<PlayerMovement>() != null) { // Check it's a player
                 //target.GetComponent<Target>().TakeDamage(targetDamage); // Damage the player
-                Debug.Log("Damaged Player!");
+                //Debug.Log("Damaged Player!");
             }
         }
-        Destroy(Barrel);
+        GameManager.Instance.DestroyHazard(gameObject);
     }
 
     private void Update() {

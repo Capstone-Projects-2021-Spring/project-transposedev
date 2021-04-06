@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -11,6 +12,21 @@ public class GameManager : MonoBehaviourPunCallbacks
 	private void Awake()
 	{
 		Instance = this;
+	}
+
+	private void Start()
+	{
+		SpawnHazards();
+	}
+
+	void SpawnHazards()
+	{
+		PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), Vector3.zero, Quaternion.identity);
+	}
+
+	public void DestroyHazard(GameObject hazard)
+	{
+		PhotonNetwork.Destroy(hazard);
 	}
 
 	public override void OnLeftRoom()
