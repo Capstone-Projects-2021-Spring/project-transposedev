@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplosiveBarrel : MonoBehaviour, IDamageable {
+public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
     //public GameObject Barrel;
     public GameObject explosionEffect;
     public AudioSource explosionSound;
@@ -13,7 +14,10 @@ public class ExplosiveBarrel : MonoBehaviour, IDamageable {
     private float barrelHealth = 50;
     private bool played = false;
 
+    PhotonView PV;
+
     private void Awake() {
+        PV = GetComponent<PhotonView>();
     }
 
     public void TakeDamage(float damage) {
@@ -36,7 +40,12 @@ public class ExplosiveBarrel : MonoBehaviour, IDamageable {
                 //Debug.Log("Damaged Player!");
             }
         }
-        GameManager.Instance.DestroyHazard(gameObject);
+
+        if (PV.IsMine)
+		{
+            Debug.Log("IsMine");
+            GameManager.Instance.DestroyHazard(gameObject);
+        }
     }
 
     private void Update() {
