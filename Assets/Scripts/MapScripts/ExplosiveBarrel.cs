@@ -21,17 +21,13 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
     }
 
     public void TakeDamage(float damage) {
-        barrelHealth -= damage;
-        //Debug.Log("Ouch. Barrel is hurt. Health:" +  barrelHealth);
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
     }
 
     public void Explode() {
 
-        if (!played) {
-            Instantiate(explosionEffect, transform.position, transform.rotation);
-            explosionSound.Play();
-            played = true;
-        }
+        Instantiate(explosionEffect, transform.position, transform.rotation);
+        explosionSound.Play();
 
         Collider[] targets = Physics.OverlapSphere(transform.position, explosionRange);
         foreach (Collider target in targets) {
@@ -46,13 +42,19 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
         GameManager.Instance.DestroyHazard(gameObject);
     }
 
-    private void Update() {
-        if (barrelHealth <= 0) {
-            Explode();
-        }
-    }
-
     private void OnDrawGizmos() {
         Gizmos.DrawWireSphere(transform.position, explosionRange);
+    }
+
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+    {
+        barrelHealth -= damage;
+
+        if (barrelHealth <= 0)
+		{
+            if (PV.IsMine)
+                Explode();
+		}
     }
 }
