@@ -41,11 +41,9 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
             }
         }
 
-        if (PV.IsMine)
-		{
-            Debug.Log("IsMine");
-            GameManager.Instance.DestroyHazard(gameObject);
-        }
+        //if (PV.IsMine)
+            //Debug.Log("IsMine");
+        GameManager.Instance.DestroyHazard(gameObject);
     }
 
     private void Update() {

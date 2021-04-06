@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	void SpawnHazards()
 	{
-		PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), Vector3.zero, Quaternion.identity);
+		//if (PhotonNetwork.IsMasterClient)
+		PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), Vector3.zero, Quaternion.identity);
 	}
 
 	public void DestroyHazard(GameObject hazard)
