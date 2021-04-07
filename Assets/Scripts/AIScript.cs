@@ -21,68 +21,52 @@ public class AIScript : MonoBehaviour{
   public bool playerInSightRange;
   public bool playerInAttackRange;
 
+    public float vision_angle;
+
     // items that can be held by the bot
     [SerializeField] Item[] items;
     int itemIndex;
     int previousItemIndex = -1;
     private void Awake(){
-      player = GameObject.Find("PlayerController").transform;
-      agent = GetComponent<NavMeshAgent>();
+        //agent = GetComponent<NavMeshAgent>();
     }
     void Start()
     {
       EquipItem(0);
+        Invoke(nameof(SetPlayer), 3);
     }
     private void Update(){
-
-        foreach(PlayerMovement p in FindObjectsOfType<PlayerMovement>()) //Designate nearest target
+        //playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
+        //playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
+        if (player == null)
         {
-            float minDistance = float.MaxValue;
-
-            if(Vector3.Distance(transform.position, p.transform.position) < minDistance)
-            {
-                Debug.Log("Selected Target");
-                player = p.transform;
-            }
-
+            return;
         }
+        playerInSightRange = !Physics.Linecast(transform.position, player.position,WallSensor)&&Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
 
-
-      playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
-      playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
-
-        RaycastHit hit;
+        playerInAttackRange = !Physics.Linecast(transform.position, player.position, WallSensor) &&Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
+        Vector3 targetDir = player.position - transform.position;
+        float angle = Vector3.Angle(targetDir, transform.forward);
         
-        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
-        {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log(hit.transform.name);
-        }
-
-
-      if (playerInSightRange && playerInAttackRange)
-      {
-         AttackMode();
+        if (playerInSightRange && playerInAttackRange&&angle<vision_angle){
+            AttackMode();
       }
-      
-      if (!playerInSightRange && !playerInAttackRange)
-      {
-         PatrolMode();
+      /*
+      if (!playerInSightRange && !playerInAttackRange){
+        PatrolMode();
       }
-
-      if (playerInSightRange && !playerInAttackRange)
-      {
-         ChaseMode();
+      if (playerInSightRange && !playerInAttackRange){
+        ChaseMode();
       }
-      
+      */
     }   
  
     private void AttackMode(){
-        agent.SetDestination(transform.position);
+        //agent.SetDestination(transform.position);
         transform.LookAt(player);
 
         //for fully auto guns
-        //items[itemIndex].HoldDown();//add it back after merge...
+        items[itemIndex].HoldDown();
 
         //for single shot
         if (!alreadyAttacked)
@@ -107,7 +91,6 @@ public class AIScript : MonoBehaviour{
         }
 
         previousItemIndex = itemIndex;
-
         /*
         // I leave it here in case you will need it
         if (PV.IsMine)
@@ -119,40 +102,38 @@ public class AIScript : MonoBehaviour{
         }
         */
     }
-    private void PatrolMode()
-    {
-        Debug.Log("Entering Patrol Mode");
-        if (walkpointSet != true){
-            SearchWalkpoint();
-        }
-        else
-        agent.SetDestination(walkpoint);
+    private void PatrolMode(){
+      if (walkpointSet != true){
+         SearchWalkpoint();
+      }
+      else
+         agent.SetDestination(walkpoint);
    
-        Vector3 distToWalkpoint = transform.position - walkpoint;
-        if(distToWalkpoint.magnitude < 1f){
-             walkpointSet = false;
-        }
+      Vector3 distToWalkpoint = transform.position - walkpoint;
+      if(distToWalkpoint.magnitude < 1f){
+          walkpointSet = false;
+      }
     }
    
-    private void ChaseMode()
+ private void ChaseMode(){
+      agent.SetDestination(player.position);
+    }
+    private void SetPlayer()
     {
-        Debug.Log("Entering Chase Mode");
-        agent.SetDestination(player.position);
-    }  
- 
- private void ResetAttack(){
+        player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+    }
+
+    private void ResetAttack(){
       alreadyAttacked = false;
     } 
   
  private void SearchWalkpoint(){
-        Debug.Log("Searching for walkpoint");
       float randomX = Random.Range(-walkpointRange, walkpointRange);
       float randomZ = Random.Range(-walkpointRange, walkpointRange);
       walkpoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
       if (Physics.Raycast(walkpoint, -transform.up, 2f, GroundSensor)){ //checks if walkpoint is on map
         walkpointSet = true;
       }
-        Debug.Log("walkpoint is " + walkpoint.ToString());
     }
   
   public void TakeDamage(int damage){
