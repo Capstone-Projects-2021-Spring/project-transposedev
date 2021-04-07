@@ -55,7 +55,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	public override void OnJoinedLobby()
 	{
-        MenuManager.Instance.OpenMenu("Main");
+		// temporary fix for deaths and kills not being zeroed after a match
+		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
+		MenuManager.Instance.OpenMenu("Main");
         Debug.Log("Joined Lobby");
 
 		// whenever this joins a new lobby, clear any previous room lists
