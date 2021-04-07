@@ -21,6 +21,8 @@ public class AIScript : MonoBehaviour{
   public bool playerInSightRange;
   public bool playerInAttackRange;
 
+    public float vision_angle;
+
     // items that can be held by the bot
     [SerializeField] Item[] items;
     int itemIndex;
@@ -43,8 +45,10 @@ public class AIScript : MonoBehaviour{
         playerInSightRange = !Physics.Linecast(transform.position, player.position,WallSensor)&&Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
 
         playerInAttackRange = !Physics.Linecast(transform.position, player.position, WallSensor) &&Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
-
-        if (playerInSightRange && playerInAttackRange){
+        Vector3 targetDir = player.position - transform.position;
+        float angle = Vector3.Angle(targetDir, transform.forward);
+        
+        if (playerInSightRange && playerInAttackRange&&angle<vision_angle){
             AttackMode();
       }
       /*
