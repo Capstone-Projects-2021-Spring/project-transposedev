@@ -627,6 +627,7 @@ MonoBehaviour:
   attackCooldown: 10
   sightRange: 500
   attackRange: 500
+  vision_angle: 35
   playerInSightRange: 1
   playerInAttackRange: 1
   items:
@@ -884,7 +885,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4732556371021715647
 Transform:
   m_ObjectHideFlags: 0
