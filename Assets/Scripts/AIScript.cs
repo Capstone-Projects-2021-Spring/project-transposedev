@@ -1,91 +1,90 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIScript : MonoBehaviour{
-  public NavMeshAgent agent; //reference to agent
-  public Transform player;
-  public LayerMask GroundSensor;
-  public LayerMask PlayerSensor;
+public class AIScript : MonoBehaviourPunCallbacks
+{
+    
+    public NavMeshAgent agent; //reference to agent
+    public Transform player;
+    public LayerMask GroundSensor;
+    public LayerMask PlayerSensor;
     public LayerMask WallSensor;
     public float health;
   
-  public Vector3 walkpoint;
-  bool walkpointSet;
-  public float walkpointRange;
+    public Vector3 walkpoint;
+    bool walkpointSet;
+    public float walkpointRange;
   
-  public float attackCooldown;
-  bool alreadyAttacked;
+    public float attackCooldown;
+    bool alreadyAttacked;
   
-  public float sightRange;
-  public float attackRange;
+    public float sightRange;
+    public float attackRange;
     public float vision_angle;
     public bool playerInSightRange;
-  public bool playerInAttackRange;
+    public bool playerInAttackRange;
 
     // items that can be held by the bot
     [SerializeField] Item[] items;
     int itemIndex;
     int previousItemIndex = -1;
-    private void Awake(){
-      //player = GameObject.Find("PlayerController").transform;
-      agent = GetComponent<NavMeshAgent>();
+
+    private void Awake()
+    {
+        //player = GameObject.Find("PlayerController").transform;
+        agent = GetComponent<NavMeshAgent>();
     }
+
     void Start()
     {
-      EquipItem(0);
+        EquipItem(0);
         Invoke(nameof(SetPlayer), 3);
     }
-    private void Update(){
 
+    private void Update()
+    {
         foreach(PlayerMovement p in FindObjectsOfType<PlayerMovement>()) //Designate nearest target
         {
             float minDistance = float.MaxValue;
-
             if(Vector3.Distance(transform.position, p.transform.position) < minDistance)
             {
                 //Debug.Log("Selected Target");
                 player = p.transform;
             }
-
         }
 
-
         playerInSightRange = !Physics.Linecast(transform.position, player.position, WallSensor) && Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
-
         playerInAttackRange = !Physics.Linecast(transform.position, player.position, WallSensor) && Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
 
         RaycastHit hit;
-        
         if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
         {
             //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
             //Debug.Log(hit.transform.name);
         }
 
+        Vector3 targetDir = player.position - transform.position;
+        float angle = Vector3.Angle(targetDir, transform.forward);
 
-
-
-            Vector3 targetDir = player.position - transform.position;
-            float angle = Vector3.Angle(targetDir, transform.forward);
-
-            if (playerInSightRange && playerInAttackRange && angle < vision_angle)
-            {
-                AttackMode();
-      }
+        if (playerInSightRange && playerInAttackRange && angle < vision_angle)
+        {
+            AttackMode();
+        }
       
-      if (!playerInSightRange && !playerInAttackRange)
-      {
-         PatrolMode();
-      }
+        if (!playerInSightRange && !playerInAttackRange)
+        {
+            PatrolMode();
+        }
 
-      if (playerInSightRange && !playerInAttackRange)
-      {
-         ChaseMode();
-      }
-      
+        if (playerInSightRange && !playerInAttackRange)
+        {
+            ChaseMode();
+        }
     }   
  
-    private void AttackMode(){
+    private void AttackMode()
+    {
         //Debug.Log("Entering Attack Mode");
         agent.SetDestination(transform.position);
         transform.LookAt(player);
@@ -101,6 +100,7 @@ public class AIScript : MonoBehaviour{
             Invoke(nameof(ResetAttack), attackCooldown);
         }
     }
+
     void EquipItem(int index)
     {
         if (index == previousItemIndex)
@@ -128,17 +128,20 @@ public class AIScript : MonoBehaviour{
         }
         */
     }
+
     private void PatrolMode()
     {
         //Debug.Log("Entering Patrol Mode");
-        if (walkpointSet != true){
+        if (walkpointSet != true)
+        {
             SearchWalkpoint();
         }
         else
-        agent.SetDestination(walkpoint);
+            agent.SetDestination(walkpoint);
    
         Vector3 distToWalkpoint = transform.position - walkpoint;
-        if(distToWalkpoint.magnitude < 1f){
+        if(distToWalkpoint.magnitude < 1f)
+        {
              walkpointSet = false;
         }
     }
@@ -149,40 +152,41 @@ public class AIScript : MonoBehaviour{
         agent.SetDestination(player.position);
     }  
  
- private void ResetAttack(){
-      alreadyAttacked = false;
+    private void ResetAttack()
+    {
+        alreadyAttacked = false;
     } 
   
- private void SearchWalkpoint(){
-       // Debug.Log("Searching for walkpoint");
-      float randomX = Random.Range(-walkpointRange, walkpointRange);
-      float randomZ = Random.Range(-walkpointRange, walkpointRange);
-      walkpoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-      if (Physics.Raycast(walkpoint, -transform.up, 2f, GroundSensor)){ //checks if walkpoint is on map
-        walkpointSet = true;
-      }
+    private void SearchWalkpoint()
+    {
+        // Debug.Log("Searching for walkpoint");
+        float randomX = Random.Range(-walkpointRange, walkpointRange);
+        float randomZ = Random.Range(-walkpointRange, walkpointRange);
+        
+        walkpoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        
+        //checks if walkpoint is on map
+        if (Physics.Raycast(walkpoint, -transform.up, 2f, GroundSensor))
+        {
+            walkpointSet = true;
+        }
         //Debug.Log("walkpoint is " + walkpoint.ToString());
     }
   
-  public void TakeDamage(int damage){
-      health = health - damage;
-      if (health <= 0){
-       // Wait(0.5f);
-        killEnemy();
-      }
-   }
-  
-  private void killEnemy(){
-      Destroy(gameObject);
+    private void killEnemy()
+    {
+        Destroy(gameObject);
     }
   
-  //uncomment to make sightRange & attackRange visible in-game
-  private void makeSightRangesVisible() {
-  Gizmos.color = Color.red;
-  Gizmos.DrawWireSphere(transform.position, attackRange);
-  Gizmos.color = Color.yellow;
-  Gizmos.DrawWireSphere(transform.position, sightRange);
-  }
+    //uncomment to make sightRange & attackRange visible in-game
+    private void makeSightRangesVisible() 
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, sightRange);
+    }
+
     private void SetPlayer()
     {
         player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
