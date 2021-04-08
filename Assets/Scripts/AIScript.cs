@@ -43,7 +43,7 @@ public class AIScript : MonoBehaviour{
 
             if(Vector3.Distance(transform.position, p.transform.position) < minDistance)
             {
-                Debug.Log("Selected Target");
+                //Debug.Log("Selected Target");
                 player = p.transform;
             }
 
@@ -58,8 +58,8 @@ public class AIScript : MonoBehaviour{
         
         if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log(hit.transform.name);
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            //Debug.Log(hit.transform.name);
         }
 
 
@@ -86,7 +86,7 @@ public class AIScript : MonoBehaviour{
     }   
  
     private void AttackMode(){
-        Debug.Log("Entering Attack Mode");
+        //Debug.Log("Entering Attack Mode");
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
@@ -130,7 +130,7 @@ public class AIScript : MonoBehaviour{
     }
     private void PatrolMode()
     {
-        Debug.Log("Entering Patrol Mode");
+        //Debug.Log("Entering Patrol Mode");
         if (walkpointSet != true){
             SearchWalkpoint();
         }
@@ -145,7 +145,7 @@ public class AIScript : MonoBehaviour{
    
     private void ChaseMode()
     {
-        Debug.Log("Entering Chase Mode");
+        //Debug.Log("Entering Chase Mode");
         agent.SetDestination(player.position);
     }  
  
@@ -154,14 +154,14 @@ public class AIScript : MonoBehaviour{
     } 
   
  private void SearchWalkpoint(){
-        Debug.Log("Searching for walkpoint");
+       // Debug.Log("Searching for walkpoint");
       float randomX = Random.Range(-walkpointRange, walkpointRange);
       float randomZ = Random.Range(-walkpointRange, walkpointRange);
       walkpoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
       if (Physics.Raycast(walkpoint, -transform.up, 2f, GroundSensor)){ //checks if walkpoint is on map
         walkpointSet = true;
       }
-        Debug.Log("walkpoint is " + walkpoint.ToString());
+        //Debug.Log("walkpoint is " + walkpoint.ToString());
     }
   
   public void TakeDamage(int damage){

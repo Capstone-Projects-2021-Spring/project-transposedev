@@ -16,12 +16,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
-		SpawnHazards();
+		//SpawnHazards();
+		SpawnAI();
 	}
 
 	void SpawnHazards()
 	{
 		PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), Vector3.zero, Quaternion.identity);
+	}
+
+	void SpawnAI()
+	{
+		PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), Vector3.zero, Quaternion.identity);
 	}
 
 	public void DestroyHazard(GameObject hazard)
