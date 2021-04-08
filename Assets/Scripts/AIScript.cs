@@ -2,7 +2,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIScript : MonoBehaviourPunCallbacks
+public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 {
     
     public NavMeshAgent agent; //reference to agent
@@ -30,9 +30,11 @@ public class AIScript : MonoBehaviourPunCallbacks
     int itemIndex;
     int previousItemIndex = -1;
 
+    PhotonView PV;
+
     private void Awake()
     {
-        //player = GameObject.Find("PlayerController").transform;
+        PV = GetComponent<PhotonView>();
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -190,5 +192,24 @@ public class AIScript : MonoBehaviourPunCallbacks
     private void SetPlayer()
     {
         player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+    {
+        health -= damage;
+
+        if (health <= 0)
+        {
+            if (PV.IsMine)
+            {
+                GameManager.Instance.DestroyAI(gameObject);
+            }
+        }
     }
 }

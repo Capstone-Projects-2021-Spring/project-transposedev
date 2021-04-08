@@ -20,10 +20,6 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
         PV = GetComponent<PhotonView>();
     }
 
-    public void TakeDamage(float damage) {
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
-    }
-
     public void Explode() {
 
         Instantiate(explosionEffect, transform.position, transform.rotation);
@@ -39,6 +35,11 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
 
     private void OnDrawGizmos() {
         Gizmos.DrawWireSphere(transform.position, explosionRange);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
     }
 
     [PunRPC]

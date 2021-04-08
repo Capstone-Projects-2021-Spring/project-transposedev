@@ -36,6 +36,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 		Invoke("SpawnHazards", 3);
 	}
 
+	public void DestroyAI(GameObject AI)
+	{
+		PhotonNetwork.Destroy(AI);
+		Invoke("SpawnAI", 3);
+	}
+
 	public override void OnLeftRoom()
 	{
 		SceneManager.LoadScene(0);
