@@ -18,7 +18,8 @@ public class AIScript : MonoBehaviour{
   
   public float sightRange;
   public float attackRange;
-  public bool playerInSightRange;
+    public float vision_angle;
+    public bool playerInSightRange;
   public bool playerInAttackRange;
 
     // items that can be held by the bot
@@ -32,6 +33,7 @@ public class AIScript : MonoBehaviour{
     void Start()
     {
       EquipItem(0);
+        Invoke(nameof(SetPlayer), 3);
     }
     private void Update(){
 
@@ -48,8 +50,9 @@ public class AIScript : MonoBehaviour{
         }
 
 
-      playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
-      playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
+        playerInSightRange = !Physics.Linecast(transform.position, player.position, WallSensor) && Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
+
+        playerInAttackRange = !Physics.Linecast(transform.position, player.position, WallSensor) && Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
 
         RaycastHit hit;
         
@@ -60,9 +63,14 @@ public class AIScript : MonoBehaviour{
         }
 
 
-      if (playerInSightRange && playerInAttackRange)
-      {
-         AttackMode();
+
+
+            Vector3 targetDir = player.position - transform.position;
+            float angle = Vector3.Angle(targetDir, transform.forward);
+
+            if (playerInSightRange && playerInAttackRange && angle < vision_angle)
+            {
+                AttackMode();
       }
       
       if (!playerInSightRange && !playerInAttackRange)
@@ -78,11 +86,12 @@ public class AIScript : MonoBehaviour{
     }   
  
     private void AttackMode(){
+        Debug.Log("Entering Attack Mode");
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
         //for fully auto guns
-        //items[itemIndex].HoldDown();//add it back after merge...
+        items[itemIndex].HoldDown();//add it back after merge...
 
         //for single shot
         if (!alreadyAttacked)
@@ -174,5 +183,8 @@ public class AIScript : MonoBehaviour{
   Gizmos.color = Color.yellow;
   Gizmos.DrawWireSphere(transform.position, sightRange);
   }
-  
+    private void SetPlayer()
+    {
+        player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
+    }
 }

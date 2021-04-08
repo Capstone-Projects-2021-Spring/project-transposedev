@@ -1500,9 +1500,9 @@ GameObject:
   - component: {fileID: 114484287199985068}
   - component: {fileID: 8437731143245113783}
   - component: {fileID: 4930457120071184490}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerController
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1629,6 +1629,11 @@ MonoBehaviour:
   maxSlopeAngle: 35
   jumpForce: 350
   escMenu: {fileID: 3171332616261470469}
+  leaderboard: {fileID: 0}
+  hudMenu: {fileID: 0}
+  classText: {fileID: 0}
+  projectile: {fileID: 0}
+  projectileSpeed: 5
 --- !u!114 &7007282031397312272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,8 +1685,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04fe5a9cdebfe64ea9dcaa6b25014d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentAmmoText: {fileID: 3077566864168632245}
-  BackUpAmmoText: {fileID: 395442956224700796}
   HealthText: {fileID: 5856508192756094922}
   ArmorText: {fileID: 6253174721933025552}
   TimerText: {fileID: 8494094214964532039}
