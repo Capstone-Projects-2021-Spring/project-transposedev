@@ -26,7 +26,7 @@ public class AIScript : MonoBehaviour{
     int itemIndex;
     int previousItemIndex = -1;
     private void Awake(){
-      player = GameObject.Find("PlayerController").transform;
+      //player = GameObject.Find("PlayerController").transform;
       agent = GetComponent<NavMeshAgent>();
     }
     void Start()
