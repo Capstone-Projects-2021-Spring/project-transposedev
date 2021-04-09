@@ -25,7 +25,7 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
         this.GetComponent<SphereCollider>().enabled = false;
     }
 
-    public void TakeDamage(float damage) {
+    public void TakeDamage(float damage, Component source) {
         currentBatteryHealth -= damage;
         Debug.Log("Ouch. Battery is hurt. Health:" + currentBatteryHealth);
     }
@@ -52,7 +52,7 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
 
             if (damageTimer <= 0 ) {
                 Debug.Log("Player takes damage");
-                other.gameObject.GetComponent<IDamageable>()?.TakeDamage(1);
+                other.gameObject.GetComponent<IDamageable>()?.TakeDamage(1, this);
                 zapSound.Play();
                 damageTimer = damageTime; // Reset Timer
             }
@@ -79,7 +79,7 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
     }
 
     IEnumerator SlowDamage(Collider other) {
-        other.gameObject.GetComponent<IDamageable>()?.TakeDamage(1);
+        other.gameObject.GetComponent<IDamageable>()?.TakeDamage(1, this);
         zapSound.Play();
         yield return new WaitForSeconds(1);
     }

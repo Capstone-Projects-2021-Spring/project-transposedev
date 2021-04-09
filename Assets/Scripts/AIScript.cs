@@ -194,7 +194,7 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         player = GameObject.FindGameObjectsWithTag("Player")[0].transform;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Component source)
     {
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
     }

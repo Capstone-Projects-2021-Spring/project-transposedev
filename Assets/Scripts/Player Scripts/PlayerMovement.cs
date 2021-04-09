@@ -423,10 +423,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		}
 	}
 
-    // ran by the shooter
-    public void TakeDamage(float damage)
+    // ran by the shooter on the target
+    public void TakeDamage(float damage, Component source)
     {
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+        // find player owner of gun
+        if (source is Gun && source.GetComponentInParent<PlayerMovement>() != null)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+        // find ai owner of gun
+        if (source is Gun && source.GetComponentInParent<AIScript>() != null)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+        // find player or ai that blew up barrel
+        if (source is ExplosiveBarrel)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+        // find player owner of rocket
+        if (source is RocketBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+
     }
 
     // ran by the target
@@ -440,6 +452,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
+            if (shooter == null)
+			{
+                Die();
+                return;
+			}
             Die(shooter);
 		}
 	}

@@ -441,7 +441,7 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     }
 
     // ran by the shooter
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Component source)
     {
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
     }
