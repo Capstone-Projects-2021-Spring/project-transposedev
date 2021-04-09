@@ -2,24 +2,25 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class AIScript : MonoBehaviour{
-  public NavMeshAgent agent; //reference to agent
-  public Transform player;
-  public LayerMask GroundSensor;
-  public LayerMask PlayerSensor;
+      public NavMeshAgent agent; //reference to agent
+      public Transform player;
+      public LayerMask GroundSensor;
+      public LayerMask PlayerSensor;
     public LayerMask WallSensor;
     public float health;
   
-  public Vector3 walkpoint;
-  bool walkpointSet;
-  public float walkpointRange;
+      public Vector3 walkpoint;
+      bool walkpointSet;
+      public float walkpointRange;
   
-  public float attackCooldown;
-  bool alreadyAttacked;
+      public float attackCooldown;
+      bool alreadyAttacked;
   
-  public float sightRange;
-  public float attackRange;
-  public bool playerInSightRange;
-  public bool playerInAttackRange;
+      public float sightRange;
+      public float attackRange;
+      public bool playerInSightRange;
+      public bool playerInAttackRange;
+    public bool playerInSight;
 
     // items that can be held by the bot
     [SerializeField] Item[] items;
@@ -44,9 +45,7 @@ public class AIScript : MonoBehaviour{
                 Debug.Log("Selected Target");
                 player = p.transform;
             }
-
         }
-
 
       playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
       playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
@@ -56,13 +55,20 @@ public class AIScript : MonoBehaviour{
         if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log(hit.transform.name);
+
+            if (hit.transform.name == "PlayerController") {
+                playerInSight = true;
+            }
+            else {
+                playerInSight = false;
+            }
+
+            Debug.Log(hit.transform.name + " AHHHHHHHHHHHH it sees that object");
         }
-
-
+        
       if (playerInSightRange && playerInAttackRange)
       {
-         AttackMode();
+            AttackMode();
       }
       
       if (!playerInSightRange && !playerInAttackRange)
@@ -84,12 +90,14 @@ public class AIScript : MonoBehaviour{
         //for fully auto guns
         //items[itemIndex].HoldDown();//add it back after merge...
 
-        //for single shot
-        if (!alreadyAttacked)
-        {
-            items[itemIndex].Use();
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), attackCooldown);
+        if (playerInSight) { // if AI is staring at PlayerController
+            if (!alreadyAttacked) { //for single shot
+                items[itemIndex].Use();
+                alreadyAttacked = true;
+                Invoke(nameof(ResetAttack), attackCooldown);
+            }
+        } else { // There's something in the way
+            agent.SetDestination(player.position); // Go find player
         }
     }
     void EquipItem(int index)
