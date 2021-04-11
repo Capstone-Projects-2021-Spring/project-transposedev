@@ -43,6 +43,45 @@ public class PlayerMovement : MonoBehaviour {
     float x, y;
     bool jumping, sprinting;
 
+    // class
+    public int classSelection = 0;
+
+    /* ----------------------------------------------------------------------------------------------------------------- */
+
+    /**********************/
+    /*   PLAYER CLASSES   */
+    /**********************/
+
+    // assigns the corresponding powers and abilites to the class the player chooses (classSelection == 0 is the 'Gunner')...
+    void assignClassAbilities()
+    {
+        if(classSelection == 1)
+        {
+            // player is the 'Grappler'
+        }
+        else if(classSelection == 2)
+        {
+            // player is the 'Gravitator'
+            flipGravity();
+        }
+        else
+        {
+            // player is the 'Teleporter'
+        }
+    }
+
+    void flipGravity()
+    {
+        if(Input.GetButtonDown("Fire3"))
+        {
+            rb.useGravity = false;
+        }
+        else if(Input.GetButtonUp("Fire3"))
+        {
+            rb.useGravity = true;
+        }
+    }
+
 /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -62,6 +101,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void FixedUpdate() {
         Movement();
+        assignClassAbilities();
     }
 
     private void Update() {
