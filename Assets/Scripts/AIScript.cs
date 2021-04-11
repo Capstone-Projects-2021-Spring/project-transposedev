@@ -140,12 +140,15 @@ public class AIScript : MonoBehaviour{
         if(distToWalkpoint.magnitude < 1f){
              walkpointSet = false;
         }
+        //after a certain amount of time in patrol mode, change weapon
     }
    
     private void ChaseMode()
     {
         Debug.Log("Entering Chase Mode");
         agent.SetDestination(player.position);
+        //if bot is in chase mode after a certain amount of time{
+        //change weapon to longer range weapon if not equipped already}
     }  
  
  private void ResetAttack(){
@@ -175,6 +178,12 @@ public class AIScript : MonoBehaviour{
       Destroy(gameObject);
     }
   
+  public void changeWeapon(int weapon){
+        if (!playerInSightRange && !playerInAttackRange){//AI can't change weapons in chase or attack mode
+              EquipItem(weapon);
+        }
+  }    
+      
   //uncomment to make sightRange & attackRange visible in-game
   private void makeSightRangesVisible() {
   Gizmos.color = Color.red;
