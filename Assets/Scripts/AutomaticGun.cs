@@ -12,8 +12,8 @@ public class AutomaticGun : Gun
     private AudioSource mySource;
 
 	//ammo
-	private int ammo_max = 50;
-	private int ammo_current = 50;
+	private int ammo_max = 30;
+	private int ammo_current = 30;
 	//for automatic fire
 	private long time_fire=0;
 	private long cooldown=100;
@@ -22,14 +22,14 @@ public class AutomaticGun : Gun
 	private long reload=5000;
 	private bool isReloading;
 
-	public override void Use()
+	public override bool Use()
     {
-
+		return false;
     }
 
-	public override void HoldDown()
+	public override bool HoldDown()
 	{
-		Shoot();
+		return Shoot();
 	}
 
 	
@@ -40,9 +40,9 @@ public class AutomaticGun : Gun
 		mySource.clip = myClip;
 	}
 	
-	public override void Release()
+	public override bool Release()
 	{
-
+		return false;
 	}
 	bool Reload()
     {
@@ -62,7 +62,7 @@ public class AutomaticGun : Gun
 		ammo_current = ammo_max;
 		isReloading = false;
 	}
-	void Shoot()
+	bool Shoot()
 	{
 		DateTime dt = DateTime.Now;
 		long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -71,7 +71,7 @@ public class AutomaticGun : Gun
 		{
 			if (cr < time_reload)
 			{
-				return;
+				return false;
 			}
 			ReloadCompleted();
 		}
@@ -79,15 +79,15 @@ public class AutomaticGun : Gun
 		//cooldown of automatic
 		if (cr < time_fire)
 		{
-			return;
+			return false;
 		}
 		time_fire = cr + cooldown;
         //cooldown of automatic end
         //check if there is ammo
         if (!Reload())
         {
-			return;
-        }
+			return false;
+		}
 		//check ammo end
 		mySource.Play();
 		Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
@@ -102,6 +102,7 @@ public class AutomaticGun : Gun
 			isReloading = true;
 			time_reload = cr + reload;
 		}
+		return true;
 	}
 	
 }

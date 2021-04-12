@@ -21,7 +21,6 @@ public class RocketLauncher : Gun
     //ammo
     private int ammo_max = 1;
     private int ammo_current = 1;
-    //for automatic fire
     private long time_fire = 0;
     private long cooldown = 500;
     private void Awake()
@@ -31,28 +30,32 @@ public class RocketLauncher : Gun
         mySource.clip = myClip;
     }
 
-    public override void Use()
+    public override bool Use()
 	{
-        mySource.Play();
-		Shoot();
+		return Shoot();
 	}
 
-	void Shoot()
+    bool Shoot()
 	{
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         if (isReloading)
         {
             if (cr < time_reload)
             {
-                return;
+                return false;
             }
             ReloadCompleted();
         }
+        if (cr < time_fire)
+        {
+            return false;
+        }
+        time_fire = cr + cooldown;
         if (!Reload())
         {
-            return;
+            return false;
         }
-        
+        mySource.Play();
         RaycastHit hit;
         GameObject instantiatedProjectile;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1)) {
@@ -71,6 +74,7 @@ public class RocketLauncher : Gun
             isReloading = true;
             time_reload = cr + reload;
         }
+        return true;
     }
     bool Reload()
     {
@@ -89,12 +93,12 @@ public class RocketLauncher : Gun
         ammo_current = ammo_max;
         isReloading = false;
     }
-    public override void Release()
+    public override bool Release()
 	{
-
+        return false;
 	}
-    public override void HoldDown()
+    public override bool HoldDown()
     {
-        
+        return false;
     }
 }
