@@ -10,6 +10,7 @@ public class RocketBehaviour : MonoBehaviour
     float power = 150;
     float explosiveLift = 3;
     public GameObject FireworksAll;
+
     // Start is called before the first frame update
     long initTime;
     void Start()
@@ -29,7 +30,7 @@ public class RocketBehaviour : MonoBehaviour
         Explode();
         foreach (Collider hit in colliders)
         {
-            hit.GetComponent<Collider>().gameObject.GetComponent<IDamageable>()?.TakeDamage(itemInfo.damage);
+            hit.GetComponent<Collider>().gameObject.GetComponent<IDamageable>()?.TakeDamage(itemInfo.damage, this);
             if (hit.attachedRigidbody)
             {
                 hit.GetComponent<Rigidbody>().AddExplosionForce(power, rocketOrigin, radius, explosiveLift);

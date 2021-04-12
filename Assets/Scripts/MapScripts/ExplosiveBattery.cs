@@ -10,68 +10,86 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
     public AudioSource zapSound;
 
     [SerializeField]
-    private float explosionRange;
     private float batteryHealth = 50f;
-    private bool inRange =  false;
-    private bool destroyed = true;
-    private float health = 100f;
-    private float damageTime = 3; // amount of time before player gets electricuted again
-    private float damageDuration;
+    private float currentBatteryHealth;
+    private readonly float damageTime = 0.05f; // amount of time before player gets electricuted again
+    private float damageTimer;
+    private float targetDamage = 50f;
+    private readonly float resetTime = 20f;
+    private float currentResetTimer;
     private bool played = false;
 
     private void Awake() {
-        Battery.SetActive(true);
+        currentBatteryHealth = batteryHealth;
+        currentResetTimer = resetTime;
         this.GetComponent<SphereCollider>().enabled = false;
     }
 
-    public void TakeDamage(float damage) {
-        batteryHealth -= damage;
-        Debug.Log("Ouch. Battery is hurt. Health:" + batteryHealth);
+    public void TakeDamage(float damage, Component source) {
+        currentBatteryHealth -= damage;
+        Debug.Log("Ouch. Battery is hurt. Health:" + currentBatteryHealth);
     }
 
     public void Electricute() {
         
-        if (!played) {
+        if (!played) { // Effects play once
             explosionSound.Play();
             Instantiate(explosionEffect, transform.position, transform.rotation);
             played = true;
         }
-
-        if (inRange) { // Damage timer countdown
-            zapSound.Play();
-            damageDuration -= 1 * Time.deltaTime;
-            Debug.Log("Current Time: " + damageDuration);
-        }
-
-        if (damageDuration <= 0) { // electricute once countdown ended
-            health -= 10;
-            damageDuration = damageTime; // Reset damage timer
-        }
-
+        ResetBattery();
     }
 
     public void OnTriggerEnter(Collider other) {
         if (other.gameObject.GetComponent<PlayerMovement>() != null) {
             Debug.Log("Player enters battery range");
-            inRange = true;
-            damageDuration = damageTime;
+            damageTimer = damageTime;
         }
     }
 
-    public void OnTriggerExit(Collider other) {
-        if (other.gameObject.GetComponent<PlayerMovement>() != null) { // Check if it's tagged target
-            inRange = false;
-            damageDuration = 2; // reset timer
-            Debug.Log("Player exits battery range");
-            Debug.Log("Current Health: " + health);
+    public void OnTriggerStay(Collider other) {
+        if (other.gameObject.GetComponent<PlayerMovement>() != null) { // Check if player
+
+            if (damageTimer <= 0 ) {
+                Debug.Log("Player takes damage");
+                other.gameObject.GetComponent<IDamageable>()?.TakeDamage(1, this);
+                zapSound.Play();
+                damageTimer = damageTime; // Reset Timer
+            }
+
+            else {
+                damageTimer -= Time.deltaTime;
+            }
+            
         }
+    }
+
+    private void ResetBattery() {
+        // Set timer
+        if (currentResetTimer <= 0) {
+            currentBatteryHealth = batteryHealth;
+            played = false;
+            currentResetTimer = resetTime; // Reset Timer
+            this.GetComponent<SphereCollider>().enabled = false;
+        }
+
+        else { // Countdown
+            currentResetTimer -= Time.deltaTime;
+        }
+    }
+
+    IEnumerator SlowDamage(Collider other) {
+        other.gameObject.GetComponent<IDamageable>()?.TakeDamage(1, this);
+        zapSound.Play();
+        yield return new WaitForSeconds(1);
     }
 
     private void Update() {
-        if (batteryHealth <= 0) {
+        if (currentBatteryHealth <= 0) {
             this.GetComponent<SphereCollider>().enabled = true;
             Electricute();
         }
         
     }
+
 }

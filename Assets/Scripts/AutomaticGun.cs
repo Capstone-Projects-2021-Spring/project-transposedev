@@ -94,7 +94,7 @@ public class AutomaticGun : Gun
 		ray.origin = camera.transform.position;
 		if (Physics.Raycast(ray, out RaycastHit hit))
 		{
-			hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
+			hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage, this);
 		}
 		ammo_current--;
 		if (ammo_current <= 0)

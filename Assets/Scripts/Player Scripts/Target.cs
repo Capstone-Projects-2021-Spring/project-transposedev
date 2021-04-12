@@ -23,7 +23,7 @@ public class Target : MonoBehaviour, IDamageable
 		}
 	}
 
-	public void TakeDamage(float damage)
+	public void TakeDamage(float damage, Component source)
 	{
 		currentHealth -= damage;
 	}

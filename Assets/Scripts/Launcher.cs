@@ -5,6 +5,7 @@ using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
 using System.IO;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -24,6 +25,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 	[SerializeField] TMP_InputField nicknameInputField;
 	[SerializeField] GameObject nicknameGUIContainer;
 	[SerializeField] GameObject nicknameContainer;
+	[SerializeField] GameObject botListContent;
+	[SerializeField] TMP_Text botCountText;
 
 	private Dictionary<string, RoomInfo> cachedRoomList;
 	private Dictionary<string, GameObject> roomListEntries;
@@ -55,7 +58,10 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 	public override void OnJoinedLobby()
 	{
-        MenuManager.Instance.OpenMenu("Main");
+		// temporary fix for deaths and kills not being zeroed after a match
+		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
+		MenuManager.Instance.OpenMenu("Main");
         Debug.Log("Joined Lobby");
 
 		// whenever this joins a new lobby, clear any previous room lists
@@ -96,6 +102,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 		roomNameText.text = PhotonNetwork.CurrentRoom.Name;
 		MenuManager.Instance.OpenMenu("Room");
+		PhotonNetwork.CurrentRoom.SetCustomProperties(PhotonNetwork.CurrentRoom.CustomProperties);
 
 		Player[] players = PhotonNetwork.PlayerList;
 
@@ -114,12 +121,22 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 		startGameButton.SetActive(PhotonNetwork.IsMasterClient);
 		mapListContent.SetActive(PhotonNetwork.IsMasterClient);
+		botListContent.SetActive(PhotonNetwork.IsMasterClient);
+		if (PhotonNetwork.CurrentRoom.CustomProperties["bots"] != null)
+			botCountText.text = "Bot Count: " + (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
+		else
+			botCountText.text = "Bot Count: 0";
 	}
 
 	public override void OnMasterClientSwitched(Player newMasterClient)
 	{
 		startGameButton.SetActive(PhotonNetwork.IsMasterClient);
 		mapListContent.SetActive(PhotonNetwork.IsMasterClient);
+		botListContent.SetActive(PhotonNetwork.IsMasterClient);
+		if (PhotonNetwork.CurrentRoom.CustomProperties["bots"] != null)
+			botCountText.text = "Bot Count: " + (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
+		else
+			botCountText.text = "Bot Count: 0";
 	}
 
 	public override void OnCreateRoomFailed(short returnCode, string message)
@@ -151,6 +168,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 		playerListEntries.Clear();
 		playerListEntries = null;
+		botCountText.text = "Bot Count: 0";
 	}
 
 	public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -275,8 +293,31 @@ public class Launcher : MonoBehaviourPunCallbacks
 		nicknameText.text = "Nickname: " + PhotonNetwork.NickName;
 	}
 
+	public void AddBot()
+	{
+		Hashtable hash;
+		hash = PhotonNetwork.CurrentRoom.CustomProperties;
+		int botCount = (int)hash["bots"];
+		if (botCount == 10)
+			return;
+		botCount++;
+		hash.Remove("bots");
+		hash.Add("bots", botCount);
+		PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+		botCountText.text = "Bot Count: " + (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
+	}
 
-
-
-
+	public void RemoveBot()
+	{
+		Hashtable hash;
+		hash = PhotonNetwork.CurrentRoom.CustomProperties;
+		int botCount = (int)hash["bots"];
+		if (botCount == 0)
+			return;
+		botCount--;
+		hash.Remove("bots");
+		hash.Add("bots", botCount);
+		PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+		botCountText.text = "Bot Count: " + (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
+	}
 }

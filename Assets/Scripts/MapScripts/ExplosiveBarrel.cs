@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplosiveBarrel : MonoBehaviour, IDamageable {
-    public GameObject Barrel;
+public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
+    //public GameObject Barrel;
     public GameObject explosionEffect;
     public AudioSource explosionSound;
 
@@ -13,40 +14,46 @@ public class ExplosiveBarrel : MonoBehaviour, IDamageable {
     private float barrelHealth = 50;
     private bool played = false;
 
-    private void Awake() {
-        Barrel.SetActive(true);
-    }
+    PhotonView PV;
 
-    public void TakeDamage(float damage) {
-        barrelHealth -= damage;
-        Debug.Log("Ouch. Barrel is hurt. Health:" +  barrelHealth);
+    private void Awake() {
+        PV = GetComponent<PhotonView>();
     }
 
     public void Explode() {
 
-        if (!played) {
-            Instantiate(explosionEffect, transform.position, transform.rotation);
-            explosionSound.Play();
-            played = true;
-        }
+        Instantiate(explosionEffect, transform.position, transform.rotation);
+        explosionSound.Play();
 
         Collider[] targets = Physics.OverlapSphere(transform.position, explosionRange);
         foreach (Collider target in targets) {
             if (target.gameObject.GetComponent<PlayerMovement>() != null) { // Check it's a player
-                //target.GetComponent<Target>().TakeDamage(targetDamage); // Damage the player
-                Debug.Log("Damaged Player!");
+                target.gameObject.GetComponent<PlayerMovement>().TakeDamage(100, this);
             }
-        }
-        Destroy(Barrel);
-    }
-
-    private void Update() {
-        if (barrelHealth <= 0) {
-            Explode();
         }
     }
 
     private void OnDrawGizmos() {
         Gizmos.DrawWireSphere(transform.position, explosionRange);
+    }
+
+    public void TakeDamage(float damage, Component source)
+    {
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+    {
+        barrelHealth -= damage;
+
+        if (barrelHealth <= 0)
+		{
+            if (PV.IsMine)
+            {
+                Explode();
+                GameManager.Instance.DestroyHazard(gameObject);
+            }
+		}
     }
 }
