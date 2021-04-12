@@ -8,22 +8,17 @@ using System.IO;
 public class GameManager : MonoBehaviourPunCallbacks
 {
 	public static GameManager Instance;
-	int botCount;
+    GameObject controller;
 
 	private void Awake()
 	{
 		Instance = this;
-		botCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
 	}
 
 	private void Start()
 	{
 		//SpawnHazards();
-		//SpawnAI();
-		for (int i = 0; i < botCount; i++)
-		{
-			PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), Vector3.zero, Quaternion.identity);
-		}
+		SpawnAI();
 	}
 
 	void SpawnHazards()
@@ -31,10 +26,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 		PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), Vector3.zero, Quaternion.identity);
 	}
 
-	void SpawnAI()
-	{
-		PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), Vector3.zero, Quaternion.identity);
-	}
+    // used to spawn an AI character...
+    void SpawnAI()
+    {
+        // create an AI controller for the AI character...
+        CreateAIController();
+    }
+
+    // uses the 'CreateController()' method from the 'PlayerManager.cs' scipt as template for creating AI players...
+    void CreateAIController()
+    {
+        // instantiate AI controller
+        Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+        PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
+    }
 
 	public void DestroyHazard(GameObject hazard)
 	{

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -208,6 +209,7 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         {
             if (PV.IsMine)
             {
+                // destroy the game object taking damage (kill the AI player)...
                 GameManager.Instance.DestroyAI(gameObject);
             }
         }
