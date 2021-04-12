@@ -4,10 +4,12 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using System.IO;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
 	public static RoomManager Instance;
+	Hashtable hash;
 
 	void Awake()
 	{
@@ -19,6 +21,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 		DontDestroyOnLoad(gameObject);
 		Instance = this;
+		hash = new Hashtable();
+		hash.Add("bots", 0);
+		PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
 	}
 
 	public override void OnEnable()
@@ -40,4 +45,5 @@ public class RoomManager : MonoBehaviourPunCallbacks
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
 		}
 	}
+
 }
