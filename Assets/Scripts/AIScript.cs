@@ -20,11 +20,11 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     public float attackCooldown;
     bool alreadyAttacked;
   
-    public float sightRange;
-    public float attackRange;
-    public float vision_angle;
-    public bool playerInSightRange;
-    public bool playerInAttackRange;
+      public float sightRange;
+      public float attackRange;
+      public bool playerInSightRange;
+      public bool playerInAttackRange;
+    public bool playerInSight;
 
     // items that can be held by the bot
     [SerializeField] Item[] items;
@@ -57,23 +57,28 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
             }
         }
 
-        playerInSightRange = !Physics.Linecast(transform.position, player.position, WallSensor) && Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
-        playerInAttackRange = !Physics.Linecast(transform.position, player.position, WallSensor) && Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
+      playerInSightRange = Physics.CheckSphere(transform.position, sightRange, PlayerSensor);
+      playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, PlayerSensor);
 
         RaycastHit hit;
         if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
         {
-            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            //Debug.Log(hit.transform.name);
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+
+            if (hit.transform.name == "PlayerController") {
+                playerInSight = true;
+            }
+            else {
+                playerInSight = false;
+            }
+
+            Debug.Log(hit.transform.name + " AHHHHHHHHHHHH it sees that object");
         }
-
-        Vector3 targetDir = player.position - transform.position;
-        float angle = Vector3.Angle(targetDir, transform.forward);
-
-        if (playerInSightRange && playerInAttackRange && angle < vision_angle)
-        {
+        
+      if (playerInSightRange && playerInAttackRange)
+      {
             AttackMode();
-        }
+      }
       
         if (!playerInSightRange && !playerInAttackRange)
         {
@@ -95,12 +100,14 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         //for fully auto guns
         items[itemIndex].HoldDown();//add it back after merge...
 
-        //for single shot
-        if (!alreadyAttacked)
-        {
-            items[itemIndex].Use();
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), attackCooldown);
+        if (playerInSight) { // if AI is staring at PlayerController
+            if (!alreadyAttacked) { //for single shot
+                items[itemIndex].Use();
+                alreadyAttacked = true;
+                Invoke(nameof(ResetAttack), attackCooldown);
+            }
+        } else { // There's something in the way
+            agent.SetDestination(player.position); // Go find player
         }
     }
 
@@ -147,12 +154,15 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         {
              walkpointSet = false;
         }
+        //after a certain amount of time in patrol mode, change weapon
     }
    
     private void ChaseMode()
     {
         //Debug.Log("Entering Chase Mode");
         agent.SetDestination(player.position);
+        //if bot is in chase mode after a certain amount of time{
+        //change weapon to longer range weapon if not equipped already}
     }  
  
     private void ResetAttack()
