@@ -9,16 +9,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
 	public static GameManager Instance;
     GameObject controller;
+	int botCount;
 
 	private void Awake()
 	{
 		Instance = this;
+		botCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
 	}
 
 	private void Start()
 	{
 		//SpawnHazards();
-		SpawnAI();
+		for (int i = 0; i < botCount; i++)
+			SpawnAI();
 	}
 
 	void SpawnHazards()
