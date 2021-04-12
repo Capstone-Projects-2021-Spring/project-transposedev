@@ -39,7 +39,6 @@ public class RocketLauncher : Gun
 
 	void Shoot()
 	{
-        DateTime dt = DateTime.Now;
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         if (isReloading)
         {
@@ -53,7 +52,17 @@ public class RocketLauncher : Gun
         {
             return;
         }
-        GameObject instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position, transform.rotation);
+        
+        RaycastHit hit;
+        GameObject instantiatedProjectile;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1)) {
+            instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position, transform.rotation);//this will make rocket to shoot from the start point in front of player but will cause it to pass through wall when player stand in front of wall
+        }
+        else
+        {
+            instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position + transform.forward * 1, transform.rotation);
+        }
+
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, speed));
         Destroy(instantiatedProjectile,3);
         ammo_current--;
@@ -65,7 +74,6 @@ public class RocketLauncher : Gun
     }
     bool Reload()
     {
-        DateTime dt = DateTime.Now;
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         if (ammo_current <= 0)
         {
