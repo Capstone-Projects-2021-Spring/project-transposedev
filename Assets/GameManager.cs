@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         // instantiate AI controller
         Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
-        controller = PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
+        PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
     }
 
 	public void DestroyHazard(GameObject hazard)

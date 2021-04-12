@@ -211,10 +211,6 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
             {
                 // destroy the game object taking damage (kill the AI player)...
                 GameManager.Instance.DestroyAI(gameObject);
-                // randomly select a respawn point for the AI character to respawn at...
-                Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
-                // respawn the AI character into the game...
-                GameObject controller = PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
             }
         }
     }
