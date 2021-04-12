@@ -65,7 +65,7 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
 
-            if (hit.transform.name == "PlayerController") {
+            if (hit.transform.GetComponentInParent<PlayerMovement>() != null) {
                 playerInSight = true;
             }
             else {
