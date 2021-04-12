@@ -298,6 +298,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Hashtable hash;
 		hash = PhotonNetwork.CurrentRoom.CustomProperties;
 		int botCount = (int)hash["bots"];
+		if (botCount == 10)
+			return;
 		botCount++;
 		hash.Remove("bots");
 		hash.Add("bots", botCount);
@@ -310,6 +312,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Hashtable hash;
 		hash = PhotonNetwork.CurrentRoom.CustomProperties;
 		int botCount = (int)hash["bots"];
+		if (botCount == 0)
+			return;
 		botCount--;
 		hash.Remove("bots");
 		hash.Add("bots", botCount);

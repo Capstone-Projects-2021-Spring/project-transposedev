@@ -63,7 +63,7 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         RaycastHit hit;
         if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
 
             if (hit.transform.GetComponentInParent<PlayerMovement>() != null) {
                 playerInSight = true;
@@ -72,7 +72,7 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
                 playerInSight = false;
             }
 
-            Debug.Log(hit.transform.name + " AHHHHHHHHHHHH it sees that object");
+            //Debug.Log(hit.transform.name + " AHHHHHHHHHHHH it sees that object");
         }
         
       if (playerInSightRange && playerInAttackRange)
@@ -107,7 +107,8 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
                 Invoke(nameof(ResetAttack), attackCooldown);
             }
         } else { // There's something in the way
-            agent.SetDestination(player.position); // Go find player
+            if (player != null)
+                agent.SetDestination(player.position); // Go find player
         }
     }
 

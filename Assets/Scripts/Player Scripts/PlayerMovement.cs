@@ -427,7 +427,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     public void TakeDamage(float damage, Component source)
     {
         // find player owner of gun
-        if (source is Gun && source.GetComponentInParent<PlayerMovement>() != null)
+        if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
             PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
         // find ai owner of gun
         if (source is Gun && source.GetComponentInParent<AIScript>() != null)

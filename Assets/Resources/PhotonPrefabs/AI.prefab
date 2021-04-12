@@ -620,9 +620,9 @@ MonoBehaviour:
   attackCooldown: 1
   sightRange: 50
   attackRange: 20
-  vision_angle: 35
   playerInSightRange: 0
   playerInAttackRange: 0
+  playerInSight: 0
   items:
   - {fileID: 5653140657832976657}
   - {fileID: 8256452302220889869}
