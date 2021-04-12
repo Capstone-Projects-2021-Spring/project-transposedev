@@ -15,21 +15,21 @@ TRANSPOSE is a multiplayer,  traditional arena style first-person shooter game i
 
 ### Setting Up a Game
 - Upon opening, the game will prompt the player to either join or create a room; select **"Create Room"** to setup a game.
-![Demo Image](readme_image7.png)
+![Demo Image](readme_image7.jpg)
 - Enter the name of your room so that other players can recognize what game-match is yours.
-![Demo Image](readme_image8.png)
+![Demo Image](readme_image8.jpg)
 - After naming your room, select which map you would like to play on along with adding as many AI bot players as you want.
-![Demo Image](readme_image9.png)
+![Demo Image](readme_image9.jpg)
 - Once the player presses **"Start Game"**, the player will spawn into the in-game world, and the game begins!
-![Demo Image](readme_image10.png)
+![Demo Image](readme_image10.jpg)
 
 ### Joining a Game
 - Upon opening, the game will prompt the player to either join or create a room; select **"Join Room"** to join other players.
-![Demo Image](readme_image7.png)
+![Demo Image](readme_image7.jpg)
 - After choosing to join a room, the player will be given a list of available games to join. 
-![Demo Image](readme_image11.png)
+![Demo Image](readme_image11.jpg)
 - Simply select one and wait for the host player to start the game!
-![Demo Image](readme_image12.png)
+![Demo Image](readme_image12.jpg)
 ---
 
 ### General Requirements
@@ -45,31 +45,31 @@ The system requrements for the game are as follows...
 ##### Windows 10:
 1. Go to Transpose's Github repository, https://github.com/Capstone-Projects-2021-Spring/project-transposedev,  so that we can access the project's releases.
 2. Navigate to the **"Releases"** portion of the project's Github page.
-![Demo Image](readme_image2.png)
+![Demo Image](readme_image2.jpg)
 3. Click **"Demo 3 Builds"** under the Demo 3 portion.
-![Demo Image](readme_image3.png)
+![Demo Image](readme_image3.jpg)
 4. Right-click and select **"Download"** for the compressed file called **"TRANSPOSE_D3_Windows.zip"**.
-![Demo Image](readme_image4.png)
+![Demo Image](readme_image4.jpg)
 5. After downloading the compressed file, decompress it in a location that you are comfortable with, and run **"Transpose.exe"** found within the folder extracted.
 6. Once the program is running, select your graphical and input settings, and press play.
 ##### MacOS:
 1. Go to Transpose's Github repository, https://github.com/Capstone-Projects-2021-Spring/project-transposedev,  so that we can access the project's releases.
 2. Navigate to the **"Releases"** portion of the project's Github page.
-![Demo Image](readme_image2.png)
+![Demo Image](readme_image2.jpg)
 3. Click **"Demo 3 Builds"** under the Demo 3 portion.
-![Demo Image](readme_image3.png)
+![Demo Image](readme_image3.jpg)
 4. Right-click and select **"Download"** for the compressed file called **"TRANSPOSE_D3_Mac.zip"**.
-![Demo Image](readme_image5.png)
+![Demo Image](readme_image5.jpg)
 5. After downloading the compressed file, decompress it in a location that you are comfortable with, and run **"Transpose.app"** found within the folder extracted.
 6. Once the program is running, select your graphical and input settings, and press play.
 ##### Linux:
 1. Go to Transpose's Github repository, https://github.com/Capstone-Projects-2021-Spring/project-transposedev,  so that we can access the project's releases.
 2. Navigate to the **"Releases"** portion of the project's Github page.
-![Demo Image](readme_image2.png)
+![Demo Image](readme_image2.jpg)
 3. Click **"Demo 3 Builds"** under the Demo 3 portion.
-![Demo Image](readme_image3.png)
+![Demo Image](readme_image3.jpg)
 4. Right-click and select **"Download"** for the compressed file called **"TRANSPOSE_D3_Linux.zip"**.
-![Demo Image](readme_image6.png)
+![Demo Image](readme_image6.jpg)
 5. After downloading the compressed file, decompress it in a location that you are comfortable with, and run **"TRANSPOSE_D3.x86_64"** found within the folder extracted.
 6. Once the program is running, select your graphical and input settings, and press play.
 
