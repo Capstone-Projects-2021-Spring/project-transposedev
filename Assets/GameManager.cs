@@ -8,16 +8,22 @@ using System.IO;
 public class GameManager : MonoBehaviourPunCallbacks
 {
 	public static GameManager Instance;
+	int botCount;
 
 	private void Awake()
 	{
 		Instance = this;
+		botCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
 	}
 
 	private void Start()
 	{
 		//SpawnHazards();
-		SpawnAI();
+		//SpawnAI();
+		for (int i = 0; i < botCount; i++)
+		{
+			PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), Vector3.zero, Quaternion.identity);
+		}
 	}
 
 	void SpawnHazards()
