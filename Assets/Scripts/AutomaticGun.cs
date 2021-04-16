@@ -38,6 +38,7 @@ public class AutomaticGun : Gun
 		mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
 		mySource.playOnAwake = false;
 		mySource.clip = myClip;
+        mySource.volume = mySource.volume / 2;
 	}
 	
 	public override void Release()

@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Timers;
+using Photon.Pun;
+using Photon.Realtime;
 using static EscMenu;
 
 public class RuleSet : MonoBehaviour
@@ -29,7 +32,7 @@ public class RuleSet : MonoBehaviour
 
     void Awake()
     {
-        SetMatchTime(3);
+        SetMatchTime(1);
         StartMatchTimer();
     }
 
@@ -38,6 +41,11 @@ public class RuleSet : MonoBehaviour
     {
         if (timer_running)
             UpdateTimer();
+
+        if(GameOver())
+        {
+            StartCoroutine(GameEnd());
+        }
     }
 
     public void SetMatchTime(int mins)
@@ -53,7 +61,7 @@ public class RuleSet : MonoBehaviour
 
     private void UpdateTimer()
     {
-        if (current_time < 0)
+        if (current_time <= 0)
         {
             timer_running = false;
         }
@@ -73,6 +81,9 @@ public class RuleSet : MonoBehaviour
             sec = "0" + seconds.ToString();
         else
             sec = seconds.ToString();
+
+        if (current_time <= 0)
+            return "0:00";
 
         return mins + ":" + sec;
     }
@@ -96,6 +107,19 @@ public class RuleSet : MonoBehaviour
     public bool GameOver()
     {
         return !timer_running;
+    }
+
+    public IEnumerator GameEnd()
+    {
+        yield return new WaitForSeconds(8);
+        ExitMap();
+        StopCoroutine(GameEnd());
+    }
+
+    public void ExitMap()
+    {
+        //PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("Main Menu");
     }
 
 
