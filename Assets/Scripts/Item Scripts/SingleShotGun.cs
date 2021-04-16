@@ -31,8 +31,21 @@ public class SingleShotGun : Gun
 	{
 		return Shoot();
 	}
-
-	bool Shoot()
+    void Update()
+    {
+        //check if reloading
+        long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        if (isReloading)
+        {
+            if (cr < time_reload)
+            {
+                return;
+            }
+            ReloadCompleted();
+        }
+        //check if reloading end
+    }
+    bool Shoot()
 	{
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         if (isReloading)

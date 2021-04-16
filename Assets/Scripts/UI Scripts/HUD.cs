@@ -43,7 +43,6 @@ public class HUD : MonoBehaviour
     public int getRemainAmmo()
     {
         int index = transform.gameObject.GetComponent<PlayerMovement>().getItemIndex();
-        Debug.Log(index);
         switch (index)
         {
             case 0:
