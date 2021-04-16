@@ -78,6 +78,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+        lr = GetComponent<LineRenderer>();
     }
     
     void Start() {
@@ -116,6 +117,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         }
         EscMenu();
         LeaderboardMenu();
+    }
+
+    private void LateUpdate() {
+        // draw grapple rope
+        if (itemIndex == 2) {
+            if (((GrapplingHook)items[itemIndex]).IsGrappling()) {
+                if (itemIndex == 2) {
+                    PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+                }
+            }
+        }
     }
 
     private void SelectItem()
@@ -166,6 +178,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
                 PV.RPC("RPC_LaunchProjectile", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
                     items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, projectileSpeed)));
             }
+            else if (itemIndex == 2) { // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Hey maybe change the value
+                PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+            }
+
+
+
         }
         if (Input.GetKey(KeyCode.Mouse0))
         {
@@ -174,6 +192,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (Input.GetMouseButtonUp(0))
         {
             items[itemIndex].Release();
+            if (itemIndex == 2) { // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ^ Which means also this
+                PV.RPC("RPC_Grapple", RpcTarget.All, 0, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+            }
         }
     }
 
