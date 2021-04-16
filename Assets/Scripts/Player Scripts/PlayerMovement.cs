@@ -160,8 +160,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         // use equipped item
         if (Input.GetMouseButtonDown(0))
         {
-            items[itemIndex].Use();
-            if (itemIndex == 3)
+            bool u = items[itemIndex].Use();
+            if (itemIndex == 3&&u)
             {
                 PV.RPC("RPC_LaunchProjectile", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
                     items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, projectileSpeed)));

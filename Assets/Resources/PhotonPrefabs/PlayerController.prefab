@@ -3531,6 +3531,16 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 4732556369328161615}
+    - target: {fileID: 969007012428590384, guid: 698f6a015033f6841a25e64eaab5035a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2511705653680164268, guid: 698f6a015033f6841a25e64eaab5035a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 3122157488546303971, guid: 698f6a015033f6841a25e64eaab5035a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3544,7 +3554,7 @@ PrefabInstance:
     - target: {fileID: 3122157488546303971, guid: 698f6a015033f6841a25e64eaab5035a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.441
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3122157488546303971, guid: 698f6a015033f6841a25e64eaab5035a,
         type: 3}
@@ -3590,6 +3600,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RocketLauncher
+      objectReference: {fileID: 0}
+    - target: {fileID: 8034095849301608894, guid: 698f6a015033f6841a25e64eaab5035a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 698f6a015033f6841a25e64eaab5035a, type: 3}

@@ -97,10 +97,9 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
-        //for fully auto guns
-        items[itemIndex].HoldDown();//add it back after merge...
-
         if (playerInSight) { // if AI is staring at PlayerController
+            //for fully auto guns
+            items[itemIndex].HoldDown();
             if (!alreadyAttacked) { //for single shot
                 items[itemIndex].Use();
                 alreadyAttacked = true;

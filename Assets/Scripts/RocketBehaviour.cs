@@ -15,23 +15,19 @@ public class RocketBehaviour : MonoBehaviour
     long initTime;
     void Start()
     {
-
+        initTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-<<<<<<< Updated upstream
-        if (initTime + 1000 > cr)
-=======
-        if (initTime + 50 > cr)
->>>>>>> Stashed changes
+        if (initTime + 20 > cr)
         {
             return;
         }
+        Explode();
         Vector3 rocketOrigin = transform.position;
         Collider[] colliders = Physics.OverlapSphere(rocketOrigin, radius);
-        Explode();
         foreach (Collider hit in colliders)
         {
             hit.GetComponent<Collider>().gameObject.GetComponent<IDamageable>()?.TakeDamage(itemInfo.damage, this);

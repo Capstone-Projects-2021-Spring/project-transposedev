@@ -14,17 +14,13 @@ public class RocketNoDamageBehavior : MonoBehaviour
     long initTime;
     void Start()
     {
-
+        initTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-<<<<<<< Updated upstream
-        if (initTime + 1000 > cr)
-=======
-        if (initTime + 50 > cr)
->>>>>>> Stashed changes
+        if (initTime + 20 > cr)
         {
             return;
         }
