@@ -190,6 +190,12 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     {
         Destroy(gameObject);
     }
+    
+    //public void changeWeapon(int weapon){
+    //    if (!playerInSightRange && !playerInAttackRange){//AI can't change weapons in chase or attack mode
+    //          EquipItem(weapon);
+    //    }
+    //}    
   
     //uncomment to make sightRange & attackRange visible in-game
     private void makeSightRangesVisible() 
