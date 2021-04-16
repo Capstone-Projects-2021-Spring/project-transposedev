@@ -29,7 +29,20 @@ public class RocketLauncher : Gun
         mySource.playOnAwake = false;
         mySource.clip = myClip;
     }
-
+    void Update()
+    {
+        //check if reloading
+        long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        if (isReloading)
+        {
+            if (cr < time_reload)
+            {
+                return;
+            }
+            ReloadCompleted();
+        }
+        //check if reloading end
+    }
     public override bool Use()
 	{
 		return Shoot();
@@ -58,12 +71,12 @@ public class RocketLauncher : Gun
         mySource.Play();
         RaycastHit hit;
         GameObject instantiatedProjectile;
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1)) {
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2)) {
             instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position, transform.rotation);//this will make rocket to shoot from the start point in front of player but will cause it to pass through wall when player stand in front of wall
         }
         else
         {
-            instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position + transform.forward * 1, transform.rotation);
+            instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position + transform.forward * 2, transform.rotation);
         }
 
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = transform.TransformDirection(new Vector3(0, 0, speed));
@@ -100,5 +113,9 @@ public class RocketLauncher : Gun
     public override bool HoldDown()
     {
         return false;
+    }
+    public int getRemainingAmmo()
+    {
+        return ammo_current;
     }
 }

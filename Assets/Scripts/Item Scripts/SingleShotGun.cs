@@ -93,4 +93,8 @@ public class SingleShotGun : Gun
         ammo_current = ammo_max;
         isReloading = false;
     }
+    public int getRemainingAmmo()
+    {
+        return ammo_current;
+    }
 }
