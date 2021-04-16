@@ -32,7 +32,20 @@ public class AutomaticGun : Gun
 		Shoot();
 	}
 
-	
+	void Update()
+	{
+		//check if reloading
+		long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+		if (isReloading)
+		{
+			if (cr < time_reload)
+			{
+				return;
+			}
+			ReloadCompleted();
+		}
+		//check if reloading end
+	}
 	private void Awake()
 	{
 		mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
@@ -103,5 +116,8 @@ public class AutomaticGun : Gun
 			time_reload = cr + reload;
 		}
 	}
-	
+	public int getRemainingAmmo()
+    {
+		return ammo_current;
+    }
 }

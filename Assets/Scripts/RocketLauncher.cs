@@ -36,8 +36,26 @@ public class RocketLauncher : Gun
         mySource.Play();
 		Shoot();
 	}
+<<<<<<< Updated upstream
 
 	void Shoot()
+=======
+    void Update()
+    {
+        //check if reloading
+        long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        if (isReloading)
+        {
+            if (cr < time_reload)
+            {
+                return;
+            }
+            ReloadCompleted();
+        }
+        //check if reloading end
+    }
+    bool Shoot()
+>>>>>>> Stashed changes
 	{
         DateTime dt = DateTime.Now;
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -88,5 +106,9 @@ public class RocketLauncher : Gun
     public override void HoldDown()
     {
         
+    }
+    public int getRemainingAmmo()
+    {
+        return ammo_current;
     }
 }
