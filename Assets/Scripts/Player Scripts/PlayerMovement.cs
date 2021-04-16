@@ -178,11 +178,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
                 PV.RPC("RPC_LaunchProjectile", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
                     items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, projectileSpeed)));
             }
-            else if (itemIndex == 2) { // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Hey maybe change the value
+            else if (itemIndex == 2) { // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Hey maybe change the value depending how weapons are set
                 PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
             }
-
-
 
         }
         if (Input.GetKey(KeyCode.Mouse0))
@@ -192,7 +190,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (Input.GetMouseButtonUp(0))
         {
             items[itemIndex].Release();
-            if (itemIndex == 2) { // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ^ Which means also this
+            if (itemIndex == 2) { // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ^ Which means change also this for grapple
                 PV.RPC("RPC_Grapple", RpcTarget.All, 0, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
             }
         }
