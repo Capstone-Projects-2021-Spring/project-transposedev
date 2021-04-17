@@ -227,11 +227,30 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
         if (health <= 0)
         {
-            if (PV.IsMine)
-            {
-                // destroy the game object taking damage (kill the AI player)...
-                GameManager.Instance.DestroyAI(gameObject);
-            }
+            // destroy the game object taking damage (kill the AI player)...
+            Die();
         }
+    }
+
+    public void Die()
+	{
+        gameObject.SetActive(false);
+        Invoke("Respawn", 3);
+	}
+
+    public void Respawn()
+	{
+        gameObject.SetActive(true);
+	}
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        health = 100;
     }
 }
