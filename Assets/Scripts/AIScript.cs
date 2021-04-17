@@ -47,7 +47,10 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     private void Update()
     {
-        foreach(PlayerMovement p in FindObjectsOfType<PlayerMovement>()) //Designate nearest target
+        if (!PV.IsMine)
+            return;
+
+        foreach (PlayerMovement p in FindObjectsOfType<PlayerMovement>()) //Designate nearest target
         {
             float minDistance = float.MaxValue;
             if(Vector3.Distance(transform.position, p.transform.position) < minDistance)
