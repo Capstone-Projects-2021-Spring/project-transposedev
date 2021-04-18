@@ -40,11 +40,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 		Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
 		GameObject bot = PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
 		string id = bot.GetComponent<AIScript>().GetId();
-		Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+		Hashtable hash = PhotonNetwork.MasterClient.CustomProperties;
 
 		hash.Add(id + "_kills", 0);
 		hash.Add(id + "_deaths", 0);
-		PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+		PhotonNetwork.MasterClient.SetCustomProperties(hash);
 	}
 
 	public void DestroyHazard(GameObject hazard)

@@ -265,7 +265,6 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        Debug.Log("MADE IT HERE");
 		try
 		{
             kills = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_kills"];
