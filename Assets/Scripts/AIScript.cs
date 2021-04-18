@@ -1,4 +1,6 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
@@ -261,4 +263,13 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     public string GetId() { return id; }
     
     public void SetId(string id) { this.id = id; }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (targetPlayer == PV.Owner)
+		{
+            kills = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_kills"];
+            deaths = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_deaths"];
+        }
+    }
 }

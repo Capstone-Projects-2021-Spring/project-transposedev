@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using System.IO;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -39,6 +40,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 		Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
 		GameObject bot = PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
 		bot.GetComponent<AIScript>().SetId(id);
+		Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+
+		hash.Add(id + "_kills", 0);
+		hash.Add(id + "_deaths", 0);
+		PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 	}
 
 	public void DestroyHazard(GameObject hazard)

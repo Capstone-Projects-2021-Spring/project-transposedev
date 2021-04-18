@@ -16,13 +16,14 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     private string myClassName;
 
     // player properties
-    Hashtable hash = new Hashtable();
+    Hashtable hash;
 
     void Awake()
 	{
         PV = GetComponent<PhotonView>();
         if (PV.IsMine)
         {
+            hash = PhotonNetwork.LocalPlayer.CustomProperties;
             hash.Add("itemIndex", 0);
             hash.Add("deaths", 0);
             hash.Add("kills", 0);
