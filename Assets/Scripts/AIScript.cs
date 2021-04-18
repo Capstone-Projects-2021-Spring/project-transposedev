@@ -35,9 +35,9 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     PhotonView PV;
 
-    string id;
-    int kills = 0;
-    int deaths = 0;
+    public string id;
+    public int kills = 0;
+    public int deaths = 0;
 
     private void Awake()
     {
@@ -266,10 +266,16 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (targetPlayer == PV.Owner)
+        Debug.Log("MADE IT HERE");
+
+		try
 		{
             kills = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_kills"];
             deaths = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_deaths"];
         }
+        catch (System.Exception e)
+		{
+            Debug.Log(e);
+		}
     }
 }

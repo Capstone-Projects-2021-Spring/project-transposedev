@@ -474,12 +474,12 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
     public void Die(Player shooter)
     {
-        playerManager.Die(shooter);
+        playerManager.Die(shooter, null);
     }
 
     public void Die()
     {
-        playerManager.Die(null);
+        playerManager.Die(null, null);
     }
 
 

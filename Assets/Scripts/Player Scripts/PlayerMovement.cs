@@ -428,22 +428,22 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     {
         // find player owner of gun
         if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
         // find ai owner of gun
         if (source is Gun && source.GetComponentInParent<AIScript>() != null)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, source.GetComponentInParent<AIScript>().GetId());
         // find player or ai that blew up barrel
         if (source is ExplosiveBarrel)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
         // find player owner of rocket
         if (source is RocketBehaviour)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
 
     }
 
     // ran by the target
     [PunRPC]
-    void RPC_TakeDamage(float damage, Player shooter)
+    void RPC_TakeDamage(float damage, Player shooter, string botId)
 	{
         if (!PV.IsMine)
             return;
@@ -452,23 +452,23 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
-            if (shooter == null)
+            if (shooter != null || botId != null)
 			{
-                Die();
+                Die(shooter, botId);
                 return;
 			}
-            Die(shooter);
+            Die();
 		}
 	}
 
-    public void Die(Player shooter)
+    public void Die(Player shooter, string botId)
 	{
-        playerManager.Die(shooter);
+        playerManager.Die(shooter, botId);
 	}
 
     public void Die()
     {
-        playerManager.Die(null);
+        playerManager.Die(null, null);
     }
 
 

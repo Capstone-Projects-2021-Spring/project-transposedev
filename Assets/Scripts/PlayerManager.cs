@@ -51,7 +51,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
 
 
-	public void Die(Player shooter)
+	public void Die(Player shooter, string botId)
 	{
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
         UpdateDeaths(deaths + 1);
@@ -59,12 +59,26 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if(shooter != null && !shooter.Equals(PhotonNetwork.LocalPlayer))
             UpdateKills(shooter);
 
+        if(botId != null)
+		{
+            GiveBotKill(botId);
+		}
+
         PhotonNetwork.Destroy(controller);
 		CreateController((string)hash["class"]);
 	}
 
+    private void GiveBotKill(string botId)
+	{
+        string key = botId + "_kills";
+        Hashtable hash = PhotonNetwork.MasterClient.CustomProperties;
+        int botkills = (int)hash[key] + 1;
+        hash.Remove(key);
+        hash.Add(key, botkills);
+        PhotonNetwork.MasterClient.SetCustomProperties(hash);
+	}
 
-    public void UpdateKills(Player shooter)
+	public void UpdateKills(Player shooter)
 	{
         int newKillCount;
         if (PV.IsMine)
