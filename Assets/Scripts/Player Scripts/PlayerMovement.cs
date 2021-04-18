@@ -438,7 +438,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         // find player owner of rocket
         if (source is RocketBehaviour)
             PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
-
+        if (source is GrenadeBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
     }
 
     // ran by the target

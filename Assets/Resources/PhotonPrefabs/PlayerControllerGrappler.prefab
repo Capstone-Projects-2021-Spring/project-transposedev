@@ -1623,7 +1623,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3415867650493480273}
-  - component: {fileID: 7383984241013649058}
+  - component: {fileID: 7911311356745509662}
   m_Layer: 0
   m_Name: GrenadeLauncher
   m_TagString: Untagged
@@ -1646,7 +1646,7 @@ Transform:
   m_Father: {fileID: 1214475199125577979}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7383984241013649058
+--- !u!114 &7911311356745509662
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1655,13 +1655,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2848379319730998746}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f61f3ae1bc96d804d98c627036725505, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d820fb62cdc4c445aec0ed0c8c2688d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 1ce3e356b409a9a448e3f547d5296fe9, type: 2}
   itemGameObject: {fileID: 5354554051105394694}
   camera: {fileID: 7844574922926761082}
   myClip: {fileID: 8300000, guid: 63e0cc565dd9e554b8a6e4a9cb81b976, type: 3}
+  rocket: {fileID: 1489931404435634938, guid: c473b31566261e64fb0b72ee4207a4d3, type: 3}
+  speed: 5
 --- !u!1 &4085233450774855369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1868,7 +1870,7 @@ MonoBehaviour:
   orientation: {fileID: 6533150564170572085}
   items:
   - {fileID: 5591978463452133401}
-  - {fileID: 7383984241013649058}
+  - {fileID: 0}
   - {fileID: 7376202007841682187}
   moveSpeed: 5000
   maxSpeed: 25
@@ -1950,6 +1952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04fe5a9cdebfe64ea9dcaa6b25014d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentAmmoText: {fileID: 0}
   HealthText: {fileID: 6922346511149539418}
   ArmorText: {fileID: 6652640634063811751}
   TimerText: {fileID: 4692068909605075433}

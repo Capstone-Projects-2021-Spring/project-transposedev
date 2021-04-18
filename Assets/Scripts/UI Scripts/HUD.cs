@@ -48,7 +48,7 @@ public class HUD : MonoBehaviour
             case 0:
                 return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
             case 1:
-                return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+                return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<GrenadeLauncher>().getRemainingAmmo();
             case 2:
                 return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<AutomaticGun>().getRemainingAmmo();
             case 3:
