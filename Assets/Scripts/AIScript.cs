@@ -20,10 +20,10 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     public float attackCooldown;
     bool alreadyAttacked;
   
-      public float sightRange;
-      public float attackRange;
-      public bool playerInSightRange;
-      public bool playerInAttackRange;
+    public float sightRange;
+    public float attackRange;
+    public bool playerInSightRange;
+    public bool playerInAttackRange;
     public bool playerInSight;
 
     // items that can be held by the bot
@@ -32,6 +32,10 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     int previousItemIndex = -1;
 
     PhotonView PV;
+
+    string id;
+    int kills = 0;
+    int deaths = 0;
 
     private void Awake()
     {
@@ -253,4 +257,8 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         base.OnDisable();
         health = 100;
     }
+
+    public string GetId() { return id; }
+    
+    public void SetId(string id) { this.id = id; }
 }

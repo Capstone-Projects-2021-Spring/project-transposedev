@@ -21,7 +21,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 	{
 		//SpawnHazards();
 		for (int i = 0; i < botCount; i++)
-			SpawnAI();
+		{
+			if (PhotonNetwork.IsMasterClient)
+				SpawnAI("bot" + i);
+		}
 	}
 
 	void SpawnHazards()
@@ -30,19 +33,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
     // used to spawn an AI character...
-    void SpawnAI()
+    void SpawnAI(string id)
     {
-        // create an AI controller for the AI character...
-        CreateAIController();
-    }
-
-    // uses the 'CreateController()' method from the 'PlayerManager.cs' scipt as template for creating AI players...
-    void CreateAIController()
-    {
-        // instantiate AI controller
-        Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
-        PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
-    }
+		// instantiate AI controller
+		Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+		GameObject bot = PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
+		bot.GetComponent<AIScript>().SetId(id);
+	}
 
 	public void DestroyHazard(GameObject hazard)
 	{
