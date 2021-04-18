@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 		for (int i = 0; i < botCount; i++)
 		{
 			if (PhotonNetwork.IsMasterClient)
-				SpawnAI("bot" + i);
+				SpawnAI();
 		}
 	}
 
@@ -34,12 +34,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 	}
 
     // used to spawn an AI character...
-    void SpawnAI(string id)
+    void SpawnAI()
     {
 		// instantiate AI controller
 		Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
 		GameObject bot = PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "AI"), spawnPoint.position, spawnPoint.rotation);
-		bot.GetComponent<AIScript>().SetId(id);
+		string id = bot.GetComponent<AIScript>().GetId();
 		Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
 
 		hash.Add(id + "_kills", 0);

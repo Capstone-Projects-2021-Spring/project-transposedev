@@ -43,6 +43,7 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     {
         PV = GetComponent<PhotonView>();
         agent = GetComponent<NavMeshAgent>();
+        id = "bot" + PV.ViewID;
     }
 
     void Start()
@@ -261,13 +262,10 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     }
 
     public string GetId() { return id; }
-    
-    public void SetId(string id) { this.id = id; }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
         Debug.Log("MADE IT HERE");
-
 		try
 		{
             kills = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_kills"];
