@@ -42,19 +42,48 @@ public class HUD : MonoBehaviour
 
     public int getRemainAmmo()
     {
-        int index = transform.gameObject.GetComponent<PlayerMovement>().getItemIndex();
-        switch (index)
+        int index;
+        bool isGrappler;
+        try { 
+            index = transform.gameObject.GetComponent<PlayerMovement>().getItemIndex();
+            isGrappler = false;
+        } catch (Exception e) { 
+            index = transform.gameObject.GetComponent<PlayerMovement_Grappler>().getItemIndex();
+            isGrappler = true;
+        }
+        if (isGrappler)
         {
-            case 0:
-                return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
-            case 1:
-                return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<GrenadeLauncher>().getRemainingAmmo();
-            case 2:
-                return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<AutomaticGun>().getRemainingAmmo();
-            case 3:
-                return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<RocketLauncher>().getRemainingAmmo();
-            default:
-                return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+            switch (index)
+            {
+                case 0:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+                case 1:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<GrenadeLauncher>().getRemainingAmmo();
+                case 2:
+                    return 1;
+                /*
+                case 3:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<RocketLauncher>().getRemainingAmmo();
+                */
+                default:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+            }
+        }
+        else
+        {
+            switch (index)
+            {
+                case 0:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+                case 1:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<GrenadeLauncher>().getRemainingAmmo();
+                case 2:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<AutomaticGun>().getRemainingAmmo();
+                case 3:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<RocketLauncher>().getRemainingAmmo();
+                default:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+            }
         }
     }
     /*

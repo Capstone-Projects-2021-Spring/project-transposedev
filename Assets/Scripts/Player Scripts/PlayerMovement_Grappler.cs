@@ -590,4 +590,12 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             lr.SetPosition(1, endPosition);
         }
     }
+    public int getItemIndex()
+    {
+        return itemIndex;
+    }
+    public Item getCurrentItem()
+    {
+        return items[itemIndex];
+    }
 }
