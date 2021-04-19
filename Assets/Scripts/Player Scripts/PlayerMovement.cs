@@ -544,7 +544,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     {
         if (!PV.IsMine)
             return;
-        GameManager.Instance.LeaveRoom();
+        //GameManager.Instance.LeaveRoom();
+        RoomManager.Instance.ReturnToRoomMenu();
     }
 
 

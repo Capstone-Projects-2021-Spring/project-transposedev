@@ -39,16 +39,19 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Instance = this;
 		cachedRoomList = new Dictionary<string, RoomInfo>();
 		roomListEntries = new Dictionary<string, GameObject>();
-
-        if (PhotonNetwork.CurrentRoom != null)
-        {
-            Debug.Log("I'm already in a room");
-        }
-    }
+	}
 
 	// Start is called before the first frame update
 	void Start()
     {
+		if (PhotonNetwork.CurrentRoom != null)
+		{
+			// open room menu with room info and player list prefabs
+			MenuManager.Instance.OpenMenu("Loading");
+			OnJoinedRoom();
+			return;
+		}
+
 		Debug.Log("Connecting to Master");
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -131,6 +134,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 			botCountText.text = "Bot Count: " + (int)PhotonNetwork.CurrentRoom.CustomProperties["bots"];
 		else
 			botCountText.text = "Bot Count: 0";
+	}
+
+	public void ReturnToRoomMenu()
+	{
+
 	}
 
 	public override void OnMasterClientSwitched(Player newMasterClient)

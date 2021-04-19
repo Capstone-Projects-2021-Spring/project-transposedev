@@ -7,7 +7,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using static EscMenu;
 
-public class RuleSet : MonoBehaviour
+public class RuleSet : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private int match_time;
@@ -44,7 +44,9 @@ public class RuleSet : MonoBehaviour
 
         if(GameOver())
         {
-            StartCoroutine(GameEnd());
+            if (PhotonNetwork.IsMasterClient)
+                RoomManager.Instance.ReturnToRoomMenu();
+            Destroy(gameObject);
         }
     }
 
@@ -119,7 +121,8 @@ public class RuleSet : MonoBehaviour
     public void ExitMap()
     {
         //PhotonNetwork.LeaveRoom();
-        SceneManager.LoadScene("Main Menu");
+
+
     }
 
 

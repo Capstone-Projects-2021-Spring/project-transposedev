@@ -56,10 +56,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 		Invoke("SpawnAI", 3);
 	}
 
+	
 	public override void OnLeftRoom()
 	{
 		SceneManager.LoadScene(0);
 	}
+	
 
 	public void LeaveRoom()
 	{
