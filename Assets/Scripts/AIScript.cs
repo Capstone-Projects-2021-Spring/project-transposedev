@@ -243,7 +243,17 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 	{
         gameObject.SetActive(false);
         Invoke("Respawn", 3);
-	}
+
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        Hashtable hash = PhotonNetwork.MasterClient.CustomProperties;
+        string key = id + "_deaths";
+        int deaths = (int)hash[key] + 1;
+        hash.Remove(key);
+        hash.Add(key, deaths);
+        PhotonNetwork.MasterClient.SetCustomProperties(hash);
+    }
 
     public void Respawn()
 	{
@@ -262,6 +272,10 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     }
 
     public string GetId() { return id; }
+
+    public int GetKills() { return kills; }
+
+    public int GetDeaths() { return deaths; }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {

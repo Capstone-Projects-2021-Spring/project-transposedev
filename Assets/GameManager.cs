@@ -5,6 +5,7 @@ using Photon.Pun;
 using UnityEngine.SceneManagement;
 using System.IO;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -67,5 +68,22 @@ public class GameManager : MonoBehaviourPunCallbacks
 	public void LeaveRoom()
 	{
 		PhotonNetwork.LeaveRoom();
+	}
+
+	public override void OnMasterClientSwitched(Player newMasterClient)
+	{
+		if (!PhotonNetwork.IsMasterClient)
+			return;
+		
+		Hashtable hash = PhotonNetwork.MasterClient.CustomProperties;
+		AIScript[] bots = FindObjectsOfType<AIScript>();
+
+		foreach (AIScript bot in bots)
+		{
+			hash.Add(bot.GetId() + "_kills", bot.GetKills());
+			hash.Add(bot.GetId() + "_deaths", bot.GetDeaths());
+		}
+
+		PhotonNetwork.MasterClient.SetCustomProperties(hash);
 	}
 }
