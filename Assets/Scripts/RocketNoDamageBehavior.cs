@@ -20,7 +20,7 @@ public class RocketNoDamageBehavior : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        if (initTime + 50 > cr)
+        if (initTime + 30 > cr)
         {
             return;
         }

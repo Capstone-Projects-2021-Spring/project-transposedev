@@ -2078,9 +2078,10 @@ MonoBehaviour:
   leaderboard: {fileID: 129839702972293082}
   hudMenu: {fileID: 646852617385971302}
   classText: {fileID: 1032812968276129792}
-  projectile: {fileID: 444522161687498213, guid: f67cea237b6862e458cb9da1b90fce54,
-    type: 3}
-  projectileSpeed: 50
+  grenade: {fileID: 444522161687498213, guid: 62e4eeb5a0a7bd34e890d2966c415eb0, type: 3}
+  rocket: {fileID: 444522161687498213, guid: f67cea237b6862e458cb9da1b90fce54, type: 3}
+  rocketSpeed: 50
+  grenadeSpeed: 35
 --- !u!114 &7007282031397312272
 MonoBehaviour:
   m_ObjectHideFlags: 0

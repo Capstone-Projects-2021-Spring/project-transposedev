@@ -72,7 +72,7 @@ public class RocketLauncher : Gun
         RaycastHit hit;
         GameObject instantiatedProjectile;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 2)) {
-            instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position, transform.rotation);//this will make rocket to shoot from the start point in front of player but will cause it to pass through wall when player stand in front of wall
+            instantiatedProjectile = (GameObject)Instantiate(rocket, transform.position, transform.rotation);
         }
         else
         {
