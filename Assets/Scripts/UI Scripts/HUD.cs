@@ -9,11 +9,11 @@ public class HUD : MonoBehaviour
     public static int health = 100;
     public static int ammo = 30;
     public static int armor = 100;
-    public static int ammo_BackUp = 80;
+    //public static int ammo_BackUp = 80;
     public static int trgt_cntr;
     public static string timer = "";
 
-    //public Transform CurrentAmmoText;
+    public Transform CurrentAmmoText;
     //public Transform BackUpAmmoText;
     public Transform HealthText;
     public Transform ArmorText;
@@ -40,13 +40,53 @@ public class HUD : MonoBehaviour
             return 0;
     }
 
-    /*
-    //please hook the following to Game Status
-    public static int getRemainAmmo()
+    public int getRemainAmmo()
     {
-        return ammo;
-
+        int index;
+        bool isGrappler;
+        try { 
+            index = transform.gameObject.GetComponent<PlayerMovement>().getItemIndex();
+            isGrappler = false;
+        } catch (Exception e) { 
+            index = transform.gameObject.GetComponent<PlayerMovement_Grappler>().getItemIndex();
+            isGrappler = true;
+        }
+        if (isGrappler)
+        {
+            switch (index)
+            {
+                case 0:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+                case 1:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<GrenadeLauncher>().getRemainingAmmo();
+                case 2:
+                    return 1;
+                /*
+                case 3:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<RocketLauncher>().getRemainingAmmo();
+                */
+                default:
+                    return transform.gameObject.GetComponent<PlayerMovement_Grappler>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+            }
+        }
+        else
+        {
+            switch (index)
+            {
+                case 0:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+                case 1:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<GrenadeLauncher>().getRemainingAmmo();
+                case 2:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<AutomaticGun>().getRemainingAmmo();
+                case 3:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<RocketLauncher>().getRemainingAmmo();
+                default:
+                    return transform.gameObject.GetComponent<PlayerMovement>().getCurrentItem().GetComponent<SingleShotGun>().getRemainingAmmo();
+            }
+        }
     }
+    /*
     public static int getBackUpAmmo()
     {
         return ammo_BackUp;
@@ -60,31 +100,20 @@ public class HUD : MonoBehaviour
     }
     void Start()
     {
-        /*
-        health = getHealth();
-        armor = getArmor();
-        ammo = getRemainAmmo();
-        ammo_BackUp = getBackUpAmmo();
-        */
+
     }
 
-
-    //testing features(please remove this after hooking to the game status)
-    //private static long time = 0;
-    //private static long time_reload = 3000;
-    //private static int mag = 30;
-    //testing features end
     void Update()
     {
         
         health = getHealth();
         armor = getArmor();
-        //ammo = getRemainAmmo();
+        ammo = getRemainAmmo();
         //ammo_BackUp = getBackUpAmmo();
         timer = getTime();
         trgt_cntr = getTargets();
 
-        //CurrentAmmoText.GetComponent<Text>().text = "" + ammo;
+        CurrentAmmoText.GetComponent<Text>().text = "" + ammo;
         //BackUpAmmoText.GetComponent<Text>().text = "" + ammo_BackUp;
         HealthText.GetComponent<Text>().text = "" + health;
         ArmorText.GetComponent<Text>().text = "" + armor;

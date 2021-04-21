@@ -62,9 +62,11 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     // countainer for accessing custom properties
     Hashtable hash;
 
-    public GameObject projectile;
+    public GameObject grenade;
+    public GameObject rocket;
 
-    public float projectileSpeed = 5;
+    public float rocketSpeed = 5;
+    public float grenadeSpeed = 5;
 
     private LineRenderer lr;
 
@@ -185,6 +187,12 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             if (itemIndex == 2)
             {
                 PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+            }
+            bool u = items[itemIndex].Use();
+            if (itemIndex == 1 && u)
+            {
+                PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                        items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, grenadeSpeed)));
             }
         }
         if (Input.GetKey(KeyCode.Mouse0))
@@ -563,14 +571,22 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
 
     [PunRPC]
-    void RPC_LaunchProjectile(Vector3 position, Quaternion rotation, Vector3 velocity)
+    void RPC_LaunchProjectile_Rocket(Vector3 position, Quaternion rotation, Vector3 velocity)
     {
         if (PV.IsMine)
             return;
-
-        GameObject instantiatedProjectile = (GameObject)Instantiate(projectile, position, rotation);
+        GameObject instantiatedProjectile = (GameObject)Instantiate(rocket, position, rotation);
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
         Destroy(instantiatedProjectile, 3);
+    }
+    [PunRPC]
+    void RPC_LaunchProjectile_Grenade(Vector3 position, Quaternion rotation, Vector3 velocity)
+    {
+        if (PV.IsMine)
+            return;
+        GameObject instantiatedProjectile = (GameObject)Instantiate(grenade, position, rotation);
+        instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
+        Destroy(instantiatedProjectile, 10);
     }
 
     /***************/
@@ -589,5 +605,13 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             lr.SetPosition(0, startPosition);
             lr.SetPosition(1, endPosition);
         }
+    }
+    public int getItemIndex()
+    {
+        return itemIndex;
+    }
+    public Item getCurrentItem()
+    {
+        return items[itemIndex];
     }
 }
