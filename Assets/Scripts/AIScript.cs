@@ -257,6 +257,12 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     public void Respawn()
 	{
+        Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameObject.transform.position = spawnPoint.position;
+            gameObject.transform.rotation = spawnPoint.rotation;
+        }
         gameObject.SetActive(true);
 	}
 
