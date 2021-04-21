@@ -718,6 +718,9 @@ MonoBehaviour:
   items:
   - {fileID: 5653140657832976657}
   - {fileID: 4216425267540797345}
+  id: 
+  kills: 0
+  deaths: 0
 --- !u!195 &195176151356541576
 NavMeshAgent:
   m_ObjectHideFlags: 0
