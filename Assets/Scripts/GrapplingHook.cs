@@ -33,12 +33,11 @@ public class GrapplingHook : Utility
         DrawRope();
     }
 
-    public override void Use()
+    public override bool Use()
     {
-        StartGrapple();
+        return StartGrapple();
     }
-
-    void StartGrapple() 
+    bool StartGrapple() 
     {
         RaycastHit hit;
         if(Physics.Raycast(camera.position, camera.forward, out hit, maxDistance, whatIsGrappleable)) 
@@ -60,12 +59,14 @@ public class GrapplingHook : Utility
             lr.positionCount = 2;
             currentGrapplePosition = gunTip.position;
         }
+        return true;
     }
 
-    void StopGrapple() 
+    bool StopGrapple() 
     {
         lr.positionCount = 0;
         Destroy(joint);
+        return true;
     }
 
     void DrawRope() 
@@ -92,13 +93,13 @@ public class GrapplingHook : Utility
         return currentGrapplePosition;
     }
 
-	public override void HoldDown()
+	public override bool HoldDown()
 	{
-
+        return false;
 	}
 
-	public override void Release()
+	public override bool Release()
 	{
-        StopGrapple();
+        return StopGrapple();
     }
 }

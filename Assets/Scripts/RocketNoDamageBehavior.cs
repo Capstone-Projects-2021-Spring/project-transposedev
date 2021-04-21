@@ -14,13 +14,13 @@ public class RocketNoDamageBehavior : MonoBehaviour
     long initTime;
     void Start()
     {
-
+        initTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         long cr = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        if (initTime + 1000 > cr)
+        if (initTime + 30 > cr)
         {
             return;
         }

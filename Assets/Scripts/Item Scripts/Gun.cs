@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Gun : Item
 {
-	public abstract override void Use();
-	public abstract override void HoldDown();
-	public abstract override void Release();
+	public abstract override bool Use();
+	public abstract override bool HoldDown();
+	public abstract override bool Release();
 }
