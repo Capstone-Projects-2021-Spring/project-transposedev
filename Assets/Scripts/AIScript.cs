@@ -225,16 +225,34 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     public void TakeDamage(float damage, Component source)
     {
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        // find player owner of gun
+        if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+        // find ai owner of gun
+        if (source is Gun && source.GetComponentInParent<AIScript>() != null)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, source.GetComponentInParent<AIScript>().GetId());
+        // find player or ai that blew up barrel
+        if (source is ExplosiveBarrel)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
+        // find player owner of rocket
+        if (source is RocketBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+        if (source is GrenadeBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
     }
 
     [PunRPC]
-    void RPC_TakeDamage(float damage)
+    void RPC_TakeDamage(float damage, Player shooter, string botId)
     {
         health -= damage;
 
         if (health <= 0)
         {
+            if (shooter != null)
+			{
+                if (PhotonNetwork.IsMasterClient)
+                    GameManager.Instance.UpdatePlayerKills(shooter);
+			}
             // destroy the game object taking damage (kill the AI player)...
             Die();
         }

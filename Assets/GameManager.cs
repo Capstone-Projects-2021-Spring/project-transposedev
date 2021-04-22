@@ -86,4 +86,14 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 		PhotonNetwork.MasterClient.SetCustomProperties(hash);
 	}
+
+	public void UpdatePlayerKills(Player shooter)
+	{
+		PlayerManager[] playerManagers = FindObjectsOfType<PlayerManager>();
+		foreach (PlayerManager p in playerManagers)
+		{
+			if (p.gameObject.GetPhotonView().Owner == PhotonNetwork.MasterClient)
+				p.UpdateKills(shooter);
+		}
+	}
 }
