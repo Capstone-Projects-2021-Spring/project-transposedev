@@ -20,12 +20,10 @@ public class GrapplingHook : Utility
 
     void Update()
     {
-        /*
         if (Input.GetMouseButtonUp(0))
         {
             StopGrapple();
         }
-        */
     }
 
     void LateUpdate() 

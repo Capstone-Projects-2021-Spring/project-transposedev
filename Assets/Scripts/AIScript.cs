@@ -170,6 +170,8 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     private void ChaseMode()
     {
         //Debug.Log("Entering Chase Mode");
+        if (player == null)
+            return;
         agent.SetDestination(player.position);
         //if bot is in chase mode after a certain amount of time{
         //change weapon to longer range weapon if not equipped already}
