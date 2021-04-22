@@ -183,12 +183,12 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         // use equipped item
         if (Input.GetMouseButtonDown(0))
         {
-            items[itemIndex].Use();
+            bool u = items[itemIndex].Use();
             if (itemIndex == 2)
             {
                 PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
             }
-            bool u = items[itemIndex].Use();
+            
             if (itemIndex == 1 && u)
             {
                 PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
@@ -453,21 +453,24 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     {
         // find player owner of gun
         if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
         // find ai owner of gun
         if (source is Gun && source.GetComponentInParent<AIScript>() != null)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, source.GetComponentInParent<AIScript>().GetId());
         // find player or ai that blew up barrel
         if (source is ExplosiveBarrel)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
         // find player owner of rocket
         if (source is RocketBehaviour)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+        if (source is GrenadeBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+
     }
 
     // ran by the target
     [PunRPC]
-    void RPC_TakeDamage(float damage, Player shooter)
+    void RPC_TakeDamage(float damage, Player shooter, string botId)
     {
         if (!PV.IsMine)
             return;
@@ -476,13 +479,18 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
         {
-            Die(shooter);
+            if (shooter != null || botId != null)
+            {
+                Die(shooter, botId);
+                return;
+            }
+            Die();
         }
     }
 
-    public void Die(Player shooter)
+    public void Die(Player shooter, string botId)
     {
-        playerManager.Die(shooter, null);
+        playerManager.Die(shooter, botId);
     }
 
     public void Die()
@@ -579,6 +587,7 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
         Destroy(instantiatedProjectile, 3);
     }
+
     [PunRPC]
     void RPC_LaunchProjectile_Grenade(Vector3 position, Quaternion rotation, Vector3 velocity)
     {
