@@ -11,6 +11,15 @@ public class GrapplingHook : Utility
     public float maxDistance = 100f;
     private SpringJoint joint;
     private Vector3 currentGrapplePosition;
+    [SerializeField] private AudioClip myClip;
+    private AudioSource mySource;
+
+    private void Start()
+    {
+        mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
+        mySource.playOnAwake = false;
+        mySource.clip = myClip;
+    }
 
     void Awake() 
     {
@@ -40,6 +49,8 @@ public class GrapplingHook : Utility
         RaycastHit hit;
         if(Physics.Raycast(camera.position, camera.forward, out hit, maxDistance, whatIsGrappleable)) 
         {
+            mySource.Play();
+
             grapplePoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
