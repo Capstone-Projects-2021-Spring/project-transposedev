@@ -3,7 +3,13 @@ guid: a224a3556c5a68642bc7cbf61bd89097
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - itemInfo: {instanceID: 0}
+  - itemGameObject: {instanceID: 0}
+  - gunTip: {instanceID: 0}
+  - camera: {instanceID: 0}
+  - player: {instanceID: 0}
+  - myClip: {fileID: 8300000, guid: 9dc62b285a820fa4b90803a762f922a3, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
