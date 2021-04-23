@@ -46,6 +46,9 @@ public class PlayerMovement : MonoBehaviour {
     // class
     public int classSelection = 0;
 
+    [SerializeField] private AudioClip gravityClip;
+    private AudioSource gravitySource;
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     /**********************/
@@ -74,10 +77,12 @@ public class PlayerMovement : MonoBehaviour {
     {
         if(Input.GetButtonDown("Fire3"))
         {
+            gravitySource.Play();
             rb.useGravity = false;
         }
         else if(Input.GetButtonUp("Fire3"))
         {
+            gravitySource.Play();
             rb.useGravity = true;
         }
     }
@@ -93,6 +98,10 @@ public class PlayerMovement : MonoBehaviour {
     }
     
     void Start() {
+        gravitySource = gameObject.AddComponent<AudioSource>() as AudioSource;
+        gravitySource.playOnAwake = false;
+        gravitySource.clip = gravityClip;
+
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
