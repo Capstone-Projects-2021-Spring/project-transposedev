@@ -62,7 +62,9 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("Connected to Master");
         PhotonNetwork.JoinLobby();
 		PhotonNetwork.AutomaticallySyncScene = true;
-	}
+
+
+    }
 
 	public override void OnJoinedLobby()
 	{
@@ -76,7 +78,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 		cachedRoomList.Clear();
 		ClearRoomListView();
 
-		SetNickname("Player " + Random.Range(0, 1000).ToString("0000"));
+		//SetNickname("Player " + Random.Range(0, 1000).ToString("0000"));
 	}
 
 	public override void OnLeftLobby()

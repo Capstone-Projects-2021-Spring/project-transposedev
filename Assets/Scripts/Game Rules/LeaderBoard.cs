@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class LeaderBoard : MonoBehaviour
 {
@@ -17,7 +18,16 @@ public class LeaderBoard : MonoBehaviour
 
 	void Start()
     {
+        Hashtable hash;
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            hash = p.CustomProperties;
 
+            hash.Remove("kills");
+            hash.Remove("deaths");
+
+            p.SetCustomProperties(hash);
+        }
     }
 
     // Update is called once per frame
@@ -33,7 +43,7 @@ public class LeaderBoard : MonoBehaviour
 
                 foreach (Player p in PhotonNetwork.PlayerList)
                 {
-                    kd = p.ToString() + ": " + p.CustomProperties["kills"].ToString() + " / " + p.CustomProperties["deaths"];
+                    kd = p.NickName + ": " + p.CustomProperties["kills"].ToString() + " / " + p.CustomProperties["deaths"];
 
                     if (p.Equals(PhotonNetwork.LocalPlayer))
                     {
