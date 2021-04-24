@@ -22,9 +22,6 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
 
     public void Explode() {
 
-        Instantiate(explosionEffect, transform.position, transform.rotation);
-        explosionSound.Play();
-
         Collider[] targets = Physics.OverlapSphere(transform.position, explosionRange);
         foreach (Collider target in targets) {
             if (target.gameObject.GetComponent<PlayerMovement>() != null) { // Check it's a player
@@ -50,6 +47,9 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
 
         if (barrelHealth <= 0)
 		{
+            Instantiate(explosionEffect, transform.position, transform.rotation);
+            explosionSound.Play();
+
             if (PV.IsMine)
             {
                 Explode();
