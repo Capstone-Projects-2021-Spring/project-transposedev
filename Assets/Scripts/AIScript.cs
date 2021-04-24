@@ -1,4 +1,6 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,10 +22,10 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     public float attackCooldown;
     bool alreadyAttacked;
   
-      public float sightRange;
-      public float attackRange;
-      public bool playerInSightRange;
-      public bool playerInAttackRange;
+    public float sightRange;
+    public float attackRange;
+    public bool playerInSightRange;
+    public bool playerInAttackRange;
     public bool playerInSight;
 
     // items that can be held by the bot
@@ -33,10 +35,15 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     PhotonView PV;
 
+    public string id;
+    public int kills = 0;
+    public int deaths = 0;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         agent = GetComponent<NavMeshAgent>();
+        id = "bot" + PV.ViewID;
     }
 
     void Start()
@@ -47,7 +54,10 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     private void Update()
     {
-        foreach(PlayerMovement p in FindObjectsOfType<PlayerMovement>()) //Designate nearest target
+        if (!PV.IsMine)
+            return;
+
+        foreach (PlayerMovement p in FindObjectsOfType<PlayerMovement>()) //Designate nearest target
         {
             float minDistance = float.MaxValue;
             if(Vector3.Distance(transform.position, p.transform.position) < minDistance)
@@ -97,10 +107,9 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
-        //for fully auto guns
-        items[itemIndex].HoldDown();//add it back after merge...
-
         if (playerInSight) { // if AI is staring at PlayerController
+            //for fully auto guns
+            items[itemIndex].HoldDown();
             if (!alreadyAttacked) { //for single shot
                 items[itemIndex].Use();
                 alreadyAttacked = true;
@@ -161,6 +170,8 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
     private void ChaseMode()
     {
         //Debug.Log("Entering Chase Mode");
+        if (player == null)
+            return;
         agent.SetDestination(player.position);
         //if bot is in chase mode after a certain amount of time{
         //change weapon to longer range weapon if not equipped already}
@@ -214,21 +225,93 @@ public class AIScript : MonoBehaviourPunCallbacks, IDamageable
 
     public void TakeDamage(float damage, Component source)
     {
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        // find player owner of gun
+        if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+        // find ai owner of gun
+        if (source is Gun && source.GetComponentInParent<AIScript>() != null)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, source.GetComponentInParent<AIScript>().GetId());
+        // find player or ai that blew up barrel
+        if (source is ExplosiveBarrel)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
+        // find player owner of rocket
+        if (source is RocketBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+        if (source is GrenadeBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
     }
 
     [PunRPC]
-    void RPC_TakeDamage(float damage)
+    void RPC_TakeDamage(float damage, Player shooter, string botId)
     {
         health -= damage;
 
         if (health <= 0)
         {
-            if (PV.IsMine)
-            {
-                // destroy the game object taking damage (kill the AI player)...
-                GameManager.Instance.DestroyAI(gameObject);
-            }
+            if (shooter != null)
+			{
+                if (PhotonNetwork.IsMasterClient)
+                    GameManager.Instance.UpdatePlayerKills(shooter);
+			}
+            // destroy the game object taking damage (kill the AI player)...
+            Die();
         }
+    }
+
+    public void Die()
+	{
+        gameObject.SetActive(false);
+        Invoke("Respawn", 3);
+
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        Hashtable hash = PhotonNetwork.MasterClient.CustomProperties;
+        string key = id + "_deaths";
+        int deaths = (int)hash[key] + 1;
+        hash.Remove(key);
+        hash.Add(key, deaths);
+        PhotonNetwork.MasterClient.SetCustomProperties(hash);
+    }
+
+    public void Respawn()
+	{
+        Transform spawnPoint = SpawnManager.Instance.GetSpawnPoint();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            gameObject.transform.position = spawnPoint.position;
+            gameObject.transform.rotation = spawnPoint.rotation;
+        }
+        gameObject.SetActive(true);
+	}
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        health = 100;
+    }
+
+    public string GetId() { return id; }
+
+    public int GetKills() { return kills; }
+
+    public int GetDeaths() { return deaths; }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+		try
+		{
+            kills = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_kills"];
+            deaths = (int)PhotonNetwork.MasterClient.CustomProperties[id + "_deaths"];
+        }
+        catch (System.Exception e)
+		{
+            Debug.Log(e);
+		}
     }
 }

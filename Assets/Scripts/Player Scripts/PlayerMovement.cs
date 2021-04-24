@@ -62,9 +62,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     // countainer for accessing custom properties
     Hashtable hash;
 
-    public GameObject projectile;
+    public GameObject grenade;
+    public GameObject rocket;
 
-    public float projectileSpeed = 5;
+    public float rocketSpeed = 5;
+    public float grenadeSpeed = 5;
 
     private LineRenderer lr;
 
@@ -160,11 +162,28 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         // use equipped item
         if (Input.GetMouseButtonDown(0))
         {
-            items[itemIndex].Use();
-            if (itemIndex == 3)
+            bool u = items[itemIndex].Use();
+            if (u)
             {
-                PV.RPC("RPC_LaunchProjectile", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
-                    items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, projectileSpeed)));
+                if (itemIndex == 3)
+                {
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position, items[itemIndex].gameObject.transform.TransformDirection(Vector3.forward), out hit, 2))
+                    {
+                        PV.RPC("RPC_LaunchProjectile_Rocket", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                        items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, rocketSpeed)));
+                    }
+                    else
+                    {
+                        PV.RPC("RPC_LaunchProjectile_Rocket", RpcTarget.All, items[itemIndex].gameObject.transform.position + items[itemIndex].gameObject.transform.forward * 2, items[itemIndex].gameObject.transform.rotation,
+                        items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, rocketSpeed)));
+                    }
+                }
+                if (itemIndex == 1)
+                {
+                    PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                        items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, grenadeSpeed)));
+                }
             }
         }
         if (Input.GetKey(KeyCode.Mouse0))
@@ -428,24 +447,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     {
         // find player owner of gun
         if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
         // find ai owner of gun
         if (source is Gun && source.GetComponentInParent<AIScript>() != null)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, source.GetComponentInParent<AIScript>().GetId());
         // find player or ai that blew up barrel
         if (source is ExplosiveBarrel)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
-        if (source is ExplosiveBattery)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
         // find player owner of rocket
         if (source is RocketBehaviour)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+        if (source is GrenadeBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
 
     }
 
     // ran by the target
     [PunRPC]
-    void RPC_TakeDamage(float damage, Player shooter)
+    void RPC_TakeDamage(float damage, Player shooter, string botId)
 	{
         if (!PV.IsMine)
             return;
@@ -454,23 +473,23 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
 		{
-            if (shooter == null)
+            if (shooter != null || botId != null)
 			{
-                Die();
+                Die(shooter, botId);
                 return;
 			}
-            Die(shooter);
+            Die();
 		}
 	}
 
-    public void Die(Player shooter)
+    public void Die(Player shooter, string botId)
 	{
-        playerManager.Die(shooter);
+        playerManager.Die(shooter, botId);
 	}
 
     public void Die()
     {
-        playerManager.Die(null);
+        playerManager.Die(null, null);
     }
 
 
@@ -554,18 +573,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     /*   Projectile weapon  */
     /***************/
 
-    
+
     [PunRPC]
-    void RPC_LaunchProjectile(Vector3 position, Quaternion rotation, Vector3 velocity)
-	{
+    void RPC_LaunchProjectile_Rocket(Vector3 position, Quaternion rotation, Vector3 velocity)
+    {
         if (PV.IsMine)
             return;
-
-        GameObject instantiatedProjectile = (GameObject)Instantiate(projectile, position, rotation);
+        GameObject instantiatedProjectile = (GameObject)Instantiate(rocket, position, rotation);
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
         Destroy(instantiatedProjectile, 3);
     }
-
+    [PunRPC]
+    void RPC_LaunchProjectile_Grenade(Vector3 position, Quaternion rotation, Vector3 velocity)
+    {
+        if (PV.IsMine)
+            return;
+        GameObject instantiatedProjectile = (GameObject)Instantiate(grenade, position, rotation);
+        instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
+        Destroy(instantiatedProjectile, 10);
+    }
 
     /***************/
     /*   Grapple  */
@@ -585,5 +611,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             lr.SetPosition(1, endPosition);
         }
     }
-
+    public int getItemIndex()
+    {
+        return itemIndex;
+    }
+    public Item getCurrentItem()
+    {
+        return items[itemIndex];
+    }
 }

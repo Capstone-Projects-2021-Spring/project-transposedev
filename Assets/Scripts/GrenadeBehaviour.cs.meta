@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 606eb267ca680f046a754bd8057415fe
+guid: eedc7ccc92fe5724982787f534770d6e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - teleportClip: {fileID: 8300000, guid: 83be757d3bab82641bf5ffc2248ee9a2, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

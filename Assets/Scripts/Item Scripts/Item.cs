@@ -7,7 +7,7 @@ public abstract class Item : MonoBehaviour
 	public ItemInfo itemInfo;
 	public GameObject itemGameObject;
 
-	public abstract void Use();
-	public abstract void HoldDown();
-	public abstract void Release();
+	public abstract bool Use();
+	public abstract bool HoldDown();
+	public abstract bool Release();
 }

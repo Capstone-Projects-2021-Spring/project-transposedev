@@ -11,6 +11,15 @@ public class GrapplingHook : Utility
     public float maxDistance = 100f;
     private SpringJoint joint;
     private Vector3 currentGrapplePosition;
+    [SerializeField] private AudioClip myClip;
+    private AudioSource mySource;
+
+    private void Start()
+    {
+        mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
+        mySource.playOnAwake = false;
+        mySource.clip = myClip;
+    }
 
     void Awake() 
     {
@@ -20,12 +29,10 @@ public class GrapplingHook : Utility
 
     void Update()
     {
-        /*
         if (Input.GetMouseButtonUp(0))
         {
             StopGrapple();
         }
-        */
     }
 
     void LateUpdate() 
@@ -33,16 +40,17 @@ public class GrapplingHook : Utility
         DrawRope();
     }
 
-    public override void Use()
+    public override bool Use()
     {
-        StartGrapple();
+        return StartGrapple();
     }
-
-    void StartGrapple() 
+    bool StartGrapple() 
     {
         RaycastHit hit;
         if(Physics.Raycast(camera.position, camera.forward, out hit, maxDistance, whatIsGrappleable)) 
         {
+            mySource.Play();
+
             grapplePoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
@@ -60,12 +68,14 @@ public class GrapplingHook : Utility
             lr.positionCount = 2;
             currentGrapplePosition = gunTip.position;
         }
+        return true;
     }
 
-    void StopGrapple() 
+    bool StopGrapple() 
     {
         lr.positionCount = 0;
         Destroy(joint);
+        return true;
     }
 
     void DrawRope() 
@@ -92,13 +102,13 @@ public class GrapplingHook : Utility
         return currentGrapplePosition;
     }
 
-	public override void HoldDown()
+	public override bool HoldDown()
 	{
-
+        return false;
 	}
 
-	public override void Release()
+	public override bool Release()
 	{
-        StopGrapple();
+        return StopGrapple();
     }
 }
