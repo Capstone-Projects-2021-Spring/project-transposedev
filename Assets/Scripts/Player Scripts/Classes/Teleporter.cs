@@ -4,9 +4,27 @@ using UnityEngine;
 
 public class Teleporter : PlayerClass
 {
-    public override void UseAbility()
+    [SerializeField] private AudioClip teleportClip;
+    [SerializeField] private Camera cam;
+    private AudioSource teleportSource;
+
+    public void Start()
     {
-        Camera cam = transform.parent.gameObject.GetComponentInChildren<Camera>();
+        teleportSource = gameObject.AddComponent<AudioSource>() as AudioSource;
+        teleportSource.playOnAwake = false;
+        teleportSource.clip = teleportClip;
+    }
+
+	public override void StopAbility()
+	{
+        // does nothing for teleporter
+	}
+
+	public override void UseAbility()
+    {
+        teleportSource.Play();
+
+        //Camera cam = transform.parent.gameObject.GetComponentInChildren<Camera>();
 
         if(cam == null)
         {

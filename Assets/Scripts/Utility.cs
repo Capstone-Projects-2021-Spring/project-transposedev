@@ -4,5 +4,7 @@ using UnityEngine;
 
 public abstract class Utility : Item
 {
-    public abstract override void Use();
+    public abstract override bool Use();
+    public abstract override bool HoldDown();
+    public abstract override bool Release();
 }

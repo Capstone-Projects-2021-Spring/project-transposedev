@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 7bfc8be611b2cbb44977d653425e7b1a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - gravityClip: {fileID: 8300000, guid: 3589a2e8500642f4391f2addcc152101, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

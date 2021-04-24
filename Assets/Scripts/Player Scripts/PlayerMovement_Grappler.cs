@@ -62,9 +62,11 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     // countainer for accessing custom properties
     Hashtable hash;
 
-    public GameObject projectile;
+    public GameObject grenade;
+    public GameObject rocket;
 
-    public float projectileSpeed = 5;
+    public float rocketSpeed = 5;
+    public float grenadeSpeed = 5;
 
     private LineRenderer lr;
 
@@ -80,6 +82,12 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         PV = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
         lr = GetComponent<LineRenderer>();
+        if (PV.IsMine)
+        {
+            Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            string className = (string)hash["class"];
+            classText.text = "Class: " + className;
+        }
     }
 
     void Start()
@@ -94,7 +102,6 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
-
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -181,10 +188,16 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         // use equipped item
         if (Input.GetMouseButtonDown(0))
         {
-            items[itemIndex].Use();
+            bool u = items[itemIndex].Use();
             if (itemIndex == 2)
             {
                 PV.RPC("RPC_Grapple", RpcTarget.All, 2, ((GrapplingHook)items[itemIndex]).gunTip.position, ((GrapplingHook)items[itemIndex]).GetGrapplePoint());
+            }
+            
+            if (itemIndex == 1 && u)
+            {
+                PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                        items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, grenadeSpeed)));
             }
         }
         if (Input.GetKey(KeyCode.Mouse0))
@@ -445,21 +458,26 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     {
         // find player owner of gun
         if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
         // find ai owner of gun
         if (source is Gun && source.GetComponentInParent<AIScript>() != null)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, source.GetComponentInParent<AIScript>().GetId());
         // find player or ai that blew up barrel
         if (source is ExplosiveBarrel)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
+        if (source is ExplosiveBattery)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
         // find player owner of rocket
         if (source is RocketBehaviour)
-            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer);
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+        if (source is GrenadeBehaviour)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
+
     }
 
     // ran by the target
     [PunRPC]
-    void RPC_TakeDamage(float damage, Player shooter)
+    void RPC_TakeDamage(float damage, Player shooter, string botId)
     {
         if (!PV.IsMine)
             return;
@@ -468,18 +486,23 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
         if (GetComponent<PlayerStats>().GetHealth() <= 0)
         {
-            Die(shooter);
+            if (shooter != null || botId != null)
+            {
+                Die(shooter, botId);
+                return;
+            }
+            Die();
         }
     }
 
-    public void Die(Player shooter)
+    public void Die(Player shooter, string botId)
     {
-        playerManager.Die(shooter);
+        playerManager.Die(shooter, botId);
     }
 
     public void Die()
     {
-        playerManager.Die(null);
+        playerManager.Die(null, null);
     }
 
 
@@ -526,17 +549,24 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         if (!PV.IsMine)
             return;
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        if ((string)hash["class"] == "PlayerController")
+        string className = (string)hash["class"];
+        switch (className)
         {
-            hash.Remove("class");
-            hash.Add("class", "PlayerControllerGrappler");
-            classText.text = "Class: Grappler";
-        }
-        else
-        {
-            hash.Remove("class");
-            hash.Add("class", "PlayerController");
-            classText.text = "Class: Gunner";
+            case "Grappler":
+                hash.Remove("class");
+                hash.Add("class", "Gravitator");
+                classText.text = "Class: Gravitator";
+                break;
+            case "Teleporter":
+                hash.Remove("class");
+                hash.Add("class", "Grappler");
+                classText.text = "Class: Grappler";
+                break;
+            case "Gravitator":
+                hash.Remove("class");
+                hash.Add("class", "Teleporter");
+                classText.text = "Class: Teleporter";
+                break;
         }
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
@@ -563,14 +593,23 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
 
 
     [PunRPC]
-    void RPC_LaunchProjectile(Vector3 position, Quaternion rotation, Vector3 velocity)
+    void RPC_LaunchProjectile_Rocket(Vector3 position, Quaternion rotation, Vector3 velocity)
     {
         if (PV.IsMine)
             return;
-
-        GameObject instantiatedProjectile = (GameObject)Instantiate(projectile, position, rotation);
+        GameObject instantiatedProjectile = (GameObject)Instantiate(rocket, position, rotation);
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
         Destroy(instantiatedProjectile, 3);
+    }
+
+    [PunRPC]
+    void RPC_LaunchProjectile_Grenade(Vector3 position, Quaternion rotation, Vector3 velocity)
+    {
+        if (PV.IsMine)
+            return;
+        GameObject instantiatedProjectile = (GameObject)Instantiate(grenade, position, rotation);
+        instantiatedProjectile.GetComponent<Rigidbody>().velocity = velocity;
+        Destroy(instantiatedProjectile, 10);
     }
 
     /***************/
@@ -589,5 +628,13 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             lr.SetPosition(0, startPosition);
             lr.SetPosition(1, endPosition);
         }
+    }
+    public int getItemIndex()
+    {
+        return itemIndex;
+    }
+    public Item getCurrentItem()
+    {
+        return items[itemIndex];
     }
 }
