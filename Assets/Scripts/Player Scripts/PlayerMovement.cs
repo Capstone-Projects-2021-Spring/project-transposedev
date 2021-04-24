@@ -70,6 +70,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     private LineRenderer lr;
 
+    private PlayerClass playerClass;
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -80,6 +82,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+        //playerClass = GetComponent<Teleporter>();
+        playerClass = GetComponent<Gravitator>();
     }
     
     void Start() {
@@ -115,6 +119,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             Look();
             SelectItem();
             UseItem();
+            UseAbility();
         }
         EscMenu();
         LeaderboardMenu();
@@ -199,7 +204,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     private void UseAbility()
     {
         if(Input.GetKeyDown(KeyCode.LeftShift))
-            gameObject.GetComponent<PlayerClass>().UseAbility();
+            playerClass.UseAbility();
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+            playerClass.StopAbility();
+
+
     }
 
     /// Finds the player's inputs for player movement

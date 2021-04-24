@@ -23,21 +23,17 @@ public class Gravitator : PlayerClass
     public override void UseAbility()
     {
         gravitySource.Play();
-
-        if (Input.GetButtonDown("Fire3"))
-        {
-            gravitySource.Play();
-            rb.useGravity = false;
-        }
-        else if (Input.GetButtonUp("Fire3"))
-        {
-            gravitySource.Play();
-            rb.useGravity = true;
-        }
+        rb.useGravity = false;
     }
 
     public override void UseAltAbility()
     {
         throw new System.NotImplementedException();
+    }
+
+	public override void StopAbility()
+	{
+        gravitySource.Play();
+        rb.useGravity = true;
     }
 }
