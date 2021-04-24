@@ -39,7 +39,6 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
 
     public void TakeDamage(float damage, Component source)
     {
-        Debug.Log("Excuse me what.");
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
     }
 

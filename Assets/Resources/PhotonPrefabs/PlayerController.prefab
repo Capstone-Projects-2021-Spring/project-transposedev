@@ -1980,7 +1980,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   counterMovement: 0.175
-  maxSlopeAngle: 35
+  maxSlopeAngle: 90
   jumpForce: 350
   escMenu: {fileID: 3171332616261470469}
   leaderboard: {fileID: 129839702972293082}

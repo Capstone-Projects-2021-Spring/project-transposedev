@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplosiveBattery : MonoBehaviour, IDamageable {
+public class ExplosiveBattery : MonoBehaviour {
     public GameObject Battery;
     public GameObject explosionEffect;
     public GameObject sparkEffect;
@@ -20,24 +20,16 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
     private bool played = false;
 
     private void Awake() {
-        currentBatteryHealth = batteryHealth;
-        currentResetTimer = resetTime;
         this.GetComponent<SphereCollider>().enabled = false;
     }
 
-    public void TakeDamage(float damage, Component source) {
-        currentBatteryHealth -= damage;
-        Debug.Log("Ouch. Battery is hurt. Health:" + currentBatteryHealth);
-    }
-
     public void Electricute() {
-        
-        if (!played) { // Effects play once
-            explosionSound.Play();
+
+        if (!played) { 
             Instantiate(explosionEffect, transform.position, transform.rotation);
             played = true;
         }
-        ResetBattery();
+
     }
 
     public void OnTriggerEnter(Collider other) {
@@ -50,7 +42,7 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
     public void OnTriggerStay(Collider other) {
         if (other.gameObject.GetComponent<PlayerMovement>() != null) { // Check if player
 
-            if (damageTimer <= 0 ) {
+            if (damageTimer <= 0) {
                 Debug.Log("Player takes damage");
                 other.gameObject.GetComponent<IDamageable>()?.TakeDamage(1, this);
                 zapSound.Play();
@@ -60,21 +52,7 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
             else {
                 damageTimer -= Time.deltaTime;
             }
-            
-        }
-    }
 
-    private void ResetBattery() {
-        // Set timer
-        if (currentResetTimer <= 0) {
-            currentBatteryHealth = batteryHealth;
-            played = false;
-            currentResetTimer = resetTime; // Reset Timer
-            this.GetComponent<SphereCollider>().enabled = false;
-        }
-
-        else { // Countdown
-            currentResetTimer -= Time.deltaTime;
         }
     }
 
@@ -85,11 +63,9 @@ public class ExplosiveBattery : MonoBehaviour, IDamageable {
     }
 
     private void Update() {
-        if (currentBatteryHealth <= 0) {
-            this.GetComponent<SphereCollider>().enabled = true;
-            Electricute();
-        }
-        
+        this.GetComponent<SphereCollider>().enabled = true;
+        Electricute();
+
     }
 
 }
