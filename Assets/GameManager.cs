@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	private void Start()
 	{
-		//SpawnHazards();
+		SpawnHazards();
 		for (int i = 0; i < botCount; i++)
 		{
 			if (PhotonNetwork.IsMasterClient)
@@ -31,8 +31,29 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	void SpawnHazards()
 	{
-		PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), Vector3.zero, Quaternion.identity);
+        HazardSpawnPoint[] spawnPoints = SpawnManager.Instance.GetHazardSpawnPoints();
+
+        // Iterate through hazard spawn points
+        foreach (HazardSpawnPoint spawnPoint in spawnPoints) {
+
+            if (Random.value < 0.6) {
+                PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), spawnPoint.transform.position, Quaternion.identity);
+            }
+            else {
+                PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "ExplosiveBattery"), spawnPoint.transform.position, Quaternion.identity);
+            }
+            
+
+        }
+        
 	}
+
+
+    IEnumerator RespawnHazard(Vector3 position) {
+        yield return new WaitForSeconds(10);
+        PhotonNetwork.InstantiateRoomObject(Path.Combine("PhotonPrefabs", "ExplosiveBarrel"), position, Quaternion.identity);
+    }
+    
 
     // used to spawn an AI character...
     void SpawnAI()
@@ -50,8 +71,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 	public void DestroyHazard(GameObject hazard)
 	{
+        StartCoroutine(RespawnHazard(hazard.transform.position));
 		PhotonNetwork.Destroy(hazard);
-		Invoke("SpawnHazards", 3);
 	}
 
 	public void DestroyAI(GameObject AI)

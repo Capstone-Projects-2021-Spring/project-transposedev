@@ -460,6 +460,8 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         // find player or ai that blew up barrel
         if (source is ExplosiveBarrel)
             PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
+        if (source is ExplosiveBattery)
+            PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, null, null);
         // find player owner of rocket
         if (source is RocketBehaviour)
             PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
