@@ -53,6 +53,13 @@ public class LeaderBoard : MonoBehaviour
 
                     lb_text.text += kd;
                 }
+                foreach (AIScript ai in FindObjectsOfType<AIScript>())
+                {
+                    kd = ai.GetId() + ": " + ai.GetKills() + " / " + ai.GetDeaths();
+                    kd += "\n";
+
+                    lb_text.text += kd;
+                }
             }
             else if (FindObjectOfType<RuleSet>().GameOver())
             {
