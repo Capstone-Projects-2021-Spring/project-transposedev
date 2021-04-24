@@ -46,7 +46,7 @@ public class RailGun : Gun
             cooldown--;
     }
 
-    public override void Use()
+    public override bool Use()
     {
         if (cooldown <= 0)
         {
@@ -58,6 +58,8 @@ public class RailGun : Gun
         {
             failSource.Play();
         }
+
+        return true;
     }
 
     void Shoot()
@@ -80,13 +82,13 @@ public class RailGun : Gun
             railRenderer.SetPosition(1, railPoint.forward * 400 + railPoint.position);;
         }
     }
-    public override void Release()
+    public override bool Release()
     {
-
+        return true;
     }
-    public override void HoldDown()
+    public override bool HoldDown()
     {
-
+        return true;
     }
 
 }
