@@ -5,6 +5,7 @@ using UnityEngine;
 public class Teleporter : PlayerClass
 {
     [SerializeField] private AudioClip teleportClip;
+    [SerializeField] private Camera cam;
     private AudioSource teleportSource;
 
     public void Start()
@@ -14,11 +15,16 @@ public class Teleporter : PlayerClass
         teleportSource.clip = teleportClip;
     }
 
-    public override void UseAbility()
+	public override void StopAbility()
+	{
+        // does nothing for teleporter
+	}
+
+	public override void UseAbility()
     {
         teleportSource.Play();
 
-        Camera cam = transform.parent.gameObject.GetComponentInChildren<Camera>();
+        //Camera cam = transform.parent.gameObject.GetComponentInChildren<Camera>();
 
         if(cam == null)
         {

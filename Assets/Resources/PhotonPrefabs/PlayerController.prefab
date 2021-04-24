@@ -146,7 +146,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 0.9914532, g: 0, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1943,6 +1943,8 @@ GameObject:
   - component: {fileID: 4930457120071184490}
   - component: {fileID: 8043636809373142408}
   - component: {fileID: 114589401224559246}
+  - component: {fileID: 1345304334191273236}
+  - component: {fileID: 3375533921101485204}
   m_Layer: 10
   m_Name: PlayerController
   m_TagString: Player
@@ -2274,7 +2276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d06466c03d263624786afa88b52928b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statsWindowOn: 1
+  statsWindowOn: 0
   statsOn: 1
   healthStatsVisible: 1
   trafficStatsOn: 1
@@ -2286,6 +2288,33 @@ MonoBehaviour:
     width: 200
     height: 50
   WindowId: 100
+--- !u!114 &1345304334191273236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4732556370355924582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bfc8be611b2cbb44977d653425e7b1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravityClip: {fileID: 8300000, guid: 3589a2e8500642f4391f2addcc152101, type: 3}
+--- !u!114 &3375533921101485204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4732556370355924582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 606eb267ca680f046a754bd8057415fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportClip: {fileID: 8300000, guid: 83be757d3bab82641bf5ffc2248ee9a2, type: 3}
+  cam: {fileID: 4732556369328161615}
 --- !u!1 &4732556370444169027
 GameObject:
   m_ObjectHideFlags: 0
@@ -3611,6 +3640,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 698f6a015033f6841a25e64eaab5035a, type: 3}
+--- !u!4 &8565075941092568012 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3122157488546303971, guid: 698f6a015033f6841a25e64eaab5035a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6740026627464487983}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6615173760035537744 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 451683764080650111, guid: 698f6a015033f6841a25e64eaab5035a,
@@ -3623,12 +3658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d820fb62cdc4c445aec0ed0c8c2688d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &8565075941092568012 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3122157488546303971, guid: 698f6a015033f6841a25e64eaab5035a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6740026627464487983}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6987997961144240682
 PrefabInstance:
   m_ObjectHideFlags: 0

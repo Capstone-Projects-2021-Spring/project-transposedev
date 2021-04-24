@@ -82,6 +82,12 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         PV = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
         lr = GetComponent<LineRenderer>();
+        if (PV.IsMine)
+        {
+            Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            string className = (string)hash["class"];
+            classText.text = "Class: " + className;
+        }
     }
 
     void Start()
@@ -96,7 +102,6 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
-
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -544,17 +549,24 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         if (!PV.IsMine)
             return;
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        if ((string)hash["class"] == "PlayerController")
+        string className = (string)hash["class"];
+        switch (className)
         {
-            hash.Remove("class");
-            hash.Add("class", "PlayerControllerGrappler");
-            classText.text = "Class: Grappler";
-        }
-        else
-        {
-            hash.Remove("class");
-            hash.Add("class", "PlayerController");
-            classText.text = "Class: Gunner";
+            case "Grappler":
+                hash.Remove("class");
+                hash.Add("class", "Gravitator");
+                classText.text = "Class: Gravitator";
+                break;
+            case "Teleporter":
+                hash.Remove("class");
+                hash.Add("class", "Grappler");
+                classText.text = "Class: Grappler";
+                break;
+            case "Gravitator":
+                hash.Remove("class");
+                hash.Add("class", "Teleporter");
+                classText.text = "Class: Teleporter";
+                break;
         }
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }

@@ -70,6 +70,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     private LineRenderer lr;
 
+    private PlayerClass playerClass;
+
     /* ----------------------------------------------------------------------------------------------------------------- */
 
     /***************/
@@ -80,6 +82,25 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+        lr = GetComponent<LineRenderer>();
+        if (PV.IsMine)
+		{
+            Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+            string className = (string)hash["class"];
+            switch (className)
+            {
+                case "Grappler":
+                    // do nothing
+                    break;
+                case "Teleporter":
+                    playerClass = GetComponent<Teleporter>();
+                    break;
+                case "Gravitator":
+                    playerClass = GetComponent<Gravitator>();
+                    break;
+            }
+            classText.text = "Class: " + className;
+        }
     }
     
     void Start() {
@@ -115,6 +136,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             Look();
             SelectItem();
             UseItem();
+            UseAbility();
         }
         EscMenu();
         LeaderboardMenu();
@@ -199,7 +221,12 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     private void UseAbility()
     {
         if(Input.GetKeyDown(KeyCode.LeftShift))
-            gameObject.GetComponent<PlayerClass>().UseAbility();
+            playerClass.UseAbility();
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+            playerClass.StopAbility();
+
+
     }
 
     /// Finds the player's inputs for player movement
@@ -539,17 +566,24 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
         if (!PV.IsMine)
             return;
         Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        if ((string)hash["class"] == "PlayerController")
+        string className = (string)hash["class"];
+        switch (className)
         {
-            hash.Remove("class");
-            hash.Add("class", "PlayerControllerGrappler");
-            classText.text = "Class: Grappler";
-        }
-        else
-        {
-            hash.Remove("class");
-            hash.Add("class", "PlayerController");
-            classText.text = "Class: Gunner";
+            case "Grappler":
+                hash.Remove("class");
+                hash.Add("class", "Gravitator");
+                classText.text = "Class: Gravitator";
+                break;
+            case "Teleporter":
+                hash.Remove("class");
+                hash.Add("class", "Grappler");
+                classText.text = "Class: Grappler";
+                break;
+            case "Gravitator":
+                hash.Remove("class");
+                hash.Add("class", "Teleporter");
+                classText.text = "Class: Teleporter";
+                break;
         }
         PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
