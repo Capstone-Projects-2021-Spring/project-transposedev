@@ -24,8 +24,8 @@ public class ExplosiveBarrel : MonoBehaviourPunCallbacks, IDamageable {
 
         Collider[] targets = Physics.OverlapSphere(transform.position, explosionRange);
         foreach (Collider target in targets) {
-            if (target.gameObject.GetComponent<PlayerMovement>() != null) { // Check it's a player
-                target.gameObject.GetComponent<PlayerMovement>().TakeDamage(100, this);
+            if (target.gameObject.GetComponent<PlayerMovement>() != null || target.gameObject.GetComponent<PlayerMovement_Grappler>() != null) { // Check it's a player
+                target.gameObject.GetComponent<IDamageable>()?.TakeDamage(100, this);
             }
         }
     }

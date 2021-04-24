@@ -40,7 +40,7 @@ public class ExplosiveBattery : MonoBehaviour {
     }
 
     public void OnTriggerStay(Collider other) {
-        if (other.gameObject.GetComponent<PlayerMovement>() != null) { // Check if player
+        if (other.gameObject.GetComponent<PlayerMovement>() != null || other.gameObject.GetComponent<PlayerMovement_Grappler>() != null) { // Check if player
 
             if (damageTimer <= 0) {
                 Debug.Log("Player takes damage");
