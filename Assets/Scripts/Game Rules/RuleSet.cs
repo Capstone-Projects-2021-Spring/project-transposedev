@@ -32,7 +32,7 @@ public class RuleSet : MonoBehaviourPunCallbacks
 
     void Awake()
     {
-        SetMatchTime(1);
+        SetMatchTime(5);
         StartMatchTimer();
     }
 

@@ -11,6 +11,8 @@ public class AutomaticGun : Gun
     [SerializeField] private AudioClip myClip;
     private AudioSource mySource;
 
+    [SerializeField] private GameObject hitEffect;
+
 	//ammo
 	private int ammo_max = 50;
 	private int ammo_current = 50;
@@ -96,6 +98,14 @@ public class AutomaticGun : Gun
 		if (Physics.Raycast(ray, out RaycastHit hit))
 		{
 			hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage, this);
+
+            if(hitEffect != null)
+            {
+                GameObject hitEff = Instantiate(hitEffect, hit.point, Quaternion.identity);
+                hitEff.GetComponent<ParticleSystem>().Play();
+                Destroy(hitEff, .5f);
+            }
+
 		}
 		ammo_current--;
 		if (ammo_current <= 0)

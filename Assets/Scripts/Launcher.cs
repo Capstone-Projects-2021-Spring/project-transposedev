@@ -78,8 +78,11 @@ public class Launcher : MonoBehaviourPunCallbacks
 		cachedRoomList.Clear();
 		ClearRoomListView();
 
-		//SetNickname("Player " + Random.Range(0, 1000).ToString("0000"));
-	}
+        if (PhotonNetwork.LocalPlayer.NickName.Length <= 1)
+            SetNickname("Player " + Random.Range(0, 1000).ToString("0000"));
+        else
+            SetNickname(PhotonNetwork.LocalPlayer.NickName);
+    }
 
 	public override void OnLeftLobby()
 	{
