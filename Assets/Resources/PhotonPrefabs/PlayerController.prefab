@@ -2300,7 +2300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bfc8be611b2cbb44977d653425e7b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityClip: {fileID: 0}
+  gravityClip: {fileID: 8300000, guid: 3589a2e8500642f4391f2addcc152101, type: 3}
 --- !u!114 &3375533921101485204
 MonoBehaviour:
   m_ObjectHideFlags: 0
