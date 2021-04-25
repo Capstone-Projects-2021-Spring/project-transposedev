@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16e63c2db9a70544692943663e3d1d96, type: 3}
   m_Name: RailGun
   m_EditorClassIdentifier: 
-  itemInfo: 
-  damage: 0
+  itemInfo: RailGun
+  damage: 130
