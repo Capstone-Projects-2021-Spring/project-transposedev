@@ -108,8 +108,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		{
             EquipItem(0);
             hudMenu.Open();
-		} else
+		}
+        else
 		{
+            hudMenu.Close();
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
@@ -548,6 +550,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     void LeaderboardMenu()
     {
+        if(!PV.IsMine)
+        {
+            return;
+        }
         if (Input.GetKey(KeyCode.Tab))
         {
             if (!leaderboard.open)
