@@ -189,7 +189,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             bool u = items[itemIndex].Use();
             if (u)
             {
-                if (itemIndex == 3)
+                if (items[itemIndex].GetComponent<RocketLauncher>() != null)
                 {
                     RaycastHit hit;
                     if (Physics.Raycast(transform.position, items[itemIndex].gameObject.transform.TransformDirection(Vector3.forward), out hit, 2))
@@ -203,9 +203,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
                         items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, rocketSpeed)));
                     }
                 }
-                if (itemIndex == 1)
+                if (items[itemIndex].GetComponent<GrenadeLauncher>() != null)
                 {
-                    PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                    PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position + items[itemIndex].gameObject.transform.forward * 2, items[itemIndex].gameObject.transform.rotation,
                         items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, grenadeSpeed)));
                 }
             }
