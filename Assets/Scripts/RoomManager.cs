@@ -63,4 +63,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		PhotonNetwork.LoadLevel(0);
 	}
 
+    public void LeaveThisGame()
+    {
+        Application.Quit();
+    }
+
 }
