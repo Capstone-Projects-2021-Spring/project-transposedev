@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 	
 	public override void OnLeftRoom()
 	{
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
 		SceneManager.LoadScene(0);
 	}
 	

@@ -116,11 +116,7 @@ public class RuleSet : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(6);
 
-        PhotonNetwork.AutomaticallySyncScene = true;
-        //RoomManager.Instance.ReturnToRoomMenu();
-        RoomManager.Instance.LeaveThisGame();
-
-        Destroy(gameObject);
+        GameManager.Instance.LeaveRoom();
     }
 
     public void ExitMap()
