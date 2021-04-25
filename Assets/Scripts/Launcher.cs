@@ -39,6 +39,16 @@ public class Launcher : MonoBehaviourPunCallbacks
 		Instance = this;
 		cachedRoomList = new Dictionary<string, RoomInfo>();
 		roomListEntries = new Dictionary<string, GameObject>();
+
+		try
+		{
+			// temporary fix for deaths and kills not being zeroed after a match
+			PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+		} 
+		catch (System.Exception e)
+		{
+			Debug.Log(e);
+		}
 	}
 
 	// Start is called before the first frame update
@@ -62,8 +72,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("Connected to Master");
         PhotonNetwork.JoinLobby();
 		PhotonNetwork.AutomaticallySyncScene = true;
-
-
     }
 
 	public override void OnJoinedLobby()

@@ -122,15 +122,21 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 	{
         if (changedProps.Count < 4)
             return;
-
-		if (!PV.IsMine && targetPlayer == PV.Owner)
+		try
 		{
-            UpdateDeaths((int)changedProps["deaths"]);
-		}
+            if (!PV.IsMine && targetPlayer == PV.Owner)
+            {
+                UpdateDeaths((int)changedProps["deaths"]);
+            }
 
-        if (targetPlayer == PV.Owner)
+            if (targetPlayer == PV.Owner)
+            {
+                UpdateKills((int)changedProps["kills"]);
+            }
+        }
+        catch (System.Exception e)
 		{
-            UpdateKills((int)changedProps["kills"]);
+            Debug.Log(e);
 		}
 	}
 
