@@ -18,50 +18,49 @@ public class LeaderBoard : MonoBehaviour
 
 	void Start()
     {
-        Hashtable hash;
-        foreach (Player p in PhotonNetwork.PlayerList)
-        {
-            hash = p.CustomProperties;
+        //Hashtable hash;
+        //foreach (Player p in PhotonNetwork.PlayerList)
+        //{
+        //    hash = p.CustomProperties;
 
-            hash.Remove("kills");
-            hash.Remove("deaths");
+        //    hash.Remove("kills");
+        //    hash.Remove("deaths");
 
-            p.SetCustomProperties(hash);
-        }
+        //    p.SetCustomProperties(hash);
+        //}
     }
 
     // Update is called once per frame
     void Update()
     {
-        string kd;
+        string kd = "";
         lb_text.text = "";
 
         try
 		{
-            if (FindObjectOfType<RuleSet>() != null && !FindObjectOfType<RuleSet>().GameOver())
+            foreach (PlayerManager p in FindObjectsOfType<PlayerManager>())
             {
+                Debug.Log("PlayerList = " + PhotonNetwork.PlayerList);
 
-                foreach (Player p in PhotonNetwork.PlayerList)
+                kd = p.PV.Owner.NickName + ": " + p.KillCount() + " / " + p.DeathCount();
+
+                if (p.PV.Owner.Equals(PhotonNetwork.LocalPlayer))
                 {
-                    kd = p.NickName + ": " + p.CustomProperties["kills"].ToString() + " / " + p.CustomProperties["deaths"];
-
-                    if (p.Equals(PhotonNetwork.LocalPlayer))
-                    {
-                        kd += " (Me)";
-                    }
-                    kd += "\n";
-
-                    lb_text.text += kd;
+                    kd += " (Me)";
                 }
-                foreach (AIScript ai in FindObjectsOfType<AIScript>())
-                {
-                    kd = ai.GetId() + ": " + ai.GetKills() + " / " + ai.GetDeaths();
-                    kd += "\n";
+                kd += "\n";
 
-                    lb_text.text += kd;
-                }
+                lb_text.text += kd;
             }
-            else if (FindObjectOfType<RuleSet>().GameOver())
+            foreach (AIScript ai in FindObjectsOfType<AIScript>())
+            {
+                kd = ai.GetId() + ": " + ai.GetKills() + " / " + ai.GetDeaths();
+                kd += "\n";
+
+                lb_text.text += kd;
+            }
+
+            if (FindObjectOfType<RuleSet>().GameOver())
             {
                 kd = "The Winner is: " + DeclareWinner().ToString() + "!!!";
                 lb_text.text = kd;
