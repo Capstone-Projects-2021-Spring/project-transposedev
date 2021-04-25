@@ -16,13 +16,13 @@ public class RocketLauncher : Gun
     public float speed = 5;
     //reloadtime
     private long time_reload = 0;
-    private long reload = 10000;
+    private long reload = 3000;
     private bool isReloading;
     //ammo
     private int ammo_max = 1;
     private int ammo_current = 1;
     private long time_fire = 0;
-    private long cooldown = 500;
+    private long cooldown = 3000;
     private void Awake()
     {
         mySource = gameObject.AddComponent<AudioSource>() as AudioSource;
