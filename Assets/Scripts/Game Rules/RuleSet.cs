@@ -30,9 +30,11 @@ public class RuleSet : MonoBehaviourPunCallbacks
     [SerializeField]
     private List<string> weapons_allowed;
 
+    private bool game_ending = false;
+
     void Awake()
     {
-        SetMatchTime(5);
+        SetMatchTime(1);
         StartMatchTimer();
     }
 
@@ -42,11 +44,10 @@ public class RuleSet : MonoBehaviourPunCallbacks
         if (timer_running)
             UpdateTimer();
 
-        if(GameOver())
+        if(GameOver() && !game_ending)
         {
-            if (PhotonNetwork.IsMasterClient)
-                RoomManager.Instance.ReturnToRoomMenu();
-            Destroy(gameObject);
+            game_ending = true;
+            StartCoroutine(GameEnd());
         }
     }
 
@@ -113,14 +114,18 @@ public class RuleSet : MonoBehaviourPunCallbacks
 
     public IEnumerator GameEnd()
     {
-        yield return new WaitForSeconds(8);
-        ExitMap();
-        StopCoroutine(GameEnd());
+        yield return new WaitForSeconds(6);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.AutomaticallySyncScene = true;
+            RoomManager.Instance.ReturnToRoomMenu();
+        }
+        Destroy(gameObject);
     }
 
     public void ExitMap()
     {
-        //PhotonNetwork.LeaveRoom();
 
 
     }
