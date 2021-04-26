@@ -80,6 +80,7 @@ MonoBehaviour:
   itemGameObject: {fileID: 419261588132141064}
   camera: {fileID: 0}
   myClip: {fileID: 8300000, guid: 63e0cc565dd9e554b8a6e4a9cb81b976, type: 3}
+  hitEffect: {fileID: 100006, guid: 0438351a6e6422d43a09930e9be00ee9, type: 3}
 --- !u!1 &5084822531753875640
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +139,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7db93057c3ede3144af3e176f234d4a3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -229,7 +230,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7db93057c3ede3144af3e176f234d4a3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -5,6 +5,8 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - teleportClip: {fileID: 8300000, guid: 83be757d3bab82641bf5ffc2248ee9a2, type: 3}
+  - teleportFail: {fileID: 8300000, guid: 221b0808e3ba1c34e91a148f389f0bd0, type: 3}
+  - cam: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

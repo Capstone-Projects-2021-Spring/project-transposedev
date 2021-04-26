@@ -108,8 +108,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 		{
             EquipItem(0);
             hudMenu.Open();
-		} else
+		}
+        else
 		{
+            hudMenu.Close();
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
@@ -187,7 +189,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
             bool u = items[itemIndex].Use();
             if (u)
             {
-                if (itemIndex == 3)
+                if (items[itemIndex].GetComponent<RocketLauncher>() != null)
                 {
                     RaycastHit hit;
                     if (Physics.Raycast(transform.position, items[itemIndex].gameObject.transform.TransformDirection(Vector3.forward), out hit, 2))
@@ -201,9 +203,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
                         items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, rocketSpeed)));
                     }
                 }
-                if (itemIndex == 1)
+                if (items[itemIndex].GetComponent<GrenadeLauncher>() != null)
                 {
-                    PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position, items[itemIndex].gameObject.transform.rotation,
+                    PV.RPC("RPC_LaunchProjectile_Grenade", RpcTarget.All, items[itemIndex].gameObject.transform.position + items[itemIndex].gameObject.transform.forward * 2, items[itemIndex].gameObject.transform.rotation,
                         items[itemIndex].gameObject.transform.TransformDirection(new Vector3(0, 0, grenadeSpeed)));
                 }
             }
@@ -472,6 +474,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
     // ran by the shooter on the target
     public void TakeDamage(float damage, Component source)
     {
+        Debug.Log("Damage source is: " + source.ToString());
+
         // find player owner of gun
         if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
             PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
@@ -548,12 +552,21 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
 
     void LeaderboardMenu()
     {
+        if(!PV.IsMine)
+        {
+            return;
+        }
         if (Input.GetKey(KeyCode.Tab))
         {
+            Debug.Log("Attempting to open leaderboard on player: " + PhotonNetwork.LocalPlayer.NickName);
             if (!leaderboard.open)
             {
                 leaderboard.Open();
             }
+        }
+        else if(FindObjectOfType<RuleSet>().GameOver())
+        {
+            leaderboard.Open();
         }
         else
         {

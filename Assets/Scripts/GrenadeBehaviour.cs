@@ -20,6 +20,7 @@ public class GrenadeBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        /*
         if (trigger)
         {
             return;
@@ -30,8 +31,12 @@ public class GrenadeBehaviour : MonoBehaviour
             return;
         }
         trigger = true;
-        StartCoroutine(ExplodeInSeconds(3));
-        //Explode();
+        */
+
+        StartCoroutine(ExplodeInSeconds(2));
+
+        if (collision.gameObject.GetComponent<IDamageable>() != null)
+            Explode();
     }
     IEnumerator ExplodeInSeconds(float delay)
     {

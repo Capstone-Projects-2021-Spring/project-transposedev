@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Timers;
+using Photon.Pun;
+using Photon.Realtime;
 using static EscMenu;
 
-public class RuleSet : MonoBehaviour
+public class RuleSet : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private int match_time;
@@ -27,9 +30,11 @@ public class RuleSet : MonoBehaviour
     [SerializeField]
     private List<string> weapons_allowed;
 
+    private bool game_ending = false;
+
     void Awake()
     {
-        SetMatchTime(3);
+        SetMatchTime(1);
         StartMatchTimer();
     }
 
@@ -38,6 +43,12 @@ public class RuleSet : MonoBehaviour
     {
         if (timer_running)
             UpdateTimer();
+
+        if(GameOver() && !game_ending)
+        {
+            game_ending = true;
+            StartCoroutine(GameEnd());
+        }
     }
 
     public void SetMatchTime(int mins)
@@ -53,7 +64,7 @@ public class RuleSet : MonoBehaviour
 
     private void UpdateTimer()
     {
-        if (current_time < 0)
+        if (current_time <= 0)
         {
             timer_running = false;
         }
@@ -73,6 +84,9 @@ public class RuleSet : MonoBehaviour
             sec = "0" + seconds.ToString();
         else
             sec = seconds.ToString();
+
+        if (current_time <= 0)
+            return "0:00";
 
         return mins + ":" + sec;
     }
@@ -96,6 +110,19 @@ public class RuleSet : MonoBehaviour
     public bool GameOver()
     {
         return !timer_running;
+    }
+
+    public IEnumerator GameEnd()
+    {
+        yield return new WaitForSeconds(6);
+
+        GameManager.Instance.LeaveRoom();
+    }
+
+    public void ExitMap()
+    {
+
+
     }
 
 

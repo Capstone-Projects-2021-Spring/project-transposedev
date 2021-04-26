@@ -99,6 +99,7 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         }
         else
         {
+            hudMenu.Close();
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
@@ -456,6 +457,8 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
     // ran by the shooter on the target
     public void TakeDamage(float damage, Component source)
     {
+        Debug.Log("Damage source is " + source.ToString());
+
         // find player owner of gun
         if (source is Gun && (source.GetComponentInParent<PlayerMovement>() != null || source.GetComponentInParent<PlayerMovement_Grappler>() != null))
             PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, PhotonNetwork.LocalPlayer, null);
@@ -537,6 +540,10 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             {
                 leaderboard.Open();
             }
+        }
+        else if (FindObjectOfType<RuleSet>().GameOver())
+        {
+            leaderboard.Open();
         }
         else
         {

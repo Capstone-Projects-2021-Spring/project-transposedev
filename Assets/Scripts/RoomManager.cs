@@ -26,6 +26,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
 	}
 
+	private void Update()
+	{
+		Debug.Log(PhotonNetwork.LevelLoadingProgress);
+	}
+
 	public override void OnEnable()
 	{
 		base.OnEnable();
@@ -44,6 +49,23 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
 		}
+		else if (scene.buildIndex == 0)
+		{
+			PlayerMovement[] p_ = FindObjectsOfType<PlayerMovement>();
+			PlayerManager[] pm = FindObjectsOfType<PlayerManager>();
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+		}
 	}
+
+	public void ReturnToRoomMenu()
+	{
+		PhotonNetwork.LoadLevel(0);
+	}
+
+    public void LeaveThisGame()
+    {
+        Application.Quit();
+    }
 
 }

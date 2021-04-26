@@ -9,7 +9,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    PhotonView PV;
+    public PhotonView PV;
 	GameObject controller;
 	[SerializeField]private int kills = 0;
     [SerializeField]private int deaths = 0;
@@ -94,7 +94,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (PV.IsMine)
         {
             Hashtable hash = shooter.CustomProperties;
+
             newKillCount = ((int)hash["kills"]) + 1;
+
             hash.Remove("kills");
             hash.Add("kills", newKillCount);
             shooter.SetCustomProperties(hash);
@@ -122,15 +124,21 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 	{
         if (changedProps.Count < 4)
             return;
-
-		if (!PV.IsMine && targetPlayer == PV.Owner)
+		try
 		{
-            UpdateDeaths((int)changedProps["deaths"]);
-		}
+            if (!PV.IsMine && targetPlayer == PV.Owner)
+            {
+                UpdateDeaths((int)changedProps["deaths"]);
+            }
 
-        if (targetPlayer == PV.Owner)
+            if (targetPlayer == PV.Owner)
+            {
+                UpdateKills((int)changedProps["kills"]);
+            }
+        }
+        catch (System.Exception e)
 		{
-            UpdateKills((int)changedProps["kills"]);
+            Debug.Log(e);
 		}
 	}
 
