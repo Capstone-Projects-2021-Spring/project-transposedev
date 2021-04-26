@@ -99,6 +99,7 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
         }
         else
         {
+            hudMenu.Close();
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
         }
@@ -539,6 +540,10 @@ public class PlayerMovement_Grappler : MonoBehaviourPunCallbacks, IDamageable
             {
                 leaderboard.Open();
             }
+        }
+        else if (FindObjectOfType<RuleSet>().GameOver())
+        {
+            leaderboard.Open();
         }
         else
         {

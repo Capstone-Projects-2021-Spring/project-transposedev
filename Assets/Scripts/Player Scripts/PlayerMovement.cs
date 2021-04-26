@@ -564,6 +564,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IDamageable {
                 leaderboard.Open();
             }
         }
+        else if(FindObjectOfType<RuleSet>().GameOver())
+        {
+            leaderboard.Open();
+        }
         else
         {
             leaderboard.Close();
